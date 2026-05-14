@@ -1,0 +1,18 @@
+﻿const fs = require('fs');
+let c = fs.readFileSync('src/shared/components/Navbar.tsx', 'utf8');
+c = c.replace(/<span style={{ fontSize:"24px" }}><\/span>/, '<span style={{ fontSize:"24px" }}>🏠</span>');
+c = c.replace(/<span style={{ fontSize:"18px" }}><\/span>\s*<span style={{ fontSize:"20px" }}><\/span>/, '<span style={{ fontSize:"18px" }}>☰</span><span style={{ fontSize:"20px" }}>👤</span>');
+c = c.replace(/{ icon:"", label:"Help Center"/, '{ icon:"❓", label:"Help Center"');
+c = c.replace(/{ icon:"", label:"Become a host"/, '{ icon:"🏡", label:"Become a host"');
+c = c.replace(/{ icon:"", label:"Find a co-host"/, '{ icon:"🤝", label:"Find a co-host"');
+c = c.replace(/{ icon:"", label:"Gift cards"/, '{ icon:"🎁", label:"Gift cards"');
+c = c.replace(/{ icon: "", name: "Nearby"/, '{ icon: "📍", name: "Nearby"');
+c = c.replace(/{ icon: "", name: "Kigali/, '{ icon: "🏙️", name: "Kigali');
+c = c.replace(/{ icon: "", name: "Gisenyi/, '{ icon: "🌊", name: "Gisenyi');
+c = c.replace(/{ icon: "", name: "Musanze/, '{ icon: "⛰️", name: "Musanze');
+c = c.replace(/{ icon: "", name: "Nyungwe/, '{ icon: "🌿", name: "Nyungwe');
+c = c.replace(/{ icon: "", name: "Kibuye/, '{ icon: "🏞️", name: "Kibuye');
+c = c.replace(/<span style={{ fontSize:"18px" }}><\/span>\n\s*<p style={{ margin:0, fontSize:"14px"[\s\S]*?Dashboard/, '<span style={{ fontSize:"18px" }}>📊</span><p style={{ margin:0, fontSize:"14px", color:"#222" }}>Dashboard');
+c = c.replace(/cursor:"pointer", fontSize:"18px" }}>\s*<\/button>/, 'cursor:"pointer", fontSize:"18px" }}>🔍</button>');
+fs.writeFileSync('src/shared/components/Navbar.tsx', c, 'utf8');
+console.log('Done!');
