@@ -27,8 +27,6 @@ export default function Navbar() {
         <Link to="/" style={{ fontSize: "20px", fontWeight: 800, color: "#dc2626", textDecoration: "none", letterSpacing: "-0.5px" }}>DIAVELA</Link>
         <Link to="/" style={{ fontSize: "14px", fontWeight: 700, color: textColor, textDecoration: "none", padding: "6px 10px", borderRadius: 8, border: `1px solid ${btnBorder}` }}>Home</Link>
         <Link to="/listings" style={{ fontSize: "14px", fontWeight: 700, color: textColor, textDecoration: "none", padding: "6px 10px", borderRadius: 8, border: `1px solid ${btnBorder}` }}>All Listings</Link>
-        <Link to="/listings" style={{ fontSize: "14px", fontWeight: 700, color: textColor, textDecoration: "none", padding: "6px 10px", borderRadius: 8, border: `1px solid ${btnBorder}` }}>All Listings</Link>
-        <Link to="/listings" style={{ fontSize: "14px", fontWeight: 700, color: textColor, textDecoration: "none", padding: "6px 10px", borderRadius: 8, border: `1px solid ${btnBorder}` }}>All Listings</Link>
       </div>
       <div style={{ flex: "1 1 320px", minWidth: "260px", display: "flex", alignItems: "center", gap: "10px", padding: "8px 12px", borderRadius: "999px", background: dark ? "#131313" : "#f7f7f7", border: `1px solid ${navBorder}` }}>
         <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} onKeyDown={e => e.key === "Enter" && handleNavSearch()} placeholder="Search homes, cities, hosts..."
@@ -92,6 +90,7 @@ export default function Navbar() {
     </nav>
   );
 }
+
 
 
 

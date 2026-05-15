@@ -1,4 +1,4 @@
-import { AIRecommendations } from '../../ai/AIRecommendations';
+﻿import { AIRecommendations } from '../../ai/AIRecommendations';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
@@ -66,34 +66,31 @@ export default function GuestDashboard() {
   return (
     <div style={{ fontFamily: "Outfit, Segoe UI, sans-serif", background: bg, minHeight: "100vh" }}>
 
-      {/* Hero */}
       <section style={{ background: heroBg, padding: "48px 32px 64px" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "16px" }}>
           <div>
             <p style={{ margin: "0 0 6px", color: "#aaaaaa", fontSize: "14px", fontWeight: 600 }}>{getGreeting()}</p>
             <h1 style={{ margin: "0 0 8px", fontSize: "36px", fontWeight: 800, color: "#ffffff", letterSpacing: "-1px" }}>
-              Welcome back, {user?.name ?? "Guest"} 👋
+              Welcome back, {user?.name ?? "Guest"}
             </h1>
             <p style={{ margin: 0, color: "#aaaaaa", fontSize: "15px" }}>{user?.email}</p>
           </div>
           <button onClick={() => { logout(); navigate("/"); }}
             style={{ background: "transparent", border: "1.5px solid #444444", borderRadius: "10px", padding: "10px 20px", color: "#ffffff", fontWeight: 700, fontSize: "13px", cursor: "pointer", fontFamily: "inherit" }}>
-            🚪 Log out
+            Log out
           </button>
         </div>
       </section>
 
-      {/* Stats */}
       <section style={{ maxWidth: "1100px", margin: "-28px auto 0", padding: "0 32px" }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: "14px" }}>
           {[
-            { icon: "📋", label: "Total Bookings",  value: bookings.length },
-            { icon: "📅", label: "Upcoming",        value: upcoming.length },
-            { icon: "✅",    label: "Completed",       value: bookings.filter(b => b.status === "COMPLETED").length },
-            { icon: "❌",    label: "Cancelled",       value: bookings.filter(b => b.status === "CANCELLED").length },
-          ].map(({ icon, label, value }) => (
+            { label: "Total Bookings", value: bookings.length },
+            { label: "Upcoming",       value: upcoming.length },
+            { label: "Completed",      value: bookings.filter(b => b.status === "COMPLETED").length },
+            { label: "Cancelled",      value: bookings.filter(b => b.status === "CANCELLED").length },
+          ].map(({ label, value }) => (
             <div key={label} style={{ background: card, border: `1px solid ${border}`, borderRadius: "16px", padding: "20px 16px", textAlign: "center", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
-              <div style={{ fontSize: "26px", marginBottom: "8px" }}>{icon}</div>
               <p style={{ margin: "0 0 4px", fontSize: "24px", fontWeight: 800, color: text }}>{value}</p>
               <p style={{ margin: 0, fontSize: "12px", color: sub, fontWeight: 600 }}>{label}</p>
             </div>
@@ -101,7 +98,6 @@ export default function GuestDashboard() {
         </div>
       </section>
 
-      {/* Bookings */}
       <section style={{ maxWidth: "1100px", margin: "40px auto 0", padding: "0 32px 64px" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px", flexWrap: "wrap", gap: "12px" }}>
           <h2 style={{ fontSize: "22px", fontWeight: 800, color: text, margin: 0 }}>My Bookings</h2>
@@ -121,11 +117,10 @@ export default function GuestDashboard() {
 
         {isLoading ? (
           <div style={{ textAlign: "center", padding: "60px", color: sub }}>
-            <p style={{ fontSize: "32px" }}>⌛</p><p>Loading your bookings...</p>
+            <p>Loading your bookings...</p>
           </div>
         ) : displayed.length === 0 ? (
           <div style={{ textAlign: "center", padding: "60px", background: card, borderRadius: "20px", border: `1px solid ${border}` }}>
-            <p style={{ fontSize: "48px", margin: "0 0 16px" }}>🏖️</p>
             <h3 style={{ color: text, margin: "0 0 8px" }}>{tab === "upcoming" ? "No upcoming bookings" : "No past bookings"}</h3>
             <p style={{ color: sub, margin: "0 0 24px" }}>{tab === "upcoming" ? "Ready for your next adventure?" : "Your completed stays will appear here"}</p>
             {tab === "upcoming" && (
@@ -144,10 +139,10 @@ export default function GuestDashboard() {
               const canCancel = booking.status === "CONFIRMED" && new Date(booking.checkIn) > new Date();
               return (
                 <div key={booking.id} style={{ background: card, borderRadius: "18px", border: `1px solid ${border}`, overflow: "hidden", display: "flex", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}>
-                  <div className="booking-card-img" style={{ width: "160px", minHeight: "140px", flexShrink: 0, overflow: "hidden", background: dark ? "#333333" : "#f5f5f5", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <div style={{ width: "160px", minHeight: "140px", flexShrink: 0, overflow: "hidden", background: dark ? "#333333" : "#f5f5f5", display: "flex", alignItems: "center", justifyContent: "center" }}>
                     {photo
                       ? <img src={photo} alt={booking.listing.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                      : <span style={{ fontSize: "40px" }}>🏠</span>
+                      : <div style={{ width: "100%", height: "100%", background: dark ? "#444" : "#e5e7eb" }} />
                     }
                   </div>
                   <div style={{ flex: 1, padding: "20px 24px", display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "12px" }}>
@@ -156,22 +151,32 @@ export default function GuestDashboard() {
                         <h3 style={{ margin: 0, fontSize: "16px", fontWeight: 800, color: text }}>{booking.listing.title}</h3>
                         <span style={{ padding: "3px 10px", borderRadius: "20px", fontSize: "11px", fontWeight: 700, color: statusStyle.color, background: statusStyle.bg }}>{booking.status}</span>
                       </div>
-                      <p style={{ margin: "0 0 10px", fontSize: "13px", color: sub }}>📍 {booking.listing.location}</p>
-                      <p style={{ margin: "0 0 4px", fontSize: "13px", color: sub }}>📅 {formatDate(booking.checkIn)} &rarr; {formatDate(booking.checkOut)}</p>
+                      <p style={{ margin: "0 0 10px", fontSize: "13px", color: sub }}>{booking.listing.location}</p>
+                      <p style={{ margin: "0 0 4px", fontSize: "13px", color: sub }}>{formatDate(booking.checkIn)} to {formatDate(booking.checkOut)}</p>
                       <p style={{ margin: 0, fontSize: "12px", color: sub }}>{n} night{n !== 1 ? "s" : ""} &middot; ${booking.listing.pricePerNight}/night</p>
                     </div>
                     <div style={{ textAlign: "right" }}>
                       <p style={{ margin: "0 0 12px", fontSize: "20px", fontWeight: 800, color: text }}>${booking.totalPrice}</p>
-                      <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
+                      <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end", flexWrap: "wrap" }}>
                         <button onClick={() => navigate(`/listings/${booking.listingId}`)}
                           style={{ padding: "8px 16px", borderRadius: "8px", border: `1.5px solid ${border}`, background: card, color: sub, fontWeight: 600, fontSize: "12px", cursor: "pointer", fontFamily: "inherit" }}>
                           View listing
                         </button>
+                        <button onClick={() => navigate(`/listings/${booking.listingId}/book?checkIn=${booking.checkIn.slice(0,10)}&checkOut=${booking.checkOut.slice(0,10)}`)}
+                          style={{ padding: "8px 16px", borderRadius: "8px", border: `1.5px solid ${border}`, background: "#fff7ed", color: "#b45309", fontWeight: 700, fontSize: "12px", cursor: "pointer", fontFamily: "inherit" }}>
+                          Rebook
+                        </button>
                         {canCancel && (
-                          <button onClick={() => handleCancel(booking.id)} disabled={cancelling === booking.id}
-                            style={{ padding: "8px 16px", borderRadius: "8px", border: "none", background: cancelling === booking.id ? "#f5f5f5" : "#fde8e8", color: cancelling === booking.id ? "#aaa" : "#d93025", fontWeight: 700, fontSize: "12px", cursor: "pointer", fontFamily: "inherit" }}>
-                            {cancelling === booking.id ? "Cancelling..." : "Cancel"}
-                          </button>
+                          <>
+                            <button onClick={() => navigate(`/listings/${booking.listingId}/book?checkIn=${booking.checkIn.slice(0,10)}&checkOut=${booking.checkOut.slice(0,10)}&rescheduleBookingId=${booking.id}`)}
+                              style={{ padding: "8px 16px", borderRadius: "8px", border: `1.5px solid ${border}`, background: "#eef2ff", color: "#4338ca", fontWeight: 700, fontSize: "12px", cursor: "pointer", fontFamily: "inherit" }}>
+                              Reschedule
+                            </button>
+                            <button onClick={() => handleCancel(booking.id)} disabled={cancelling === booking.id}
+                              style={{ padding: "8px 16px", borderRadius: "8px", border: "none", background: cancelling === booking.id ? "#f5f5f5" : "#fde8e8", color: cancelling === booking.id ? "#aaa" : "#d93025", fontWeight: 700, fontSize: "12px", cursor: "pointer", fontFamily: "inherit" }}>
+                              {cancelling === booking.id ? "Cancelling..." : "Cancel"}
+                            </button>
+                          </>
                         )}
                       </div>
                     </div>
