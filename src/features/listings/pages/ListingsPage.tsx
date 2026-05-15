@@ -6,7 +6,7 @@ import ListingCard from "../components/ListingCard";
 import { Spinner } from "../../../shared/components/Spinner";
 import { useSearchParams } from "react-router-dom";
 import { FaHome, FaUmbrellaBeach, FaMountain, FaCouch, FaSearch } from 'react-icons/fa';
-import { AISearchBar } from '../../ai/AISearchBar';
+import { api } from '../../../lib/api';
 
 const CATEGORIES = [
   { value: "All",       label: "All",       icon: FaHome },
@@ -65,8 +65,6 @@ export default function ListingsPage() {
         </div>
       )}
 
-      <AISearchBar onResults={(r) => setAiResults(r)} onClear={() => setAiResults(null)} />
-
       {/* Category filter bar */}
       <div style={{ display:"flex", gap:"8px", overflowX:"auto", padding:"16px 0", borderBottom:"1px solid #ebebeb", marginBottom:"24px", scrollbarWidth:"none" }}>
         {CATEGORIES.map(cat => (
@@ -118,6 +116,8 @@ export default function ListingsPage() {
     </div>
   );
 }
+
+
 
 
 
