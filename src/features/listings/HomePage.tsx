@@ -1,7 +1,8 @@
 ﻿import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useListings } from '../hooks/useListings';
-import { ListingCard } from '../components/ListingCard';
+import type { Listing } from './types';
+import { useListings } from './hooks/useListings';
+import { ListingCard } from './components/ListingCard';
 
 const CATEGORIES = [
   { icon: '🏙️', label: 'City Stays', count: 124 },
@@ -45,7 +46,7 @@ export default function HomePage() {
   const { data: listings = [] } = useListings();
   const [searchLocation, setSearchLocation] = useState('');
   const [activeCategory, setActiveCategory] = useState('');
-  const featured = listings.slice(0, 6);
+  const featured = (listings as Listing[]).slice(0, 6);
 
   return (
     <div style={{ fontFamily: "'DM Sans', system-ui, sans-serif", background: '#f8f8f8', minHeight: '100vh' }}>

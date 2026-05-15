@@ -21,6 +21,7 @@ export interface AuthContextValue {
   login: (email: string, password: string) => Promise<void>;
   signup: (name: string, email: string, username: string, phone: string, password: string, role: "GUEST" | "HOST") => Promise<void>;
   logout: () => void;
+  updateUser: (data: Partial<User>) => void;
 }
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
@@ -81,8 +82,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem("user");
   }, []);
 
+  const updateUser = useCallback((data: Partial<User>) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      const next = { ...prev, ...data };
+      localStorage.setItem("user", JSON.stringify(next));
+      return next;
+    });
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!user, user, token, login, signup, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated: !!user, user, token, login, signup, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

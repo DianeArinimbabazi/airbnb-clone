@@ -1,4 +1,5 @@
 ﻿import { Link } from "react-router-dom";
+import { FiSearch, FiMapPin, FiSmile } from "react-icons/fi";
 
 export function ListingsPage() {
   const token = localStorage.getItem("token");
@@ -11,7 +12,10 @@ export function ListingsPage() {
         <div className="max-w-7xl mx-auto px-6 py-12">
           <h1 className="text-4xl font-bold mb-8">Discover Unique Stays</h1>
           <p className="text-center py-20 text-xl text-gray-500">
-            Welcome back! 🎉<br />
+            <span className="inline-flex items-center justify-center gap-2">
+              <FiSmile className="text-green-500" /> Welcome back!
+            </span>
+            <br />
             Your listings will appear here.
           </p>
         </div>
@@ -43,7 +47,7 @@ export function ListingsPage() {
           <div className="flex flex-col md:flex-row items-center bg-white rounded-3xl">
             <div className="flex-1 px-8 py-5">
               <div className="flex items-center gap-3">
-                <span>🔍</span>
+                <FiSearch className="text-xl text-gray-500" />
                 <input 
                   type="text" 
                   placeholder="What are you looking for?" 
@@ -53,7 +57,7 @@ export function ListingsPage() {
             </div>
             <div className="flex-1 px-8 py-5 border-t md:border-t-0 md:border-l">
               <div className="flex items-center gap-3">
-                <span>📍</span>
+                <FiMapPin className="text-xl text-gray-500" />
                 <p className="text-gray-700">Location</p>
               </div>
             </div>

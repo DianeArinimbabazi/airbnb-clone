@@ -180,7 +180,7 @@ export default function HostDashboard() {
             <p style={{ margin: "0 0 4px", fontWeight: 800, fontSize: "16px", color: "#ffffff" }}>Pro tip: Verified hosts earn 30% more</p>
             <p style={{ margin: 0, fontSize: "13px", color: "#aaaaaa", lineHeight: 1.6 }}>Complete your host profile and verification to unlock higher visibility and guest trust.</p>
           </div>
-          <button style={{ background: card, color: text, border: "none", borderRadius: "50px", padding: "12px 24px", fontSize: "14px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", flexShrink: 0 }}>
+          <button onClick={() => navigate("/profile")} style={{ background: card, color: text, border: "none", borderRadius: "50px", padding: "12px 24px", fontSize: "14px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", flexShrink: 0 }}>
             Complete profile
           </button>
         </div>

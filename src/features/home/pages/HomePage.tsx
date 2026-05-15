@@ -1,9 +1,16 @@
-﻿import { useNavigate } from "react-router-dom";
+﻿import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/hooks/useAuth";
 
 export default function HomePage() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = () => {
+    const query = searchQuery.trim();
+    navigate(`/listings${query ? `?q=${encodeURIComponent(query)}` : ""}`);
+  };
 
   return (
     <div style={{ minHeight:"100vh", fontFamily:"inherit" }}>
@@ -11,72 +18,74 @@ export default function HomePage() {
         position:"relative", minHeight:"100vh",
         display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center",
         background:"linear-gradient(rgba(0,0,0,0.52),rgba(0,0,0,0.52)), url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=1600') center/cover no-repeat",
-        padding:"80px 24px 40px"
+        padding:"clamp(40px, 10vw, 80px) 16px"
       }}>
 
         {/* Auth buttons top-right */}
-        <div style={{ position:"absolute", top:"24px", right:"36px", display:"flex", gap:"12px", zIndex:10 }}>
+        <div style={{ display:"flex", flexWrap:"wrap", justifyContent:"flex-end", width:"100%", gap:"8px", marginBottom:"clamp(20px, 5vw, 32px)" }}>
           {!isAuthenticated ? (
             <>
               <button onClick={() => navigate("/login")}
-                style={{ padding:"10px 26px", borderRadius:"8px", border:"2px solid #fff", background:"transparent", color:"#fff", fontWeight:700, fontSize:"15px", cursor:"pointer", fontFamily:"inherit" }}>
+                style={{ padding:"10px 20px", borderRadius:"8px", border:"2px solid #fff", background:"transparent", color:"#fff", fontWeight:700, fontSize:"clamp(13px, 2vw, 15px)", cursor:"pointer", fontFamily:"inherit" }}>
                 Sign In
               </button>
               <button onClick={() => navigate("/signup")}
-                style={{ padding:"10px 26px", borderRadius:"8px", border:"none", background:"#FF385C", color:"#fff", fontWeight:700, fontSize:"15px", cursor:"pointer", fontFamily:"inherit" }}>
+                style={{ padding:"10px 20px", borderRadius:"8px", border:"none", background:"#FF385C", color:"#fff", fontWeight:700, fontSize:"clamp(13px, 2vw, 15px)", cursor:"pointer", fontFamily:"inherit" }}>
                 Sign Up
               </button>
             </>
           ) : (
             <button onClick={() => navigate("/listings")}
-              style={{ padding:"10px 26px", borderRadius:"8px", border:"none", background:"#FF385C", color:"#fff", fontWeight:700, fontSize:"15px", cursor:"pointer", fontFamily:"inherit" }}>
+              style={{ padding:"10px 20px", borderRadius:"8px", border:"none", background:"#FF385C", color:"#fff", fontWeight:700, fontSize:"clamp(13px, 2vw, 15px)", cursor:"pointer", fontFamily:"inherit" }}>
               Browse Listings
             </button>
           )}
         </div>
 
         {/* Hero text */}
-        <p style={{ fontSize:"13px", fontWeight:700, letterSpacing:"0.15em", color:"rgba(255,255,255,0.75)", textTransform:"uppercase", marginBottom:"20px", textAlign:"center" }}>
-          WE ARE #1 ON THE MARKET
+        <p style={{ fontSize:"clamp(11px, 2.5vw, 13px)", fontWeight:700, letterSpacing:"0.15em", color:"rgba(255,255,255,0.75)", textTransform:"uppercase", marginBottom:"clamp(12px, 3vw, 20px)", textAlign:"center" }}>
+          DIAVELA — Trusted travel experiences in Rwanda
         </p>
-        <h1 style={{ fontSize:"clamp(36px,6vw,68px)", fontWeight:800, color:"#fff", lineHeight:1.1, marginBottom:"20px", maxWidth:"800px", textAlign:"center" }}>
-          We're Here To Help You <br />
-          <em style={{ fontStyle:"italic", color:"#FF385C", borderBottom:"3px solid #FF385C" }}>Navigate</em> While Traveling
+        <h1 style={{ fontSize:"clamp(28px, 5vw, 68px)", fontWeight:800, color:"#fff", lineHeight:1.1, marginBottom:"clamp(12px, 3vw, 20px)", maxWidth:"800px", textAlign:"center", padding:"0 8px" }}>
+          Discover Rwanda retreats <br />
+          with <em style={{ fontStyle:"italic", color:"#FF385C", borderBottom:"3px solid #FF385C" }}>DIAVELA</em>
         </h1>
-        <p style={{ fontSize:"18px", color:"rgba(255,255,255,0.8)", marginBottom:"44px", maxWidth:"480px", textAlign:"center" }}>
-          You'll get comprehensive results based on the provided location.
+        <p style={{ fontSize:"clamp(15px, 3vw, 18px)", color:"rgba(255,255,255,0.8)", marginBottom:"clamp(28px, 5vw, 44px)", maxWidth:"480px", textAlign:"center", padding:"0 8px" }}>
+          Book verified Rwanda listings, stay with trusted hosts, and travel with confidence.
         </p>
 
         {/* Search bar */}
-        <div style={{ display:"flex", alignItems:"center", background:"#fff", borderRadius:"50px", padding:"8px 8px 8px 28px", width:"100%", maxWidth:"720px", boxShadow:"0 8px 40px rgba(0,0,0,0.3)" }}>
-          <input placeholder="What are you looking for?"
-            onKeyDown={e => { if (e.key === "Enter") navigate(isAuthenticated ? "/listings" : "/login"); }}
-            style={{ flex:1, border:"none", outline:"none", fontSize:"16px", background:"transparent", fontFamily:"inherit", color:"#222" }} />
-          <div style={{ width:"1px", height:"28px", background:"#ddd", margin:"0 16px" }} />
-          <span style={{ fontSize:"15px", color:"#888", marginRight:"16px" }}>Location</span>
-          <button onClick={() => navigate(isAuthenticated ? "/listings" : "/login")}
-            style={{ padding:"14px 28px", background:"#FF385C", color:"#fff", border:"none", borderRadius:"40px", fontWeight:700, fontSize:"15px", cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap" }}>
-            Search places
-          </button>
+        <div style={{ display:"flex", flexDirection:"column", gap:"12px", alignItems:"stretch", width:"100%", maxWidth:"720px", padding:"0 8px" }}>
+          <div style={{ display:"flex", flexWrap:"wrap", alignItems:"center", background:"#fff", borderRadius:"50px", padding:"12px 16px", boxShadow:"0 8px 40px rgba(0,0,0,0.3)", gap:"12px" }}>
+            <input placeholder="Search DIAVELA stays..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              onKeyDown={e => { if (e.key === "Enter") handleSearch(); }}
+              style={{ flex:1, minWidth:"100px", border:"none", outline:"none", fontSize:"clamp(14px, 2vw, 16px)", background:"transparent", fontFamily:"inherit", color:"#222", padding:"0" }} />
+            <button onClick={handleSearch}
+              style={{ padding:"12px 24px", background:"#FF385C", color:"#fff", border:"none", borderRadius:"40px", fontWeight:700, fontSize:"clamp(13px, 2vw, 15px)", cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap" }}>
+              Search
+            </button>
+          </div>
         </div>
 
         {/* Place quick links */}
-        <div style={{ display:"flex", gap:"12px", marginTop:"28px", flexWrap:"wrap", justifyContent:"center" }}>
+        <div style={{ display:"flex", gap:"clamp(6px, 2vw, 12px)", marginTop:"clamp(20px, 5vw, 28px)", flexWrap:"wrap", justifyContent:"center" }}>
           {["Kigali","Gisenyi","Musanze","Nyungwe","Kibuye"].map(place => (
             <button key={place}
-              onClick={() => navigate(isAuthenticated ? `/listings?q=${place}` : "/login")}
-              style={{ padding:"8px 20px", borderRadius:"40px", border:"1.5px solid rgba(255,255,255,0.5)", background:"rgba(255,255,255,0.1)", color:"#fff", fontSize:"14px", fontWeight:500, cursor:"pointer", fontFamily:"inherit" }}>
+              onClick={() => navigate(`/listings?q=${place}`)}
+              style={{ padding:"8px clamp(12px, 3vw, 20px)", borderRadius:"40px", border:"1.5px solid rgba(255,255,255,0.5)", background:"rgba(255,255,255,0.1)", color:"#fff", fontSize:"clamp(12px, 2vw, 14px)", fontWeight:500, cursor:"pointer", fontFamily:"inherit" }}>
               {place}
             </button>
           ))}
         </div>
 
         {/* Stats */}
-        <div style={{ display:"flex", gap:"48px", marginTop:"60px", paddingTop:"36px", borderTop:"1px solid rgba(255,255,255,0.2)" }}>
+        <div style={{ display:"flex", flexWrap:"wrap", justifyContent:"center", gap:"clamp(24px, 5vw, 48px)", marginTop:"clamp(40px, 8vw, 60px)", paddingTop:"clamp(20px, 5vw, 36px)", borderTop:"1px solid rgba(255,255,255,0.2)", width:"100%" }}>
           {[["500+","Listings"],["200+","Hosts"],["10k+","Happy Guests"]].map(([num,label]) => (
             <div key={label} style={{ textAlign:"center" }}>
-              <p style={{ fontSize:"32px", fontWeight:800, color:"#fff", margin:0 }}>{num}</p>
-              <p style={{ fontSize:"13px", color:"rgba(255,255,255,0.6)", margin:"4px 0 0" }}>{label}</p>
+              <p style={{ fontSize:"clamp(24px, 4vw, 32px)", fontWeight:800, color:"#fff", margin:0 }}>{num}</p>
+              <p style={{ fontSize:"clamp(11px, 2vw, 13px)", color:"rgba(255,255,255,0.6)", margin:"4px 0 0" }}>{label}</p>
             </div>
           ))}
         </div>

@@ -144,7 +144,7 @@ export default function GuestDashboard() {
               const canCancel = booking.status === "CONFIRMED" && new Date(booking.checkIn) > new Date();
               return (
                 <div key={booking.id} style={{ background: card, borderRadius: "18px", border: `1px solid ${border}`, overflow: "hidden", display: "flex", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}>
-                  <div style={{ width: "160px", minHeight: "140px", flexShrink: 0, overflow: "hidden", background: dark ? "#333333" : "#f5f5f5", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <div className="booking-card-img" style={{ width: "160px", minHeight: "140px", flexShrink: 0, overflow: "hidden", background: dark ? "#333333" : "#f5f5f5", display: "flex", alignItems: "center", justifyContent: "center" }}>
                     {photo
                       ? <img src={photo} alt={booking.listing.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                       : <span style={{ fontSize: "40px" }}>🏠</span>

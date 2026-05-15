@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useTheme } from "../../../shared/context/ThemeContext";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "../../../lib/api";
+import { config } from "../../../config/env";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 export function ProfilePage() {
-  const { user, logout } = useAuth();
+  const { user, logout, updateUser } = useAuth();
   const { dark } = useTheme();
   const navigate = useNavigate();
 
@@ -22,6 +23,11 @@ export function ProfilePage() {
   const [avatarUrl, setAvatarUrl]     = useState(user?.avatar ?? "");
   const [uploading, setUploading]     = useState(false);
 
+  useEffect(() => {
+    setName(user?.name ?? "");
+    setAvatarUrl(user?.avatar ?? "");
+  }, [user]);
+
   async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -31,7 +37,7 @@ export function ProfilePage() {
     try {
       const formData = new FormData();
       formData.append("avatar", file);
-      const res = await fetch(`http://localhost:3000/api/v1/users/${user?.id}/avatar`, {
+      const res = await fetch(`${config.apiUrl}/users/${user?.id}/avatar`, {
         method: "POST",
         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
         body: formData,
@@ -39,6 +45,7 @@ export function ProfilePage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Upload failed");
       setAvatarUrl(data.avatar);
+      updateUser?.({ avatar: data.avatar });
       toast.success("Profile picture updated!");
     } catch (err: any) {
       toast.error(err.message ?? "Upload failed");
@@ -52,7 +59,10 @@ export function ProfilePage() {
 
   const updateProfile = useMutation({
     mutationFn: () => api.put("/users/" + user?.id, { name }),
-    onSuccess: () => toast.success("Profile updated!"),
+    onSuccess: () => {
+      toast.success("Profile updated!");
+      updateUser?.({ name });
+    },
     onError: () => toast.error("Failed to update profile"),
   });
 
@@ -80,7 +90,7 @@ export function ProfilePage() {
         <p style={{ color: sub, margin: "0 0 32px", fontSize: "14px" }}>{user?.email} &middot; {user?.role}</p>
 
         {/* Avatar */}
-        <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "32px", background: card, borderRadius: "16px", padding: "24px", border: "1px solid " + border }}>
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "20px", marginBottom: "32px", background: card, borderRadius: "16px", padding: "24px", border: "1px solid " + border }}>
           <div style={{ position: "relative", flexShrink: 0 }}>
             <div style={{ width: "72px", height: "72px", borderRadius: "50%", background: "#064e3b", display: "flex", alignItems: "center", justifyContent: "center", color: "#6ee7b7", fontWeight: 800, fontSize: "28px", overflow: "hidden" }}>
               {avatarUrl

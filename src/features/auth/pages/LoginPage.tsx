@@ -44,8 +44,8 @@ export function LoginPage() {
   const lbl: React.CSSProperties = { display:"block", fontWeight:600, fontSize:"13px", marginBottom:"6px", color:text };
 
   return (
-    <div style={{ minHeight:"100vh", display:"flex", background:bg }}>
-      <div style={{ flex:"0 0 480px", background:card, padding:"48px", display:"flex", flexDirection:"column", justifyContent:"center" }}>
+    <div className="auth-split" style={{ background:bg }}>
+      <div className="auth-form-panel" style={{ background:card, padding:"48px", display:"flex", flexDirection:"column", justifyContent:"center" }}>
         <div style={{ marginBottom:"32px" }}>
           <h1 style={{ fontSize:"28px", fontWeight:700, color:text, margin:"0 0 4px" }}>Welcome back! Please</h1>
           <h2 style={{ fontSize:"28px", fontWeight:700, margin:"0 0 12px" }}>
@@ -83,7 +83,7 @@ export function LoginPage() {
         </p>
       </div>
 
-      <div style={{ flex:1, background:rightBg, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"48px", position:"relative", overflow:"hidden" }}>
+      <div className="auth-right-panel" style={{ background:rightBg, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"48px", position:"relative", overflow:"hidden" }}>
         <div style={{ position:"absolute", top:"-80px", right:"-80px", width:"300px", height:"300px", borderRadius:"50%", background:"rgba(255,56,92,0.06)" }} />
         <div style={{ position:"absolute", bottom:"-60px", left:"-60px", width:"200px", height:"200px", borderRadius:"50%", background:"rgba(16,185,129,0.08)" }} />
         <div style={{ textAlign:"center", maxWidth:"360px", position:"relative", zIndex:1 }}>

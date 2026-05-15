@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "../../../lib/api";
+import { config } from "../../../config/env";
 import { useListing } from "../../listings/hooks/useListing";
 import { Spinner } from "../../../shared/components/Spinner";
 import toast from "react-hot-toast";
@@ -36,6 +37,10 @@ export function EditListingPage() {
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [deletingPhoto, setDeletingPhoto] = useState<string | null>(null);
+  const BASE = config.apiUrl;
+
+  type PhotoData = { url: string; publicId?: string; public_id?: string; id?: string };
+  const getPhotoId = (photo: PhotoData) => photo.publicId ?? photo.public_id ?? photo.id ?? photo.url;
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -77,12 +82,12 @@ export function EditListingPage() {
     try {
       const token = localStorage.getItem("token");
       const formData = new FormData();
-      formData.append("photos", file);
+      formData.append("photo", file);
       const res = await fetch(
-        `http://localhost:3000/api/v1/listings/${id}/photos`,
+        `${BASE}/listings/${id}/photos`,
         {
           method: "POST",
-          headers: { Authorization: `Bearer ${token}` },
+          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
           body: formData,
         }
       );
@@ -102,9 +107,17 @@ export function EditListingPage() {
 
   async function handleDeletePhoto(photoId: string) {
     if (!confirm("Remove this photo?")) return;
+    if (!photoId) {
+      toast.error("Unable to identify this photo for deletion.");
+      return;
+    }
     setDeletingPhoto(photoId);
     try {
-      await api.delete(`/listings/${id}/photos/${photoId}`);
+      const encodedId = encodeURIComponent(photoId);
+      const path = photoId.startsWith("http")
+        ? `/listings/${id}/photos?url=${encodedId}`
+        : `/listings/${id}/photos/${encodedId}`;
+      await api.delete(path);
       toast.success("Photo removed");
       qc.invalidateQueries({ queryKey: ["listing", id] });
     } catch (e: unknown) {
@@ -123,7 +136,7 @@ export function EditListingPage() {
     </div>
   );
 
-  const realPhotos = (listing.photos ?? []) as { url: string; publicId: string }[];
+  const realPhotos = (listing.photos ?? []) as PhotoData[];
 
   return (
     <div style={{ maxWidth:"640px", margin:"0 auto", padding:"40px 24px 80px" }}>
@@ -137,18 +150,22 @@ export function EditListingPage() {
       <div style={{ marginBottom:"32px" }}>
         <label style={{ ...lbl, fontSize:"15px", marginBottom:"12px" }}>Photos ({realPhotos.length}/5)</label>
         <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill, minmax(140px,1fr))", gap:"12px", marginBottom:"14px" }}>
-          {realPhotos.map(photo => (
-            <div key={photo.publicId} style={{ position:"relative", borderRadius:"10px", overflow:"hidden", aspectRatio:"4/3", background:"#f5f5f5" }}>
-              <img src={photo.url} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} />
-              <button
-                onClick={() => handleDeletePhoto(photo.publicId!)}
-                disabled={deletingPhoto === photo.publicId}
-                style={{ position:"absolute", top:"6px", right:"6px", width:"26px", height:"26px", borderRadius:"50%", background:"rgba(0,0,0,0.6)", color:"#fff", border:"none", cursor:"pointer", fontSize:"14px", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"inherit" }}
-              >
-                {deletingPhoto === photo.publicId ? "..." : "x"}
-              </button>
-            </div>
-          ))}
+          {realPhotos.map(photo => {
+            const photoId = getPhotoId(photo);
+            return (
+              <div key={photoId} style={{ position:"relative", borderRadius:"10px", overflow:"hidden", aspectRatio:"4/3", background:"#f5f5f5" }}>
+                <img src={photo.url} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} />
+                <button
+                  type="button"
+                  onClick={() => handleDeletePhoto(photoId)}
+                  disabled={deletingPhoto === photoId}
+                  style={{ position:"absolute", top:"6px", right:"6px", width:"26px", height:"26px", borderRadius:"50%", background:"rgba(0,0,0,0.6)", color:"#fff", border:"none", cursor:"pointer", fontSize:"14px", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"inherit" }}
+                >
+                  {deletingPhoto === photoId ? "..." : "x"}
+                </button>
+              </div>
+            );
+          })}
           {realPhotos.length < 5 && (
             <button
               onClick={() => fileRef.current?.click()}
@@ -181,7 +198,7 @@ export function EditListingPage() {
           <input {...register("location")} style={inp} />
           {errors.location && <p style={errStyle}>{errors.location.message}</p>}
         </div>
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"16px" }}>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(220px, 1fr))", gap:"16px" }}>
           <div>
             <label style={lbl}>Price per night ($) *</label>
             <input type="number" min={10} {...register("pricePerNight", { valueAsNumber:true })} style={inp} />

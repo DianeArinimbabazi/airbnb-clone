@@ -1,4 +1,5 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { overflow-x: hidden; max-width: 100vw; }
 
 :root {
   --primary: #dc2626;
@@ -54,3 +55,56 @@ img { display: block; max-width: 100%; }
   background: #1a1a1a !important; color: #f1f5f9 !important; border-color: #333333 !important;
 }
 [data-theme="dark"] a { color: #f87171; }
+
+/* ============================================================
+   RESPONSIVE LAYOUT HELPERS
+   (used by components that rely on inline styles)
+   ============================================================ */
+
+/* Auth pages – login / signup split layout */
+.auth-split      { display: flex; min-height: 100vh; }
+.auth-form-panel { flex: 0 0 480px; }
+.auth-right-panel{ flex: 1; }
+
+@media (max-width: 680px) {
+  .auth-form-panel  { flex: 1 1 100% !important; }
+  .auth-right-panel { display: none !important; }
+}
+
+/* Listing detail – two-column → single-column */
+.listing-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 48px;
+}
+
+@media (max-width: 900px) {
+  .listing-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+/* Listing photo gallery – collapse to single image on mobile */
+.listing-photo-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: 240px 240px;
+  gap: 8px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .listing-photo-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: 280px;
+  }
+  .listing-photo-grid > div:first-child { grid-row: auto; }
+  .listing-photo-grid > div:not(:first-child) { display: none; }
+}
+
+/* Guest dashboard booking card – hide thumbnail on tiny screens */
+@media (max-width: 480px) {
+  .booking-card-img { display: none !important; }
+}

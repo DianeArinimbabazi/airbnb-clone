@@ -8,20 +8,33 @@ export default function Navbar() {
   const { dark, toggleDark } = useTheme();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const navBg = dark ? "#111111" : "#fff";
   const navBorder = dark ? "#2a2a2a" : "#e5e7eb";
   const textColor = dark ? "#f1f5f9" : "#111";
   const btnBorder = dark ? "#333333" : "#e5e7eb";
+  const handleNavSearch = () => {
+    const query = searchQuery.trim();
+    if (!query) return;
+    setSearchQuery("");
+    navigate(`/listings?q=${encodeURIComponent(query)}`);
+    setMenuOpen(false);
+  };
+
   return (
-    <nav style={{ position: "sticky", top: 0, zIndex: 100, background: navBg, borderBottom: `1px solid ${navBorder}`, padding: "0 32px", height: "64px", display: "flex", alignItems: "center", justifyContent: "space-between", fontFamily: "Outfit, sans-serif", transition: "background 0.2s" }}>
-      <Link to="/" style={{ fontSize: "20px", fontWeight: 800, color: "#dc2626", textDecoration: "none", letterSpacing: "-0.5px" }}>DIAVELA</Link>
-      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+    <nav style={{ position: "sticky", top: 0, zIndex: 100, background: navBg, borderBottom: `1px solid ${navBorder}`, padding: "12px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", flexWrap: "wrap", fontFamily: "Outfit, sans-serif", transition: "background 0.2s" }}>
+      <Link to="/" style={{ fontSize: "20px", fontWeight: 800, color: "#dc2626", textDecoration: "none", letterSpacing: "-0.5px", flexShrink: 0 }}>DIAVELA</Link>
+      <div style={{ flex: "1 1 320px", minWidth: "260px", display: "flex", alignItems: "center", gap: "10px", padding: "8px 12px", borderRadius: "999px", background: dark ? "#131313" : "#f7f7f7", border: `1px solid ${navBorder}` }}>
+        <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} onKeyDown={e => e.key === "Enter" && handleNavSearch()} placeholder="Search homes, cities, hosts..."
+          style={{ flex: 1, minWidth: "0", border: "none", outline: "none", background: "transparent", color: textColor, fontSize: "14px", fontFamily: "inherit" }} />
+        <button onClick={handleNavSearch} style={{ padding: "10px 18px", background: "#FF385C", color: "#fff", border: "none", borderRadius: "999px", fontWeight: 700, fontSize: "13px", cursor: "pointer", fontFamily: "inherit" }}>Search</button>
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
         <button onClick={toggleDark} title={dark ? "Light mode" : "Dark mode"} style={{ width: "40px", height: "24px", borderRadius: "50px", border: "none", cursor: "pointer", background: dark ? "#dc2626" : "#e5e7eb", position: "relative", transition: "background 0.2s", flexShrink: 0 }}>
           <span style={{ position: "absolute", top: "3px", left: dark ? "19px" : "3px", width: "18px", height: "18px", borderRadius: "50%", background: "#fff", transition: "left 0.2s", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px" }}>{dark ? "🌙" : "☀️"}</span>
         </button>
         {isAuthenticated ? (
           <>
-            {user?.role === "HOST" && <button onClick={() => navigate("/listings/new")} style={{ background: "#dc2626", color: "#fff", border: "none", borderRadius: "50px", padding: "9px 20px", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>+ List your space</button>}
             {user?.role === "HOST" && <button onClick={() => navigate("/host")} style={{ background: "none", border: `1.5px solid ${btnBorder}`, borderRadius: "50px", padding: "9px 18px", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", color: textColor }}>Dashboard</button>}
             {user?.role === "GUEST" && <button onClick={() => navigate("/guest")} style={{ background: "none", border: `1.5px solid ${btnBorder}`, borderRadius: "50px", padding: "9px 18px", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", color: textColor }}>My trips</button>}
             {user?.role === "ADMIN" && <button onClick={() => navigate("/admin")} style={{ background: "none", border: `1.5px solid ${btnBorder}`, borderRadius: "50px", padding: "9px 18px", fontSize: "13px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", color: textColor }}>Admin</button>}
@@ -38,12 +51,7 @@ export default function Navbar() {
               )}
             </div>
           </>
-        ) : (
-          <>
-            <button onClick={() => navigate("/login")} style={{ background: "none", border: "none", fontSize: "14px", fontWeight: 600, color: textColor, cursor: "pointer", fontFamily: "inherit" }}>Sign in</button>
-            <button onClick={() => navigate("/signup")} style={{ background: "#dc2626", color: "#fff", border: "none", borderRadius: "50px", padding: "10px 22px", fontSize: "14px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Sign up</button>
-          </>
-        )}
+        ) : null}
       </div>
     </nav>
   );

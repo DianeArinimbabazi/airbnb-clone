@@ -124,7 +124,15 @@ export function ListingDetail() {
           <button onClick={() => toggle(listing.id, listing.title)} style={{ display:"flex", alignItems:"center", gap:"6px", padding:"8px 12px", background:"none", border:"none", fontWeight:600, fontSize:"14px", cursor:"pointer", fontFamily:"inherit", color: text, textDecoration:"underline" }}>
             {isSaved(listing.id) ? <><FaHeart color="#FF385C" /> Saved</> : <><FaRegHeart /> Save</>}
           </button>
-          <button style={{ display:"flex", alignItems:"center", gap:"6px", padding:"8px 12px", background:"none", border:"none", fontWeight:600, fontSize:"14px", cursor:"pointer", fontFamily:"inherit", color: text, textDecoration:"underline" }}>
+          <button onClick={async () => {
+              if (navigator.share) {
+                await navigator.share({ title: listing.title, url: window.location.href }).catch(() => {});
+              } else {
+                await navigator.clipboard.writeText(window.location.href);
+                toast.success("Link copied!");
+              }
+            }}
+            style={{ display:"flex", alignItems:"center", gap:"6px", padding:"8px 12px", background:"none", border:"none", fontWeight:600, fontSize:"14px", cursor:"pointer", fontFamily:"inherit", color: text, textDecoration:"underline" }}>
             <FaShare /> Share
           </button>
         </div>
@@ -150,7 +158,7 @@ export function ListingDetail() {
             <img src={photos[0]} alt={listing.title} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
           </div>
         ) : (
-          <div style={{ display:"grid", gridTemplateColumns:"2fr 1fr 1fr", gridTemplateRows:"240px 240px", gap:"8px", borderRadius:"16px", overflow:"hidden" }}>
+          <div className="listing-photo-grid">
             <div style={{ gridRow:"1 / 3", position:"relative", overflow:"hidden", cursor:"pointer" }} onClick={() => { setPhotoIndex(0); setShowCarousel(true); }}>
               <img src={photos[0]} alt={listing.title} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
             </div>
@@ -186,7 +194,7 @@ export function ListingDetail() {
         </div>
       )}
 
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 380px", gap:"48px" }}>
+      <div className="listing-detail-grid">
         {/* Left */}
         <div>
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", paddingBottom:"24px", borderBottom:"1px solid " + border }}>

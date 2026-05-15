@@ -5,13 +5,14 @@ import { useFavorites } from "../hooks/useFavorites";
 import ListingCard from "../components/ListingCard";
 import { Spinner } from "../../../shared/components/Spinner";
 import { useSearchParams } from "react-router-dom";
+import { FaHome, FaUmbrellaBeach, FaMountain, FaCouch, FaSearch } from 'react-icons/fa';
 
 const CATEGORIES = [
-  { value: "All",       label: "All",       icon: "🏠" },
-  { value: "HOUSE",     label: "House",     icon: "🏠 " },
-  { value: "VILLA",     label: "Villa",     icon: "🏖️" },
-  { value: "CABIN",     label: "Cabin",     icon: "🏕️" },
-  { value: "APARTMENT", label: "Apartment", icon: "🏠" },
+  { value: "All",       label: "All",       icon: FaHome },
+  { value: "HOUSE",     label: "House",     icon: FaHome },
+  { value: "VILLA",     label: "Villa",     icon: FaUmbrellaBeach },
+  { value: "CABIN",     label: "Cabin",     icon: FaMountain },
+  { value: "APARTMENT", label: "Apartment", icon: FaCouch },
 ];
 
 export default function ListingsPage() {
@@ -24,8 +25,8 @@ export default function ListingsPage() {
 
   // Read search query from URL on mount
   useEffect(() => {
-    const q = searchParams.get("q");
-    if (q) dispatch({ type: "SET_FILTER", payload: q });
+    const q = searchParams.get("q") ?? "";
+    dispatch({ type: "SET_FILTER", payload: q });
   }, [searchParams, dispatch]);
 
 
@@ -67,7 +68,8 @@ export default function ListingsPage() {
       <div style={{ display:"flex", gap:"8px", overflowX:"auto", padding:"16px 0", borderBottom:"1px solid #ebebeb", marginBottom:"24px", scrollbarWidth:"none" }}>
         {CATEGORIES.map(cat => (
           <button key={cat.value} onClick={() => setCategory(cat.value)}
-            style={{ display:"flex", alignItems:"center", gap:"6px", padding:"8px 18px", borderRadius:"24px", border:"1.5px solid", borderColor: category === cat.value ? "#FF385C" : "#ddd", background: category === cat.value ? "#FF385C" : "#fff", color: category === cat.value ? "#fff" : "#555", fontWeight:600, fontSize:"13px", cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap", flexShrink:0, transition:"all 0.15s" }}>
+            style={{ display:"flex", alignItems:"center", gap:"8px", padding:"8px 18px", borderRadius:"24px", border:"1.5px solid", borderColor: category === cat.value ? "#FF385C" : "#ddd", background: category === cat.value ? "#FF385C" : "#fff", color: category === cat.value ? "#fff" : "#555", fontWeight:600, fontSize:"13px", cursor:"pointer", fontFamily:"inherit", whiteSpace:"nowrap", flexShrink:0, transition:"all 0.15s" }}>
+            <cat.icon style={{ width: '16px', height: '16px' }} />
             {cat.label}
           </button>
         ))}
@@ -93,7 +95,7 @@ export default function ListingsPage() {
 
       {filtered.length === 0 ? (
         <div style={{ textAlign:"center", padding:"80px 24px" }}>
-          <p style={{ fontSize:"48px", marginBottom:"16px" }}>ðŸ”</p>
+          <p style={{ fontSize:"48px", marginBottom:"16px" }}><FaSearch /></p>
           <h2 style={{ fontSize:"22px", fontWeight:700, color:"#222", margin:"0 0 8px" }}>No listings found</h2>
           <p style={{ color:"#717171", marginBottom:"20px" }}>
             {state.filter ? `No results for "${state.filter}". Try a different search.` : "Try adjusting your filters."}
