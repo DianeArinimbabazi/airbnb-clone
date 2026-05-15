@@ -1,5 +1,5 @@
 ﻿import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { api } from "../../../lib/api";
@@ -26,8 +26,13 @@ export function BookingPage() {
   const qc = useQueryClient();
   const { dark } = useTheme();
   const { data: listing, isLoading } = useListing(id!);
+  const { search } = useLocation();
+  const sp = new URLSearchParams(search);
+  const qCheckIn = sp.get("checkIn") ?? undefined;
+  const qCheckOut = sp.get("checkOut") ?? undefined;
+  const qRescheduleId = sp.get("rescheduleBookingId") ?? undefined;
   const [step, setStep] = useState<Step>(1);
-  const [formData, setFormData] = useState<Partial<BookingFormData>>({});
+  const [formData, setFormData] = useState<Partial<BookingFormData>>(() => ({ checkIn: qCheckIn, checkOut: qCheckOut }));
 
   const bg    = dark ? "#1a1a1a" : "#ffffff";
   const card  = dark ? "#2a2a2a" : "#f9f9f9";
@@ -42,7 +47,17 @@ export function BookingPage() {
       toast.success("Booking confirmed!");
       qc.invalidateQueries({ queryKey: ["bookings", "me"] });
       qc.invalidateQueries({ queryKey: ["listing", id] });
-      navigate("/dashboard");
+      if (qRescheduleId) {
+        api.delete(`/bookings/${qRescheduleId}`).then(() => {
+          toast.success("Previous booking cancelled — rescheduled.");
+          qc.invalidateQueries({ queryKey: ["bookings", "mine"] });
+          navigate("/guest");
+        }).catch(() => {
+          navigate("/guest");
+        });
+      } else {
+        navigate("/guest");
+      }
     },
     onError: (e: Error) => toast.error(e.message || "Booking failed"),
   });

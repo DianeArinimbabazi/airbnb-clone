@@ -11,9 +11,18 @@ const EMOJI: Record<string, string> = {
   APARTMENT: "🏢", HOUSE: "🏠", VILLA: "🏡", CABIN: "🛖",
 };
 
+const BASE_URL = "https://airbnb-api-3mnx.onrender.com";
+
 function getImg(listing: any): string {
-  if (listing.photos?.length > 0) return listing.photos[0].url;
-  if (listing.img?.trim()) return listing.img;
+  if (listing.photos?.length > 0) {
+    const url = listing.photos[0].url ?? listing.photos[0];
+    if (typeof url === "string" && url.startsWith("http")) return url;
+    if (typeof url === "string" && url.startsWith("/")) return `${BASE_URL}${url}`;
+  }
+  if (listing.img?.trim()) {
+    if (listing.img.startsWith("http")) return listing.img;
+    return `${BASE_URL}${listing.img}`;
+  }
   return "";
 }
 
@@ -69,4 +78,5 @@ export function ListingCard({ listing }: { listing: any }) {
 }
 
 export default ListingCard;
+
 
