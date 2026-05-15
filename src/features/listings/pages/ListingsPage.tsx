@@ -6,7 +6,7 @@ import ListingCard from "../components/ListingCard";
 import { Spinner } from "../../../shared/components/Spinner";
 import { useSearchParams } from "react-router-dom";
 import { FaHome, FaUmbrellaBeach, FaMountain, FaCouch, FaSearch } from 'react-icons/fa';
-import { api } from '../../../lib/api';
+
 
 const CATEGORIES = [
   { value: "All",       label: "All",       icon: FaHome },
@@ -116,6 +116,7 @@ export default function ListingsPage() {
     </div>
   );
 }
+
 
 
 
