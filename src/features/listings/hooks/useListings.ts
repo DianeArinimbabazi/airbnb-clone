@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+﻿import { useQuery } from "@tanstack/react-query";
 import { api } from "../../../lib/api";
 import type { Listing } from "../types";
 
@@ -64,7 +64,7 @@ function hashId(id: string): number {
 }
 
 function assignPhoto(listing: Listing): Listing {
-  if (listing.photos && listing.photos.length > 0) return listing;
+  if (listing.photos && listing.photos.length > 0 && listing.photos[0]?.url) return listing;
   const pool = PHOTOS[listing.type] ?? FALLBACK;
   const url = pool[hashId(listing.id) % pool.length];
   return { ...listing, photos: [{ url }] };
