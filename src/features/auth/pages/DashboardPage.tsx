@@ -52,21 +52,21 @@ export function DashboardPage() {
     {
       group: 'Performance',
       items: [
-        { id: 'quality' as ActiveView, label: '🎯 Quality' },
-        { id: 'occupancy' as ActiveView, label: '🏨 Occupancy & rates' },
-        { id: 'conversion' as ActiveView, label: '🔄 Conversion' },
+        { id: 'quality' as ActiveView, label: 'Quality' },
+        { id: 'occupancy' as ActiveView, label: 'Occupancy & rates' },
+        { id: 'conversion' as ActiveView, label: 'Conversion' },
       ],
     },
     {
       group: 'Manage',
       items: [
-        { id: 'superhost' as ActiveView, label: '⭐ Superhost' },
-        { id: 'properties' as ActiveView, label: '🏠 Properties' },
-        { id: 'bookings' as ActiveView, label: '📅 Bookings' },
-        { id: 'guests' as ActiveView, label: '👥 Guests' },
-        { id: 'finances' as ActiveView, label: '💰 Finances' },
-        { id: 'tasks' as ActiveView, label: '📋 Tasks' },
-        { id: 'housekeeping' as ActiveView, label: '✨ Housekeeping' },
+        { id: 'superhost' as ActiveView, label: 'Superhost' },
+        { id: 'properties' as ActiveView, label: 'Properties' },
+        { id: 'bookings' as ActiveView, label: 'Bookings' },
+        { id: 'guests' as ActiveView, label: 'Guests' },
+        { id: 'finances' as ActiveView, label: 'Finances' },
+        { id: 'tasks' as ActiveView, label: 'Tasks' },
+        { id: 'housekeeping' as ActiveView, label: 'Housekeeping' },
       ],
     },
   ];
@@ -90,7 +90,7 @@ export function DashboardPage() {
         {[
           { icon: '🧳', label: 'Check-ins today', value: '2' },
           { icon: '🚪', label: 'Check-outs today', value: '1' },
-          { icon: '💬', label: 'Unread messages', value: '3' },
+          { icon: 'MSG', label: 'Unread messages', value: '3' },
         ].map(({ icon, label, value }) => (
           <div key={label} style={{ ...card, textAlign: 'center' }}>
             <p style={{ fontSize: '32px', margin: '0 0 8px' }}>{icon}</p>
@@ -200,7 +200,7 @@ export function DashboardPage() {
 
   const renderQuality = () => (
     <div style={card}>
-      <h2 style={cardTitle}>🎯 Quality Score</h2>
+      <h2 style={cardTitle}>Quality Score</h2>
       <div style={{ display: 'flex', alignItems: 'center', gap: '24px', marginBottom: '24px' }}>
         <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'conic-gradient(#9b8ec4 0% 92%, #f0ebff 92%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '18px', color: '#222' }}>4.9</div>
@@ -297,7 +297,7 @@ export function DashboardPage() {
               <p style={{ fontSize: '13px', fontWeight: 600, color: '#444', margin: '0 0 6px' }}>{label}</p>
               <p style={{ fontSize: '12px', color: '#aaa', margin: '0 0 10px' }}>{sub}</p>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <span style={{ fontSize: '12px' }}>✅</span>
+                <span style={{ fontSize: '12px' }}>✓</span>
                 <span style={{ fontSize: '12px', color: '#1a7f45', fontWeight: 600 }}>Doing great</span>
               </div>
             </div>
@@ -307,7 +307,7 @@ export function DashboardPage() {
       <div style={card}>
         <h2 style={cardTitle}>💜 Saved Homes ({savedListings.length})</h2>
         {state.loading ? <p style={{ color: '#9b8ec4' }}>Loading...</p> : savedListings.length === 0 ? (
-          <p style={{ color: '#888', fontSize: '15px' }}>No saved homes yet. Go explore! 🏡</p>
+          <p style={{ color: '#888', fontSize: '15px' }}>No saved homes yet. Go explore!</p>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {savedListings.map((listing) => (
@@ -339,7 +339,7 @@ export function DashboardPage() {
         ))}
       </div>
       <div style={card}>
-        <h2 style={cardTitle}>🏠 My Properties</h2>
+        <h2 style={cardTitle}>My Properties</h2>
         {[
           { name: 'Kigali Hills Villa', location: 'Kigali, Rwanda', price: 120, rating: 4.9 },
           { name: 'Lake Kivu Retreat', location: 'Gisenyi, Rwanda', price: 85, rating: 4.8 },
@@ -347,7 +347,7 @@ export function DashboardPage() {
         ].map(({ name, location, price, rating }) => (
           <div key={name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid #f0f0f0' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-              <div style={{ width: '52px', height: '52px', borderRadius: '10px', background: '#f0ebff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>🏠</div>
+              <div style={{ width: '52px', height: '52px', borderRadius: '10px', background: '#f0ebff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>H</div>
               <div>
                 <p style={{ margin: '0 0 2px', fontWeight: 700, fontSize: '14px', color: '#222' }}>{name}</p>
                 <p style={{ margin: '0 0 6px', fontSize: '12px', color: '#888' }}>{location}</p>
@@ -356,7 +356,7 @@ export function DashboardPage() {
             </div>
             <div style={{ textAlign: 'right' }}>
               <p style={{ margin: '0 0 4px', fontWeight: 700, color: '#9b8ec4', fontSize: '15px' }}>${price}<span style={{ fontWeight: 400, color: '#aaa', fontSize: '12px' }}>/night</span></p>
-              <p style={{ margin: 0, fontSize: '13px', color: '#555' }}>⭐ {rating}</p>
+              <p style={{ margin: 0, fontSize: '13px', color: '#555' }}>★ {rating}</p>
             </div>
           </div>
         ))}
@@ -391,7 +391,7 @@ export function DashboardPage() {
                   <p style={{ margin: 0, fontWeight: 700, fontSize: '14px', color: '#222' }}>{guest}</p>
                   <span style={mkBadge(sc.c, sc.bg)}>{status}</span>
                 </div>
-                <p style={{ margin: '0 0 2px', fontSize: '12px', color: '#888' }}>🏠 {property}</p>
+                <p style={{ margin: '0 0 2px', fontSize: '12px', color: '#888' }}>Home: {property}</p>
                 <p style={{ margin: 0, fontSize: '12px', color: '#aaa' }}>{checkin} → {checkout} · {nights} nights</p>
               </div>
               <p style={{ margin: 0, fontWeight: 700, color: '#9b8ec4', fontSize: '15px' }}>${total}</p>
@@ -456,7 +456,7 @@ export function DashboardPage() {
         ))}
       </div>
       <div style={card}>
-        <h2 style={cardTitle}>💰 Transaction History</h2>
+        <h2 style={cardTitle}>Transaction History</h2>
         {[
           { desc: 'Payout — Bob K. stay', date: 'May 9, 2026', amount: '+$170', pos: true },
           { desc: 'Payout — Carol N. stay', date: 'Apr 25, 2026', amount: '+$475', pos: true },
@@ -529,7 +529,7 @@ export function DashboardPage() {
         ))}
       </div>
       <div style={card}>
-        <h2 style={cardTitle}>✨ Housekeeping Schedule</h2>
+        <h2 style={cardTitle}>Housekeeping Schedule</h2>
         {[
           { property: 'Kigali Hills Villa', date: 'May 9 — 11:00 AM', cleaner: 'Grace N.', done: true },
           { property: 'Lake Kivu Retreat', date: 'May 10 — 10:00 AM', cleaner: 'Jean P.', done: false },
@@ -600,7 +600,7 @@ export function DashboardPage() {
             </div>
             <div style={{ minWidth: 0 }}>
               <p style={{ margin: 0, fontWeight: 700, fontSize: '13px', color: '#222', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user?.email ?? 'Diavela Host'}</p>
-              <p style={{ margin: 0, fontSize: '11px', color: '#9b8ec4', fontWeight: 600 }}>⭐ Superhost</p>
+              <p style={{ margin: 0, fontSize: '11px', color: '#9b8ec4', fontWeight: 600 }}>★ Superhost</p>
             </div>
           </div>
         </div>

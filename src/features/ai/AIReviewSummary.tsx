@@ -94,7 +94,7 @@ export function AIReviewSummary({ listingId, rating }: { listingId: string | und
               <p style={{ margin: '0 0 6px', fontSize: '12px', fontWeight: 700, color: '#008a05' }}>What guests loved</p>
               {data.positives.map((p, i) => (
                 <div key={i} style={{ display: 'flex', gap: '8px', fontSize: '13px', color: bodyText, marginBottom: '4px' }}>
-                  <span style={{ color: '#008a05', flexShrink: 0 }}>✓</span>{p}
+                  <span style={{ color: '#008a05', flexShrink: 0 }}>•</span>{p}
                 </div>
               ))}
             </div>

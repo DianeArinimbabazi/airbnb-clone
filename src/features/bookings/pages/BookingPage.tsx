@@ -65,7 +65,7 @@ export function BookingPage() {
   if (isLoading) return <Spinner />;
   if (!listing) return (
     <div style={{ textAlign:"center", padding:"80px 24px" }}>
-      <p style={{ fontSize:"48px" }}>🏠</p>
+      <p style={{ fontSize:"48px", color: text, marginBottom: 24 }}>Listing not found</p>
       <h2 style={{ color: text }}>Listing not found</h2>
       <button onClick={() => navigate(-1)} style={{ marginTop:"16px", background:"#10B981", color:"#fff", border:"none", borderRadius:"10px", padding:"12px 24px", fontWeight:700, cursor:"pointer", fontFamily:"inherit" }}>
         Go Back

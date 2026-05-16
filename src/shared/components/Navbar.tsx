@@ -35,7 +35,7 @@ export default function Navbar() {
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
         <button onClick={toggleDark} title={dark ? "Light mode" : "Dark mode"} style={{ width: "40px", height: "24px", borderRadius: "50px", border: "none", cursor: "pointer", background: dark ? "#dc2626" : "#e5e7eb", position: "relative", transition: "background 0.2s", flexShrink: 0 }}>
-          <span style={{ position: "absolute", top: "3px", left: dark ? "19px" : "3px", width: "18px", height: "18px", borderRadius: "50%", background: "#fff", transition: "left 0.2s", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px" }}>{dark ? "🌙" : "☀️"}</span>
+          <span style={{ position: "absolute", top: "3px", left: dark ? "19px" : "3px", width: "18px", height: "18px", borderRadius: "50%", background: "#fff", transition: "left 0.2s" }} />
         </button>
         {isAuthenticated ? (
           <>

@@ -1,10 +1,12 @@
-﻿const categories = [
-  { icon: '🏖️', label: 'Beach' },
-  { icon: '🏔️', label: 'Mountain' },
-  { icon: '🏙️', label: 'City' },
-  { icon: '🏠', label: 'House' },
-  { icon: '🌿', label: 'Countryside' },
-  { icon: '✨', label: 'Luxury' },
+﻿import { FiHome, FiMapPin, FiTriangle, FiFeather, FiSun, FiStar } from "react-icons/fi";
+
+const categories = [
+  { icon: FiSun, label: 'Beach' },
+  { icon: FiTriangle, label: 'Mountain' },
+  { icon: FiMapPin, label: 'City' },
+  { icon: FiHome, label: 'House' },
+  { icon: FiFeather, label: 'Countryside' },
+  { icon: FiStar, label: 'Luxury' },
 ];
 
 export function BrowseByType() {
@@ -17,17 +19,20 @@ export function BrowseByType() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {categories.map((cat, index) => (
-          <div 
-            key={index}
-            className="group bg-white border border-gray-100 hover:border-emerald-200 rounded-2xl p-6 text-center cursor-pointer transition-all hover:shadow-md"
-          >
-            <div className="text-5xl mb-4 transition-transform group-hover:scale-110">
-              {cat.icon}
+        {categories.map((cat, index) => {
+          const Icon = cat.icon;
+          return (
+            <div 
+              key={index}
+              className="group bg-white border border-gray-100 hover:border-emerald-200 rounded-2xl p-6 text-center cursor-pointer transition-all hover:shadow-md"
+            >
+              <div className="text-5xl mb-4 transition-transform group-hover:scale-110">
+                <Icon />
+              </div>
+              <p className="font-medium text-gray-800">{cat.label}</p>
             </div>
-            <p className="font-medium text-gray-800">{cat.label}</p>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

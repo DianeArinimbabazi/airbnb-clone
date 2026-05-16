@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../lib/api';
 import { useTheme } from '../../shared/context/ThemeContext';
+import { FiHome } from 'react-icons/fi';
 
 interface Rec {
   listingId: string;
@@ -93,7 +94,7 @@ export function AIRecommendations() {
                   <div style={{ width: '100%', height: '180px', background: dark ? '#333' : '#f5f5f5', overflow: 'hidden', position: 'relative' }}>
                     {photoUrl
                       ? <img src={photoUrl} alt={r.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '48px' }}>🏠</div>
+                      : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><FiHome size={40} color="#9ca3af" /></div>
                     }
                     <span style={{ position: 'absolute', top: '10px', right: '10px', background: '#FF385C', color: '#fff', fontSize: '11px', fontWeight: 700, padding: '3px 8px', borderRadius: '20px' }}>
                       {r.matchScore}% match

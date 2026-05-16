@@ -2,14 +2,11 @@
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { FaHeart, FaRegHeart, FaStar, FaMapMarkerAlt } from "react-icons/fa";
+import { FiHome } from "react-icons/fi";
 import numeral from "numeral";
 import { motion } from "framer-motion";
 import { useFavorites } from "../hooks/useFavorites";
 import styles from "./ListingCard.module.css";
-
-const EMOJI: Record<string, string> = {
-  APARTMENT: "🏢", HOUSE: "🏠", VILLA: "🏡", CABIN: "🛖",
-};
 
 const BASE_URL = "https://airbnb-api-3mnx.onrender.com";
 
@@ -50,7 +47,7 @@ export function ListingCard({ listing }: { listing: any }) {
       <div className={styles.imgWrapper}>
         {imgUrl && !err
           ? <img className={styles.img} src={imgUrl} alt={title} loading="lazy" onError={() => setErr(true)} />
-          : <div className={styles.imgFallback}>{EMOJI[category] ?? "🏠"}</div>
+          : <div className={styles.imgFallback}><FiHome size={32} color="#9ca3af" /></div>
         }
         <span className={styles.category}>{category}</span>
         <button className={styles.heartBtn} onClick={(e) => { e.stopPropagation(); toggle(listing.id, title); }} aria-label="Toggle save">

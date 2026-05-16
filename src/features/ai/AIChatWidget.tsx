@@ -27,7 +27,7 @@ export function AIChatWidget() {
   return (
     <>
       <button onClick={() => setOpen(o => !o)} style={{ position:"fixed", bottom:"28px", right:"28px", zIndex:9999, width:"56px", height:"56px", borderRadius:"50%", background:"linear-gradient(135deg,#FF385C,#ff6b35)", border:"none", cursor:"pointer", fontSize:"24px", color:"#fff", display:"flex", alignItems:"center", justifyContent:"center", boxShadow:"0 4px 20px rgba(255,56,92,0.4)" }}>
-        {open ? "X" : "💬"}
+        {open ? "X" : "Chat"}
       </button>
       {open && (
         <div style={{ position:"fixed", bottom:"96px", right:"28px", zIndex:9998, width:"360px", height:"480px", background:"#fff", borderRadius:"20px", boxShadow:"0 8px 40px rgba(0,0,0,0.18)", display:"flex", flexDirection:"column", overflow:"hidden" }}>

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useMyBookings, useCancelBooking } from "../../bookings/hooks/useMyBookings";
 import { useTheme } from "../../../shared/context/ThemeContext";
+import { FaStar } from "react-icons/fa";
 import toast from "react-hot-toast";
 
 function getGreeting() {
@@ -49,6 +50,8 @@ export default function GuestDashboard() {
   const upcoming  = bookings.filter(b => b.status === "CONFIRMED" && new Date(b.checkIn) >= new Date());
   const past      = bookings.filter(b => b.status === "COMPLETED" || b.status === "CANCELLED" || (b.status === "CONFIRMED" && new Date(b.checkIn) < new Date()));
   const displayed = tab === "upcoming" ? upcoming : past;
+  const ratingValues = bookings.map(b => b.listing.rating).filter((r): r is number => typeof r === "number");
+  const averageRating = ratingValues.length ? ratingValues.reduce((sum, r) => sum + r, 0) / ratingValues.length : null;
 
   async function handleCancel(id: string) {
     if (!confirm("Cancel this booking?")) return;
@@ -66,17 +69,17 @@ export default function GuestDashboard() {
   return (
     <div style={{ fontFamily: "Outfit, Segoe UI, sans-serif", background: bg, minHeight: "100vh" }}>
 
-      <section style={{ background: heroBg, padding: "48px 32px 64px" }}>
-        <div style={{ maxWidth: "1100px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "16px" }}>
-          <div>
+      <section style={{ background: heroBg, padding: "40px 20px 56px" }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "stretch", flexWrap: "wrap", gap: "16px" }}>
+          <div style={{ minWidth: 280, flex: "1 1 420px", minHeight: 130 }}>
             <p style={{ margin: "0 0 6px", color: "#aaaaaa", fontSize: "14px", fontWeight: 600 }}>{getGreeting()}</p>
-            <h1 style={{ margin: "0 0 8px", fontSize: "36px", fontWeight: 800, color: "#ffffff", letterSpacing: "-1px" }}>
+            <h1 style={{ margin: "0 0 8px", fontSize: "clamp(28px, 4vw, 36px)", fontWeight: 800, color: "#ffffff", letterSpacing: "-0.8px", lineHeight: 1.05 }}>
               Welcome back, {user?.name ?? "Guest"}
             </h1>
-            <p style={{ margin: 0, color: "#aaaaaa", fontSize: "15px" }}>{user?.email}</p>
+            <p style={{ margin: 0, color: "#cccccc", fontSize: "15px", maxWidth: 520 }}>{user?.email}</p>
           </div>
           <button onClick={() => { logout(); navigate("/"); }}
-            style={{ background: "transparent", border: "1.5px solid #444444", borderRadius: "10px", padding: "10px 20px", color: "#ffffff", fontWeight: 700, fontSize: "13px", cursor: "pointer", fontFamily: "inherit" }}>
+            style={{ background: "transparent", border: "1.5px solid #444444", borderRadius: "14px", padding: "12px 24px", color: "#ffffff", fontWeight: 700, fontSize: "13px", cursor: "pointer", fontFamily: "inherit", alignSelf: "center", minWidth: 140 }}>
             Log out
           </button>
         </div>
@@ -89,6 +92,7 @@ export default function GuestDashboard() {
             { label: "Upcoming",       value: upcoming.length },
             { label: "Completed",      value: bookings.filter(b => b.status === "COMPLETED").length },
             { label: "Cancelled",      value: bookings.filter(b => b.status === "CANCELLED").length },
+            { label: "Average rating", value: averageRating ? averageRating.toFixed(1) : "N/A" },
           ].map(({ label, value }) => (
             <div key={label} style={{ background: card, border: `1px solid ${border}`, borderRadius: "16px", padding: "20px 16px", textAlign: "center", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
               <p style={{ margin: "0 0 4px", fontSize: "24px", fontWeight: 800, color: text }}>{value}</p>
@@ -147,13 +151,19 @@ export default function GuestDashboard() {
                   </div>
                   <div style={{ flex: 1, padding: "20px 24px", display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "12px" }}>
                     <div>
-                      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px", flexWrap: "wrap" }}>
                         <h3 style={{ margin: 0, fontSize: "16px", fontWeight: 800, color: text }}>{booking.listing.title}</h3>
                         <span style={{ padding: "3px 10px", borderRadius: "20px", fontSize: "11px", fontWeight: 700, color: statusStyle.color, background: statusStyle.bg }}>{booking.status}</span>
                       </div>
                       <p style={{ margin: "0 0 10px", fontSize: "13px", color: sub }}>{booking.listing.location}</p>
+                      {typeof booking.listing.rating === "number" && (
+                        <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", marginBottom: "8px", color: "#f59e0b", fontSize: "13px", fontWeight: 700 }}>
+                          <FaStar size={12} />
+                          <span>{booking.listing.rating.toFixed(1)}</span>
+                        </div>
+                      )}
                       <p style={{ margin: "0 0 4px", fontSize: "13px", color: sub }}>{formatDate(booking.checkIn)} to {formatDate(booking.checkOut)}</p>
-                      <p style={{ margin: 0, fontSize: "12px", color: sub }}>{n} night{n !== 1 ? "s" : ""} &middot; ${booking.listing.pricePerNight}/night</p>
+                      <p style={{ margin: 0, fontSize: "12px", color: sub }}>{n} night{n !== 1 ? "s" : ""} · ${booking.listing.pricePerNight}/night</p>
                     </div>
                     <div style={{ textAlign: "right" }}>
                       <p style={{ margin: "0 0 12px", fontSize: "20px", fontWeight: 800, color: text }}>${booking.totalPrice}</p>

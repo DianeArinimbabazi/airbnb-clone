@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../hooks/useAuth";
 import { useMyBookings } from "../../bookings/hooks/useMyBookings";
 import { api } from "../../../lib/api";
+import { FiHome, FiStar } from "react-icons/fi";
 
 interface Listing {
   id: string;
@@ -12,6 +13,7 @@ interface Listing {
   pricePerNight: number;
   type: string;
   guests: number;
+  rating?: number;
   photos?: { url: string }[];
 }
 interface ListingsResponse {
@@ -56,12 +58,17 @@ export default function HostDashboard() {
     b => b.status === "CONFIRMED" && new Date(b.checkIn) >= new Date()
   );
 
+  const ratings = listings.map(l => l.rating).filter((r): r is number => typeof r === "number");
+  const avgRating = ratings.length ? ratings.reduce((sum, r) => sum + r, 0) / ratings.length : null;
   const stats = [
-    { label: "My Listings", value: listings.length, icon: "🏠" },
-    { label: "Total Bookings", value: bookings.length, icon: "📋" },
-    { label: "Upcoming", value: upcoming.length, icon: "📅" },
-    { label: "Total Earned", value: `$${totalRevenue.toLocaleString()}`, icon: "💰" },
+    { label: "My Listings", value: listings.length },
+    { label: "Total Bookings", value: bookings.length },
+    { label: "Upcoming", value: upcoming.length },
+    { label: "Total Earned", value: `$${totalRevenue.toLocaleString()}` },
   ];
+  if (avgRating !== null) {
+    stats.push({ label: "Avg rating", value: avgRating.toFixed(1) });
+  }
 
   const STATUS_STYLE: Record<string, { color: string; bg: string; border: string }> = {
     CONFIRMED: { color: "#166534", bg: "#f0fdf4", border: "#d1fae5" },
@@ -77,7 +84,7 @@ export default function HostDashboard() {
           <div>
             <p style={{ margin: "0 0 6px", color: "#aaaaaa", fontSize: "14px", fontWeight: 600 }}>Host dashboard</p>
             <h1 style={{ margin: "0 0 8px", fontSize: "36px", fontWeight: 800, color: "#ffffff", letterSpacing: "-1px" }}>
-              Welcome, {user?.name ?? "Host"} 👋
+              Welcome, {user?.name ?? "Host"}
             </h1>
             <p style={{ margin: 0, color: "#aaaaaa", fontSize: "15px" }}>{user?.email}</p>
           </div>
@@ -94,9 +101,9 @@ export default function HostDashboard() {
 
       <section style={{ maxWidth: "1100px", margin: "-28px auto 0", padding: "0 32px" }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: "14px" }}>
-          {stats.map(({ label, value, icon }) => (
+          {stats.map(({ label, value }) => (
             <div key={label} style={{ background: card, borderRadius: "16px", padding: "22px 20px", border: `1px solid ${border}`, boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
-              <p style={{ margin: "0 0 6px", fontSize: "12px", color: sub, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px" }}>{icon} {label}</p>
+              <p style={{ margin: "0 0 6px", fontSize: "12px", color: sub, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px" }}>{label}</p>
               <p style={{ margin: 0, fontSize: "26px", fontWeight: 800, color: text }}>{value}</p>
             </div>
           ))}
@@ -109,7 +116,7 @@ export default function HostDashboard() {
           <div style={{ textAlign: "center", padding: "40px", color: sub }}>Loading listings...</div>
         ) : listings.length === 0 ? (
           <div style={{ textAlign: "center", padding: "60px", background: card, borderRadius: "20px", border: `1px solid ${border}` }}>
-            <p style={{ fontSize: "48px", margin: "0 0 16px" }}>🏠</p>
+            <p style={{ fontSize: "48px", margin: "0 0 16px", color: "#9ca3af" }}>Your first listing will appear here once created.</p>
             <h3 style={{ color: text, margin: "0 0 8px" }}>No listings yet</h3>
             <p style={{ color: sub, margin: "0 0 24px" }}>Create your first listing to start hosting</p>
             <button onClick={() => navigate("/listings/new")} style={{ background: "#111111", color: "#ffffff", border: "none", borderRadius: "50px", padding: "12px 28px", fontSize: "14px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
@@ -123,16 +130,23 @@ export default function HostDashboard() {
               return (
                 <div key={l.id} style={{ background: card, borderRadius: "18px", border: `1px solid ${border}`, display: "flex", alignItems: "center", gap: "20px", padding: "16px 20px", flexWrap: "wrap" }}>
                   <div style={{ width: "80px", height: "64px", borderRadius: "12px", overflow: "hidden", flexShrink: 0, background: "#f5f5f5", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    {photo ? <img src={photo} alt={l.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span style={{ fontSize: "24px" }}>🏠</span>}
+                    {photo ? <img src={photo} alt={l.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <FiHome size={26} color="#9ca3af" />}
                   </div>
                   <div style={{ flex: 1, minWidth: "160px" }}>
                     <p style={{ margin: "0 0 4px", fontWeight: 700, fontSize: "15px", color: text }}>{l.title}</p>
-                    <p style={{ margin: "0 0 2px", fontSize: "13px", color: sub }}>📍 {l.location}</p>
+                    <p style={{ margin: "0 0 2px", fontSize: "13px", color: sub }}>{l.location}</p>
                     <p style={{ margin: 0, fontSize: "12px", color: "#aaaaaa" }}>{l.type} · up to {l.guests} guests · ${l.pricePerNight}/night</p>
                   </div>
-                  <span style={{ fontSize: "12px", fontWeight: 700, padding: "5px 14px", borderRadius: "20px", background: "#f0fdf4", color: "#166534", border: "1px solid #d1fae5" }}>
-                    Active
-                  </span>
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+                    {typeof l.rating === "number" && (
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "5px 12px", borderRadius: "999px", background: "#f8fafc", color: "#111827", border: "1px solid #e5e7eb", fontSize: "12px", fontWeight: 700 }}>
+                        <FiStar size={12} />{l.rating.toFixed(1)}
+                      </span>
+                    )}
+                    <span style={{ fontSize: "12px", fontWeight: 700, padding: "5px 14px", borderRadius: "20px", background: "#f0fdf4", color: "#166534", border: "1px solid #d1fae5" }}>
+                      Active
+                    </span>
+                  </div>
                   <div style={{ display: "flex", gap: "8px" }}>
                     <button onClick={() => navigate(`/listings/${l.id}`)} style={{ background: "none", border: "1.5px solid #e5e7eb", borderRadius: "50px", padding: "8px 16px", fontSize: "13px", fontWeight: 600, color: "#555555", cursor: "pointer", fontFamily: "inherit" }}>View</button>
                     <button onClick={() => navigate(`/listings/${l.id}/edit`)} style={{ background: "none", border: "1.5px solid #e5e7eb", borderRadius: "50px", padding: "8px 16px", fontSize: "13px", fontWeight: 600, color: "#555555", cursor: "pointer", fontFamily: "inherit" }}>Edit</button>
@@ -175,7 +189,7 @@ export default function HostDashboard() {
 
       <section style={{ maxWidth: "1100px", margin: "0 auto 48px", padding: "0 32px" }}>
         <div style={{ background: "#111111", borderRadius: "20px", padding: "32px 36px", display: "flex", alignItems: "center", gap: "20px", flexWrap: "wrap" }}>
-          <div style={{ fontSize: "36px" }}>💡</div>
+          <div style={{ width: 52, height: 52, borderRadius: 16, background: "#111827", display: "flex", alignItems: "center", justifyContent: "center", color: "#10b981" }}><FiStar size={24} /></div>
           <div style={{ flex: 1 }}>
             <p style={{ margin: "0 0 4px", fontWeight: 800, fontSize: "16px", color: "#ffffff" }}>Pro tip: Verified hosts earn 30% more</p>
             <p style={{ margin: 0, fontSize: "13px", color: "#aaaaaa", lineHeight: 1.6 }}>Complete your host profile and verification to unlock higher visibility and guest trust.</p>

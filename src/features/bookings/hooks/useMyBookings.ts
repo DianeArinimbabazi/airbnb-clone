@@ -11,7 +11,7 @@ export interface Booking {
   status: string;
   createdAt: string;
   guest?: { name: string; email: string };
-  listing: { title: string; location: string; pricePerNight: number; photos?: { url: string }[] };
+  listing: { title: string; location: string; pricePerNight: number; photos?: { url: string }[]; rating?: number };
 }
 
 interface BookingsResponse {

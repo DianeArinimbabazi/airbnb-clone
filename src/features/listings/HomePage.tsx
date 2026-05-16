@@ -7,12 +7,12 @@ import { ListingCard } from './components/ListingCard';
 const CATEGORIES = [
   { icon: '🏙️', label: 'City Stays', count: 124 },
   { icon: '🌊', label: 'Lakeside', count: 48 },
-  { icon: '⛰️', label: 'Mountain', count: 63 },
-  { icon: '🌿', label: 'Forest', count: 37 },
-  { icon: '🏡', label: 'Countryside', count: 91 },
-  { icon: '🏊', label: 'With Pool', count: 55 },
-  { icon: '🌅', label: 'Beachfront', count: 29 },
-  { icon: '🏰', label: 'Unique Stays', count: 42 },
+  { icon: 'MTN', label: 'Mountain', count: 63 },
+  { icon: 'FOR', label: 'Forest', count: 37 },
+  { icon: 'CTR', label: 'Countryside', count: 91 },
+  { icon: 'PLO', label: 'With Pool', count: 55 },
+  { icon: 'BCH', label: 'Beachfront', count: 29 },
+  { icon: 'UNQ', label: 'Unique Stays', count: 42 },
 ];
 
 const DESTINATIONS = [
@@ -23,16 +23,16 @@ const DESTINATIONS = [
 ];
 
 const STATS = [
-  { value: '10K+', label: 'Happy guests', icon: '😊' },
-  { value: '500+', label: 'Unique listings', icon: '🏠' },
-  { value: '50+', label: 'Destinations', icon: '📍' },
-  { value: '4.9★', label: 'Average rating', icon: '⭐' },
+  { value: '10K+', label: 'Happy guests', icon: 'HG' },
+  { value: '500+', label: 'Unique listings', icon: 'HL' },
+  { value: '50+', label: 'Destinations', icon: 'DS' },
+  { value: '4.9★', label: 'Average rating', icon: 'AR' },
 ];
 
 const HOW = [
-  { step: '01', icon: '🔍', title: 'Search your destination', desc: 'Enter your location and dates to find available verified properties near you.' },
-  { step: '02', icon: '🏡', title: 'Choose your perfect stay', desc: 'Compare listings with real reviews, photos, and transparent pricing.' },
-  { step: '03', icon: '✅', title: 'Book with confidence', desc: 'Secure payment, host-verified identity, and our stay guarantee protect every booking.' },
+  { step: '01', icon: 'SR', title: 'Search your destination', desc: 'Enter your location and dates to find available verified properties near you.' },
+  { step: '02', icon: 'PS', title: 'Choose your perfect stay', desc: 'Compare listings with real reviews, photos, and transparent pricing.' },
+  { step: '03', icon: 'BC', title: 'Book with confidence', desc: 'Secure payment, host-verified identity, and our stay guarantee protect every booking.' },
 ];
 
 const REVIEWS = [
