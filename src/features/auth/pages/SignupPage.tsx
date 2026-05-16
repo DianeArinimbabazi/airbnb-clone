@@ -89,9 +89,10 @@ export function SignupPage() {
         <div style={{ position:"absolute", top:"-80px", right:"-80px", width:"300px", height:"300px", borderRadius:"50%", background:"rgba(255,56,92,0.06)" }} />
         <div style={{ position:"absolute", bottom:"-60px", left:"-60px", width:"200px", height:"200px", borderRadius:"50%", background:"rgba(16,185,129,0.08)" }} />
         <div style={{ textAlign:"center", maxWidth:"360px", position:"relative", zIndex:1 }}>
-          <h2 style={{ fontSize:"26px", fontWeight:700, color:text, marginBottom:"12px" }}>Effortlessly organize your workspace with ease.</h2>
-          <p style={{ fontSize:"14px", color:sub, marginBottom:"40px", lineHeight:1.7 }}>Find the perfect stay, connect with hosts, and manage your bookings all in one place.</p>
-          <div style={{ background:card, borderRadius:"20px", padding:"32px", boxShadow:"0 8px 40px rgba(0,0,0,0.08)" }}>
+          <div style={{ fontSize:"56px", fontWeight:800, color:"#FF385C", marginBottom:"16px", letterSpacing:"-1px" }}>DIAVELA</div>
+          <h2 style={{ fontSize:"20px", fontWeight:700, color:text, marginBottom:"12px" }}>Trusted Travel Experiences</h2>
+          <p style={{ fontSize:"14px", color:sub, marginBottom:"40px", lineHeight:1.7 }}>Your gateway to authentic stays, verified hosts, and unforgettable Rwanda experiences.</p>
+          <div style={{ background:card, borderRadius:"20px", padding:"32px", boxShadow:"0 8px 40px rgba(0,0,0,0.08)", marginTop:"40px" }}>
             <div style={{ display:"flex", gap:"8px", marginBottom:"16px" }}>
               <div style={{ width:"12px", height:"12px", borderRadius:"50%", background:"#FF385C" }} />
               <div style={{ flex:1, height:"12px", borderRadius:"6px", background:rightBg }} />
