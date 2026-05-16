@@ -104,7 +104,6 @@ export function SignupPage() {
             </div>
             <div style={{ height:"2px", background:"#f0f0f0", marginTop:"8px" }} />
           </div>
-          <div style={{ marginTop:"24px", fontSize:"64px" }}>&#127968;</div>
         </div>
       </div>
     </div>
