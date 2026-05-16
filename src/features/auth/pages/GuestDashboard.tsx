@@ -140,7 +140,7 @@ export default function GuestDashboard() {
               const statusStyle = STATUS_STYLE[booking.status] ?? STATUS_STYLE.CONFIRMED;
               const photo = booking.listing?.photos?.[0]?.url;
               const n = nights(booking.checkIn, booking.checkOut);
-              const canCancel = booking.status === "CONFIRMED" && new Date(booking.checkIn) > new Date();
+              // // const canCancel = booking.status === "CONFIRMED" && new Date(booking.checkIn) > new Date();
               return (
                 <div key={booking.id} style={{ background: card, borderRadius: "18px", border: `1px solid ${border}`, overflow: "hidden", display: "flex", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}>
                   <div style={{ width: "160px", minHeight: "140px", flexShrink: 0, overflow: "hidden", background: dark ? "#333333" : "#f5f5f5", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -163,7 +163,7 @@ export default function GuestDashboard() {
                         </div>
                       )}
                       <p style={{ margin: "0 0 4px", fontSize: "13px", color: sub }}>{formatDate(booking.checkIn)} to {formatDate(booking.checkOut)}</p>
-                      <p style={{ margin: 0, fontSize: "12px", color: sub }}>{n} night{n !== 1 ? "s" : ""} · ${booking.listing.pricePerNight}/night</p>
+                      <p style={{ margin: 0, fontSize: "12px", color: sub }}>{n} night{n !== 1 ? "s" : ""} � ${booking.listing.pricePerNight}/night</p>
                     </div>
                     <div style={{ textAlign: "right" }}>
                       <p style={{ margin: "0 0 12px", fontSize: "20px", fontWeight: 800, color: text }}>${booking.totalPrice}</p>
