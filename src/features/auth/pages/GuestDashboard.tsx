@@ -172,11 +172,7 @@ export default function GuestDashboard() {
                           style={{ padding: "8px 16px", borderRadius: "8px", border: `1.5px solid ${border}`, background: card, color: sub, fontWeight: 600, fontSize: "12px", cursor: "pointer", fontFamily: "inherit" }}>
                           View listing
                         </button>
-                        <button onClick={() => navigate(`/listings/${booking.listingId}/book?checkIn=${booking.checkIn.slice(0,10)}&checkOut=${booking.checkOut.slice(0,10)}`)}
-                          style={{ padding: "8px 16px", borderRadius: "8px", border: `1.5px solid ${border}`, background: "#fff7ed", color: "#b45309", fontWeight: 700, fontSize: "12px", cursor: "pointer", fontFamily: "inherit" }}>
-                          Rebook
-                        </button>
-                        {canCancel && (
+                        {tab === "upcoming" ? (
                           <>
                             <button onClick={() => navigate(`/listings/${booking.listingId}/book?checkIn=${booking.checkIn.slice(0,10)}&checkOut=${booking.checkOut.slice(0,10)}&rescheduleBookingId=${booking.id}`)}
                               style={{ padding: "8px 16px", borderRadius: "8px", border: `1.5px solid ${border}`, background: "#eef2ff", color: "#4338ca", fontWeight: 700, fontSize: "12px", cursor: "pointer", fontFamily: "inherit" }}>
@@ -187,6 +183,11 @@ export default function GuestDashboard() {
                               {cancelling === booking.id ? "Cancelling..." : "Cancel"}
                             </button>
                           </>
+                        ) : (
+                          <button onClick={() => navigate(`/listings/${booking.listingId}/book?checkIn=${booking.checkIn.slice(0,10)}&checkOut=${booking.checkOut.slice(0,10)}`)}
+                            style={{ padding: "8px 16px", borderRadius: "8px", border: `1.5px solid ${border}`, background: "#fff7ed", color: "#b45309", fontWeight: 700, fontSize: "12px", cursor: "pointer", fontFamily: "inherit" }}>
+                            Rebook
+                          </button>
                         )}
                       </div>
                     </div>
