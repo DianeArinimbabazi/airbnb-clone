@@ -1,11 +1,11 @@
 ﻿import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../hooks/useAuth";
 import { useTheme } from "../../../shared/context/ThemeContext";
 import { api } from "../../../lib/api";
 import toast from "react-hot-toast";
-import { FiHome, FiPlus, FiMessageSquare, FiStar, FiCalendar, FiHeart, FiUser, FiSettings, FiLogOut, FiCheck, FiX, FiEye, FiSearch, FiShield, FiClock, FiDollarSign, FiMapPin } from "react-icons/fi";
+import { FiHome, FiPlus, FiMessageSquare, FiStar, FiCalendar, FiHeart, FiUser, FiSettings, FiLogOut, FiCheck, FiEye, FiSearch, FiShield, FiClock, FiDollarSign, FiMapPin } from "react-icons/fi";
 
 interface Booking {
   id: string;
@@ -240,3 +240,4 @@ export function AdminDashboard() {
 }
 
 export default AdminDashboard;
+
