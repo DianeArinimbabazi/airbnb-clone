@@ -3,18 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../hooks/useAuth";
-import { useMyBookings } from "../../bookings/hooks/useMyBookings";
+import { useMyBookings, Booking } from "../../bookings/hooks/useMyBookings";
 import { api } from "../../../lib/api";
 import toast from "react-hot-toast";
 import { FiCalendar, FiHome, FiStar, FiMessageSquare, FiX } from "react-icons/fi";
 
-interface Booking {
-  id: string;
-  status: "PENDING" | "CONFIRMED" | "CANCELLED" | "COMPLETED";
-  checkIn: string;
-  checkOut: string;
-  totalPrice: number;
-  listing: { id: string; title: string; location?: string };
+interface BookingWithReview extends Booking {
   review?: { id: string; rating: number; comment: string };
 }
 
@@ -42,13 +36,13 @@ function StarPicker({ value, onChange }: { value: number; onChange: (n: number) 
   );
 }
 
-function ReviewModal({ booking, onClose, card, text, sub, border }: { booking: Booking; onClose: () => void; card: string; text: string; sub: string; border: string; }) {
+function ReviewModal({ booking, onClose, card, text, sub, border }: { booking: BookingWithReview; onClose: () => void; card: string; text: string; sub: string; border: string; }) {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const qc = useQueryClient();
   const submitReview = useMutation({
-    mutationFn: () => api.post(`/reviews`, { bookingId: booking.id, listingId: booking.listing.id, rating, comment }),
-    onSuccess: () => { toast.success("Review submitted! Thank you."); qc.invalidateQueries({ queryKey: ["myBookings"] }); onClose(); },
+    mutationFn: () => api.post(`/reviews`, { bookingId: booking.id, listingId: booking.listingId, rating, comment }),
+    onSuccess: () => { toast.success("Review submitted! Thank you."); qc.invalidateQueries({ queryKey: ["bookings"] }); onClose(); },
     onError: (e: any) => toast.error(e?.message || "Could not submit review"),
   });
   return (
@@ -80,8 +74,9 @@ export default function GuestDashboard() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const { dark } = useTheme();
-  const { data: bookings = [], isLoading } = useMyBookings() as { data: Booking[]; isLoading: boolean };
-  const [reviewTarget, setReviewTarget] = useState<Booking | null>(null);
+  const { data: rawBookings = [], isLoading } = useMyBookings();
+  const bookings = rawBookings as BookingWithReview[];
+  const [reviewTarget, setReviewTarget] = useState<BookingWithReview | null>(null);
 
   const bg = dark ? "#0f0f0f" : "#f5f5f5";
   const card = dark ? "#1a1a1a" : "#ffffff";
@@ -169,7 +164,7 @@ export default function GuestDashboard() {
                       <span style={{ fontSize: "12px", fontWeight: 700, padding: "4px 12px", borderRadius: "20px", background: s.bg, color: s.color, border: `1px solid ${s.border}` }}>{s.label}</span>
                       {b.review && <span style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "12px", fontWeight: 700, color: "#166534", background: "#f0fdf4", border: "1px solid #d1fae5", borderRadius: "999px", padding: "4px 12px" }}><FiStar size={11} fill="#16a34a" color="#16a34a" />Reviewed ({b.review.rating}/5)</span>}
                       {canReview && <button onClick={() => setReviewTarget(b)} style={{ display: "flex", alignItems: "center", gap: "6px", background: "#fffbeb", border: "1.5px solid #fde68a", borderRadius: "50px", padding: "7px 14px", fontSize: "12px", fontWeight: 700, color: "#92400e", cursor: "pointer", fontFamily: "inherit" }}><FiStar size={12} /> Leave review</button>}
-                      <button onClick={() => navigate(`/listings/${b.listing.id}`)} style={{ background: "none", border: "1.5px solid #e5e7eb", borderRadius: "50px", padding: "7px 14px", fontSize: "12px", fontWeight: 600, color: "#555555", cursor: "pointer", fontFamily: "inherit" }}>View listing</button>
+                      <button onClick={() => navigate(`/listings/${b.listingId}`)} style={{ background: "none", border: "1.5px solid #e5e7eb", borderRadius: "50px", padding: "7px 14px", fontSize: "12px", fontWeight: 600, color: "#555555", cursor: "pointer", fontFamily: "inherit" }}>View listing</button>
                     </div>
                   );
                 })}
