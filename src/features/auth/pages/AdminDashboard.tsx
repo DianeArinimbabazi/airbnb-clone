@@ -105,7 +105,7 @@ export function AdminDashboard() {
       {/* Sidebar */}
       <div style={{ width: "220px", flexShrink: 0, background: card, borderRight: `1px solid ${border}`, display: "flex", flexDirection: "column", position: "sticky", top: 0, height: "100vh", overflowY: "auto" }}>
         <div style={{ padding: "18px 20px 14px", fontSize: "20px", fontWeight: 800, borderBottom: `1px solid ${border}`, display: "flex", alignItems: "center", gap: "8px", color: text }}>
-          <FiMapPin size={18} color={accent} />DIA<span style={{ color: accent }}>VELA</span>
+          <span style={{ fontWeight: 800, fontSize: "18px", color: text }}>DIA<span style={{ color: accent }}>VELA</span></span>
         </div>
 
         <div style={{ padding: "14px 0 4px" }}>
@@ -240,6 +240,7 @@ export function AdminDashboard() {
 }
 
 export default AdminDashboard;
+
 
 
 
