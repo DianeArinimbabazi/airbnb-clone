@@ -24,6 +24,7 @@ const CreateListingPage = lazy(() => import("./features/host/pages/CreateListing
 const EditListingPage   = lazy(() => import("./features/host/pages/EditListingPage").then(m => ({ default: m.EditListingPage ?? m.default })));
 const ModerationQueue   = lazy(() => import("./features/admin/pages/ModerationQueue").then(m => ({ default: m.ModerationQueue ?? m.default })));
 const ProfilePage       = lazy(() => import("./features/auth/pages/ProfilePage").then(m => ({ default: m.ProfilePage ?? m.default })));
+const MessagesPage      = lazy(() => import("./features/messages/pages/MessagesPage").then(m => ({ default: m.default })));
 
 NProgress.configure({ showSpinner: false, trickleSpeed: 200 });
 
@@ -64,6 +65,7 @@ export default function App() {
           <Route path="/admin"            element={<RequireAuth role="ADMIN"><AdminDashboard /></RequireAuth>} />
           <Route path="/admin/moderation" element={<RequireAuth role="ADMIN"><ModerationQueue /></RequireAuth>} />
           <Route path="/profile"          element={<RequireAuth><ProfilePage /></RequireAuth>} />
+          <Route path="/messages"         element={<RequireAuth><MessagesPage /></RequireAuth>} />
           <Route path="/dashboard"        element={<DashboardRedirect />} />
           <Route path="*"                 element={<NotFound />} />
         </Routes>
@@ -80,6 +82,7 @@ function DashboardRedirect() {
   if (user?.role === "ADMIN") return <Navigate to="/admin" replace />;
   return <Navigate to="/guest" replace />;
 }
+
 
 
 

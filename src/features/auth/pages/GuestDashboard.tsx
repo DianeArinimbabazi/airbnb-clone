@@ -96,7 +96,7 @@ export default function GuestDashboard() {
     { id: "home",     icon: <FiHome size={15} />,        label: "Home",           action: () => navigate("/") },
     { id: "listings", icon: <FiMapPin size={15} />,      label: "Browse listings",action: () => navigate("/listings") },
     { id: "saved",    icon: <FiHeart size={15} />,       label: "Saved",          action: () => setActiveNav("saved") },
-    { id: "messages", icon: <FiMessageSquare size={15} />,label: "Messages",      action: () => navigate("/profile") },
+    { id: "messages", icon: <FiMessageSquare size={15} />,label: "Messages",      action: () => navigate("/messages") },
   ];
   const accountItems = [
     { id: "bookings", icon: <FiCalendar size={15} />, label: "My bookings",  action: () => setActiveNav("bookings") },
@@ -358,6 +358,7 @@ export default function GuestDashboard() {
     </div>
   );
 }
+
 
 
 
