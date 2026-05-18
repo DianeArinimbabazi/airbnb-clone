@@ -95,7 +95,7 @@ export default function GuestDashboard() {
   ];
   const accountItems = [
     { id: "bookings", icon: <FiCalendar size={15} />, label: "My bookings",  action: () => setActiveNav("bookings") },
-    { id: "reviews",  icon: <FiStar size={15} />,     label: "My reviews",   action: () => setActiveNav("bookings") },
+    { id: "reviews",  icon: <FiStar size={15} />,     label: "My reviews",   action: () => setActiveNav("reviews") },
     { id: "profile",  icon: <FiUser size={15} />,     label: "Edit profile", action: () => navigate("/profile") },
     { id: "settings", icon: <FiSettings size={15} />, label: "Settings",     action: () => navigate("/profile") },
     { id: "logout",   icon: <FiLogOut size={15} />,   label: "Log out",      action: () => { logout(); navigate("/"); } },
@@ -186,10 +186,29 @@ export default function GuestDashboard() {
           )}
 
           {/* Bookings table */}
+          {activeNav === "reviews" ? (
+            <div>
+              <p style={{ fontSize: "15px", fontWeight: 700, color: text, marginBottom: "12px" }}>My Reviews</p>
+              <div style={{ background: card, border: `1px solid ${border}`, borderRadius: "14px", overflow: "hidden" }}>
+                {bookings.filter(b => b.review).length === 0 ? (
+                  <p style={{ padding: "32px", textAlign: "center", color: sub, fontSize: "13px", margin: 0 }}>No reviews yet — complete a stay and share your experience!</p>
+                ) : bookings.filter(b => b.review).map(b => (
+                  <div key={b.id} style={{ padding: "16px 20px", borderBottom: `1px solid ${border}`, display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                    <div>
+                      <p style={{ margin: "0 0 4px", fontWeight: 700, fontSize: "14px", color: text }}>{b.listing?.title}</p>
+                      <p style={{ margin: "0 0 6px", fontSize: "12px", color: sub }}>{b.listing?.location}</p>
+                      <p style={{ margin: 0, fontSize: "13px", color: text }}>{b.review?.comment}</p>
+                    </div>
+                    <span style={{ fontSize: "13px", fontWeight: 700, color: "#f59e0b", whiteSpace: "nowrap", marginLeft: "16px" }}>★ {b.review?.rating}/5</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
             <p style={{ fontSize: "15px", fontWeight: 700, color: text, margin: 0 }}>My Bookings</p>
             <span onClick={() => navigate("/listings")} style={{ fontSize: "12px", color: accent, cursor: "pointer" }}>Browse more</span>
-          </div>
+          </div>)
           <div style={{ background: card, border: `1px solid ${border}`, borderRadius: "14px", overflow: "hidden" }}>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
@@ -241,11 +260,16 @@ export default function GuestDashboard() {
               Showing {filtered.length} of {bookings.length} bookings
             </div>
           </div>
+          )}
         </div>
       </div>
     </div>
   );
 }
+
+
+
+
 
 
 
