@@ -46,7 +46,7 @@ export default function App() {
 
   return (
     <>
-      {!location.pathname.startsWith("/admin") && <Navbar />}
+      {!["/admin","/host","/guest"].some(p => location.pathname.startsWith(p)) && <Navbar />}
       <Suspense fallback={<Spinner />}>
         <Routes>
           <Route path="/"       element={<HomePage />} />
@@ -80,5 +80,6 @@ function DashboardRedirect() {
   if (user?.role === "ADMIN") return <Navigate to="/admin" replace />;
   return <Navigate to="/guest" replace />;
 }
+
 
 
