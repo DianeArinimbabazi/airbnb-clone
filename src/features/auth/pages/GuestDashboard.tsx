@@ -181,7 +181,7 @@ export default function GuestDashboard() {
                   <p style={{ margin: 0, fontSize: "12px", color: "#b45309" }}>Share your experience to help other guests</p>
                 </div>
               </div>
-              <button onClick={() => setReviewTarget(reviewable[0])} style={{ background: "#f59e0b", color: "#fff", border: "none", borderRadius: "8px", padding: "8px 16px", fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Write a review</button>
+              <button onClick={() => setReviewTarget({ ...reviewable[0], listingId: reviewable[0].listingId || (reviewable[0] as any).listing?.id })} style={{ background: "#f59e0b", color: "#fff", border: "none", borderRadius: "8px", padding: "8px 16px", fontSize: "12px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Write a review</button>
             </div>
           )}
 
@@ -224,7 +224,7 @@ export default function GuestDashboard() {
                       <td style={{ padding: "11px 14px" }}>
                         <div style={{ display: "flex", gap: "6px" }}>
                           {canReview && (
-                            <button onClick={() => setReviewTarget(b)} style={{ background: "#fffbeb", color: "#92400e", border: `1px solid #fde68a`, borderRadius: "6px", padding: "5px 10px", fontSize: "11px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", display: "flex", alignItems: "center", gap: "4px" }}><FiStar size={11} /> Review</button>
+                            <button onClick={() => setReviewTarget({ ...b, listingId: b.listingId || (b as any).listing?.id })} style={{ background: "#fffbeb", color: "#92400e", border: `1px solid #fde68a`, borderRadius: "6px", padding: "5px 10px", fontSize: "11px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", display: "flex", alignItems: "center", gap: "4px" }}><FiStar size={11} /> Review</button>
                           )}
                           {b.review && (
                             <span style={{ fontSize: "11px", fontWeight: 600, color: "#3b6d11", background: "#eaf3de", borderRadius: "6px", padding: "5px 10px" }}>★ {b.review.rating}/5</span>
@@ -246,6 +246,7 @@ export default function GuestDashboard() {
     </div>
   );
 }
+
 
 
 
