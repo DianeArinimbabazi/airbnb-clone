@@ -131,7 +131,7 @@ export function AdminDashboard() {
             <FiSearch size={13} /><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search bookings..." style={{ border:"none", background:"transparent", fontSize:"13px", color:text, outline:"none", width:"160px" }} />
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "16px", fontSize: "13px", color: sub }}>
-            {["Home","Dashboard","Listings","Explore"].map(l => <span key={l} style={{ cursor: "pointer" }}>{l}</span>)}
+            {[{label:"Home",action:()=>navigate("/")},{label:"Dashboard",action:()=>navigate("/admin")},{label:"Listings",action:()=>navigate("/listings")},{label:"Explore",action:()=>navigate("/listings")}].map(({label,action}) => <span key={label} onClick={action} style={{ cursor:"pointer" }}>{label}</span>)}
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <div style={{ width: "32px", height: "32px", borderRadius: "50%", background: accent, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "12px", fontWeight: 700 }}>{user?.name?.[0]?.toUpperCase() ?? "A"}</div>
               <div><p style={{ fontSize: "12px", fontWeight: 600, color: text, margin: 0 }}>{user?.name ?? "Admin"}</p><p style={{ fontSize: "11px", color: sub, margin: 0 }}>{user?.email}</p></div>
@@ -240,5 +240,6 @@ export function AdminDashboard() {
 }
 
 export default AdminDashboard;
+
 
 
