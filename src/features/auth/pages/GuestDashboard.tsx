@@ -4,6 +4,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../hooks/useAuth";
 import { useTheme } from "../../../shared/context/ThemeContext";
 import { useMyBookings, type Booking } from "../../bookings/hooks/useMyBookings";
+import { useFavorites } from "../../listings/hooks/useFavorites";
+import { useListings } from "../../listings/hooks/useListings";
 import { api } from "../../../lib/api";
 import toast from "react-hot-toast";
 import { FiHome, FiSearch, FiCalendar, FiStar, FiMessageSquare, FiUser, FiSettings, FiLogOut, FiHeart, FiMapPin, FiEye, FiX } from "react-icons/fi";
@@ -70,6 +72,9 @@ export default function GuestDashboard() {
   const { user, logout } = useAuth();
   const { dark } = useTheme();
   const { data: rawBookings = [], isLoading } = useMyBookings();
+  const { isSaved, toggle } = useFavorites();
+  const { data: allListings = [] } = useListings();
+  const savedListings = allListings.filter(l => isSaved(l.id));
   const bookings = rawBookings as BookingWithReview[];
   const [reviewTarget, setReviewTarget] = useState<BookingWithReview | null>(null);
   const [search, setSearch] = useState("");
@@ -90,7 +95,7 @@ export default function GuestDashboard() {
   const navItems = [
     { id: "home",     icon: <FiHome size={15} />,        label: "Home",           action: () => navigate("/") },
     { id: "listings", icon: <FiMapPin size={15} />,      label: "Browse listings",action: () => navigate("/listings") },
-    { id: "saved",    icon: <FiHeart size={15} />,       label: "Saved",          action: () => navigate("/listings") },
+    { id: "saved",    icon: <FiHeart size={15} />,       label: "Saved",          action: () => setActiveNav("saved") },
     { id: "messages", icon: <FiMessageSquare size={15} />,label: "Messages",      action: () => navigate("/profile") },
   ];
   const accountItems = [
@@ -186,7 +191,36 @@ export default function GuestDashboard() {
           )}
 
           {/* Bookings table */}
-          {activeNav === "reviews" ? (
+          {activeNav === "saved" ? (
+            <div>
+              <p style={{ fontSize: "15px", fontWeight: 700, color: text, marginBottom: "12px" }}>Saved Listings</p>
+              {savedListings.length === 0 ? (
+                <div style={{ background: card, border: `1px solid ${border}`, borderRadius: "14px", padding: "40px", textAlign: "center" }}>
+                  <FiHeart size={32} color={sub} style={{ marginBottom: "12px" }} />
+                  <p style={{ color: sub, fontSize: "14px", margin: "0 0 16px" }}>No saved listings yet</p>
+                  <button onClick={() => navigate("/listings")} style={{ background: accent, color: "#fff", border: "none", borderRadius: "8px", padding: "8px 18px", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Browse listings</button>
+                </div>
+              ) : (
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "16px" }}>
+                  {savedListings.map(l => (
+                    <div key={l.id} style={{ background: card, border: `1px solid ${border}`, borderRadius: "14px", overflow: "hidden", cursor: "pointer" }}>
+                      <div style={{ position: "relative" }}>
+                        <img src={l.photos?.[0]?.url} alt={l.title} style={{ width: "100%", height: "150px", objectFit: "cover" }} onClick={() => navigate(`/listings/${l.id}`)} />
+                        <button onClick={() => toggle(l.id)} style={{ position: "absolute", top: "8px", right: "8px", background: "#fff", border: "none", borderRadius: "50%", width: "30px", height: "30px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                          <FiHeart size={14} color={accent} fill={accent} />
+                        </button>
+                      </div>
+                      <div style={{ padding: "12px" }} onClick={() => navigate(`/listings/${l.id}`)}>
+                        <p style={{ margin: "0 0 2px", fontSize: "13px", fontWeight: 700, color: text }}>{l.title}</p>
+                        <p style={{ margin: "0 0 6px", fontSize: "12px", color: sub }}>{l.location}</p>
+                        <p style={{ margin: 0, fontSize: "13px", fontWeight: 700, color: accent }}>${l.pricePerNight}<span style={{ fontWeight: 400, color: sub, fontSize: "11px" }}>/night</span></p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : activeNav === "reviews" ? (
             <div>
               <p style={{ fontSize: "15px", fontWeight: 700, color: text, marginBottom: "12px" }}>My Reviews</p>
               <div style={{ background: card, border: `1px solid ${border}`, borderRadius: "14px", overflow: "hidden" }}>
@@ -268,6 +302,10 @@ export default function GuestDashboard() {
     </div>
   );
 }
+
+
+
+
 
 
 
