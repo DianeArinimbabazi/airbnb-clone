@@ -1,9 +1,10 @@
 ﻿import { useTheme } from "../../../shared/context/ThemeContext";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../hooks/useAuth";
 import { useMyBookings } from "../../bookings/hooks/useMyBookings";
 import { api } from "../../../lib/api";
+import toast from "react-hot-toast";
 import { FiHome, FiStar } from "react-icons/fi";
 
 interface Listing {
@@ -21,13 +22,53 @@ interface ListingsResponse {
   meta: { total: number };
 }
 
+const PHOTOS: Record<string, string[]> = {
+  VILLA: [
+    "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800",
+    "https://images.unsplash.com/photo-1602343168117-bb8a12d7c180?w=800",
+    "https://images.unsplash.com/photo-1615571022219-eb45cf7faa9d?w=800",
+  ],
+  CABIN: [
+    "https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?w=800",
+    "https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=800",
+    "https://images.unsplash.com/photo-1587061949409-02df41d5e562?w=800",
+  ],
+  APARTMENT: [
+    "https://images.unsplash.com/photo-1522708323590-d24dbb6b0266?w=800",
+    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800",
+    "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800",
+  ],
+  HOUSE: [
+    "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800",
+    "https://images.unsplash.com/photo-1576941089067-2de3c901e126?w=800",
+    "https://images.unsplash.com/photo-1598228723793-52759bba2393?w=800",
+  ],
+};
+
+const FALLBACK = [
+  "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800",
+  "https://images.unsplash.com/photo-1518732714860-b62714ce0c59?w=800",
+  "https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=800",
+];
+
+function hashId(id: string) {
+  return id.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
+}
+
+function assignPhoto(listing: Listing): Listing {
+  if (listing.photos && listing.photos.length > 0 && listing.photos[0]?.url) return listing;
+  const pool = PHOTOS[listing.type] ?? FALLBACK;
+  const url = pool[hashId(listing.id) % pool.length];
+  return { ...listing, photos: [{ url }] };
+}
+
 function useHostListings(hostId: string | undefined) {
   return useQuery<Listing[]>({
     queryKey: ["listings", "host", hostId],
     enabled: !!hostId,
     queryFn: async () => {
       const res = await api.get<ListingsResponse>(`/listings?hostId=${hostId}&limit=50`);
-      return res.data ?? [];
+      return (res.data ?? []).map(assignPhoto);
     },
   });
 }
@@ -45,8 +86,20 @@ export default function HostDashboard() {
   const text = dark ? "#f0f0f0" : "#111111";
   const sub = dark ? "#aaaaaa" : "#888888";
   const border = dark ? "#333333" : "#f0f0f0";
+  const qc = useQueryClient();
   const { data: listings = [], isLoading: loadingListings } = useHostListings(user?.id);
   const { data: bookings = [], isLoading: loadingBookings } = useMyBookings();
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => api.delete(`/listings/${id}`),
+    onSuccess: () => {
+      toast.success("Listing deleted");
+      qc.invalidateQueries({ queryKey: ["listings", "host", user?.id] });
+    },
+    onError: (error: any) => {
+      toast.error(error?.message || "Could not delete listing");
+    },
+  });
 
   const handleLogout = () => { logout(); navigate("/"); };
 
@@ -147,9 +200,29 @@ export default function HostDashboard() {
                       Active
                     </span>
                   </div>
-                  <div style={{ display: "flex", gap: "8px" }}>
+                  <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                     <button onClick={() => navigate(`/listings/${l.id}`)} style={{ background: "none", border: "1.5px solid #e5e7eb", borderRadius: "50px", padding: "8px 16px", fontSize: "13px", fontWeight: 600, color: "#555555", cursor: "pointer", fontFamily: "inherit" }}>View</button>
                     <button onClick={() => navigate(`/listings/${l.id}/edit`)} style={{ background: "none", border: "1.5px solid #e5e7eb", borderRadius: "50px", padding: "8px 16px", fontSize: "13px", fontWeight: 600, color: "#555555", cursor: "pointer", fontFamily: "inherit" }}>Edit</button>
+                    <button
+                      onClick={() => {
+                        if (deleteMutation.isPending) return;
+                        if (confirm(`Delete "${l.title}"?`)) deleteMutation.mutate(l.id);
+                      }}
+                      disabled={deleteMutation.isPending}
+                      style={{
+                        background: "#f8d7da",
+                        border: "1.5px solid #f5c2c7",
+                        borderRadius: "50px",
+                        padding: "8px 16px",
+                        fontSize: "13px",
+                        fontWeight: 600,
+                        color: "#991b1b",
+                        cursor: deleteMutation.isPending ? "not-allowed" : "pointer",
+                        fontFamily: "inherit",
+                      }}
+                    >
+                      {deleteMutation.isPending ? "Deleting..." : "Delete"}
+                    </button>
                   </div>
                 </div>
               );
