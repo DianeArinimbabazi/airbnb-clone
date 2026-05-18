@@ -52,7 +52,7 @@ function ReviewModal({ booking, onClose, card, text, sub, border, accent }: { bo
           <FiStar size={18} color={accent} />
           <h2 style={{ margin: 0, fontSize: "18px", fontWeight: 700, color: text }}>Leave a Review</h2>
         </div>
-        <p style={{ margin: "0 0 20px", fontSize: "13px", color: sub }}>{booking.listing.title}</p>
+        <p style={{ margin: "0 0 4px", fontSize: "13px", color: sub }}>{booking.listing?.title}</p><p style={{ margin: "0 0 20px", fontSize: "11px", color: "red" }}>listingId: {booking.listingId ?? "MISSING"} | listing.id: {(booking as any).listing?.id ?? "MISSING"}</p>
         <p style={{ margin: "0 0 8px", fontSize: "13px", fontWeight: 600, color: text }}>Your rating</p>
         <div style={{ marginBottom: "16px" }}><StarPicker value={rating} onChange={setRating} /></div>
         <p style={{ margin: "0 0 8px", fontSize: "13px", fontWeight: 600, color: text }}>Your experience</p>
@@ -246,6 +246,7 @@ export default function GuestDashboard() {
     </div>
   );
 }
+
 
 
 
