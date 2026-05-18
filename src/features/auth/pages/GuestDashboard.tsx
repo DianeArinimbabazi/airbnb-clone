@@ -205,10 +205,11 @@ export default function GuestDashboard() {
               </div>
             </div>
           ) : (
+          <div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
             <p style={{ fontSize: "15px", fontWeight: 700, color: text, margin: 0 }}>My Bookings</p>
             <span onClick={() => navigate("/listings")} style={{ fontSize: "12px", color: accent, cursor: "pointer" }}>Browse more</span>
-          </div>)
+          </div>
           <div style={{ background: card, border: `1px solid ${border}`, borderRadius: "14px", overflow: "hidden" }}>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
@@ -260,12 +261,14 @@ export default function GuestDashboard() {
               Showing {filtered.length} of {bookings.length} bookings
             </div>
           </div>
+          </div>
           )}
         </div>
       </div>
     </div>
   );
 }
+
 
 
 
