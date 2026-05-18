@@ -5,7 +5,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useTheme } from "../../../shared/context/ThemeContext";
 import { api } from "../../../lib/api";
 import toast from "react-hot-toast";
-import { FiHome, FiPlus, FiMessageSquare, FiStar, FiCalendar, FiHeart, FiUser, FiSettings, FiLogOut, FiCheck, FiEye, FiSearch, FiShield, FiClock, FiDollarSign } from "react-icons/fi";
+import { FiHome, FiMessageSquare, FiStar, FiCalendar, FiUser, FiSettings, FiLogOut, FiCheck, FiEye, FiSearch, FiShield, FiClock, FiDollarSign } from "react-icons/fi";
 
 interface Booking {
   id: string;
@@ -74,20 +74,18 @@ export function AdminDashboard() {
 
   const navItems = [
     { id: "dashboard", icon: <FiHome size={15} />, label: "Dashboard", action: () => navigate("/admin") },
-    { id: "listings",  icon: <FiPlus size={15} />, label: "Add listing", action: () => navigate("/listings/new") },
-    { id: "messages", icon: <FiMessageSquare size={15} />, label: "Messages", action: () => navigate("/profile") },
+    { id: "messages",  icon: <FiMessageSquare size={15} />, label: "Messages", action: () => navigate("/profile") },
   ];
   const listingItems = [
-    { id: "mylistings", icon: <FiHome size={15} />, label: "My listings", action: () => navigate("/listings") },
-    { id: "reviews", icon: <FiStar size={15} />, label: "Reviews", action: () => navigate("/listings") },
-    { id: "bookings", icon: <FiCalendar size={15} />, label: "Bookings", action: () => navigate("/admin") },
-    { id: "saved", icon: <FiHeart size={15} />, label: "Saved", action: () => navigate("/listings") },
+    { id: "alllistings", icon: <FiHome size={15} />,     label: "All listings",  action: () => navigate("/listings") },
+    { id: "reviews",     icon: <FiStar size={15} />,     label: "Reviews",       action: () => navigate("/listings") },
+    { id: "bookings",    icon: <FiCalendar size={15} />, label: "Bookings",      action: () => navigate("/admin") },
+    { id: "moderation",  icon: <FiShield size={15} />,   label: "Moderation",    action: () => navigate("/admin/moderation") },
   ];
   const accountItems = [
-    { id: "profile",  icon: <FiUser size={15} />, label: "Edit profile", action: () => navigate("/profile") },
-    { id: "settings", icon: <FiSettings size={15} />, label: "Settings", action: () => navigate("/profile") },
-    { id: "moderation", icon: <FiShield size={15} />, label: "Moderation", action: () => navigate("/admin/moderation") },
-    { id: "logout",   icon: <FiLogOut size={15} />, label: "Log out", action: () => { logout(); navigate("/"); } },
+    { id: "profile",  icon: <FiUser size={15} />,     label: "Edit profile", action: () => navigate("/profile") },
+    { id: "settings", icon: <FiSettings size={15} />, label: "Settings",     action: () => navigate("/profile") },
+    { id: "logout",   icon: <FiLogOut size={15} />,   label: "Log out",      action: () => { logout(); navigate("/"); } },
   ];
 
   const NavItem = ({ item, active }: { item: any; active: boolean }) => (
@@ -128,7 +126,7 @@ export function AdminDashboard() {
         {/* Topbar */}
         <div style={{ background: card, borderBottom: `1px solid ${border}`, padding: "12px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 10 }}>
           <div style={{ display: "flex", alignItems: "center", gap: "8px", background: bg, border: `1px solid ${border}`, borderRadius: "10px", padding: "7px 12px", fontSize: "13px", color: sub, width: "220px" }}>
-            <FiSearch size={13} /><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search bookings..." style={{ border:"none", background:"transparent", fontSize:"13px", color:text, outline:"none", width:"160px" }} />
+            <FiSearch size={13} /><span style={{ fontSize:"13px", color:sub }}>Search bookings...</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "16px", fontSize: "13px", color: sub }}>
             {[{label:"Home",action:()=>navigate("/")},{label:"Dashboard",action:()=>navigate("/admin")},{label:"Listings",action:()=>navigate("/listings")},{label:"Explore",action:()=>navigate("/listings")}].map(({label,action}) => <span key={label} onClick={action} style={{ cursor:"pointer" }}>{label}</span>)}
@@ -240,6 +238,7 @@ export function AdminDashboard() {
 }
 
 export default AdminDashboard;
+
 
 
 
