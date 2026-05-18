@@ -40,7 +40,7 @@ function ReviewModal({ booking, onClose, card, text, sub, border, accent }: { bo
   const [comment, setComment] = useState("");
   const qc = useQueryClient();
   const submitReview = useMutation({
-    mutationFn: () => api.post(`/listings/${(booking as any).listing?.id}/reviews`, { rating, comment }),
+    mutationFn: () => api.post(`/listings/${booking.listingId}/reviews`, { rating, comment }),
     onSuccess: () => { toast.success("Review submitted!"); qc.invalidateQueries({ queryKey: ["bookings"] }); onClose(); },
     onError: (e: any) => toast.error(e?.message || "Could not submit review"),
   });
@@ -246,6 +246,7 @@ export default function GuestDashboard() {
     </div>
   );
 }
+
 
 
 
