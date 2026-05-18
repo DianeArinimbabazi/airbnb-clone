@@ -40,7 +40,7 @@ function ReviewModal({ booking, onClose, card, text, sub, border, accent }: { bo
   const [comment, setComment] = useState("");
   const qc = useQueryClient();
   const submitReview = useMutation({
-    mutationFn: () => api.post(`/listings/${booking.listingId}/reviews`, { bookingId: booking.id, listingId: booking.listingId, rating, comment }),
+    mutationFn: () => api.post(`/listings/${booking.listingId}/reviews`, { rating, comment }),
     onSuccess: () => { toast.success("Review submitted!"); qc.invalidateQueries({ queryKey: ["bookings"] }); onClose(); },
     onError: (e: any) => toast.error(e?.message || "Could not submit review"),
   });
@@ -82,7 +82,7 @@ export default function GuestDashboard() {
   const border = dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)";
   const accent = "#e8442a";
 
-  const reviewable = bookings.filter(b => (b.status === "CONFIRMED" || b.status === "COMPLETED") && !b.review);
+  const reviewable = bookings.filter(b => b.status === "CONFIRMED" || b.status === "COMPLETED");
   const upcoming   = bookings.filter(b => b.status === "CONFIRMED" && new Date(b.checkIn) >= new Date());
   const totalSpent = bookings.filter(b => b.status !== "CANCELLED").reduce((s, b) => s + b.totalPrice, 0);
   const filtered   = bookings.filter(b => b.listing?.title?.toLowerCase().includes(search.toLowerCase()));
@@ -208,7 +208,7 @@ export default function GuestDashboard() {
                   </td></tr>
                 ) : filtered.map((b, i) => {
                   const s = STATUS[b.status] ?? STATUS.COMPLETED;
-                  const canReview = (b.status === "CONFIRMED" || b.status === "COMPLETED") && !b.review;
+                  const canReview = (b.status === "CONFIRMED" || b.status === "COMPLETED");
                   return (
                     <tr key={b.id} style={{ borderBottom: `1px solid ${border}` }}>
                       <td style={{ padding: "11px 14px", fontSize: "12px", color: sub }}>{String(i+1).padStart(2,"0")}</td>
@@ -246,5 +246,6 @@ export default function GuestDashboard() {
     </div>
   );
 }
+
 
 
