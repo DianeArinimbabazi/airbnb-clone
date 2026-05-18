@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../hooks/useAuth";
-import { useMyBookings, Booking } from "../../bookings/hooks/useMyBookings";
+import { useMyBookings } from "../../bookings/hooks/useMyBookings";
+import type { Booking } from "../../bookings/hooks/useMyBookings";
 import { api } from "../../../lib/api";
 import toast from "react-hot-toast";
 import { FiCalendar, FiHome, FiStar, FiMessageSquare, FiX } from "react-icons/fi";
@@ -178,3 +179,4 @@ export default function GuestDashboard() {
     </div>
   );
 }
+
