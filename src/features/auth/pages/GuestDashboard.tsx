@@ -70,7 +70,7 @@ function ReviewModal({ booking, onClose, card, text, sub, border, accent }: { bo
 export default function GuestDashboard() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  const { dark } = useTheme();
+  const { dark, toggleDark } = useTheme();
   const { data: rawBookings = [], isLoading } = useMyBookings();
   const { isSaved, toggle } = useFavorites();
   const { data: allListings = [] } = useListings();
@@ -102,7 +102,7 @@ export default function GuestDashboard() {
     { id: "bookings", icon: <FiCalendar size={15} />, label: "My bookings",  action: () => setActiveNav("bookings") },
     { id: "reviews",  icon: <FiStar size={15} />,     label: "My reviews",   action: () => setActiveNav("reviews") },
     { id: "profile",  icon: <FiUser size={15} />,     label: "Edit profile", action: () => navigate("/profile") },
-    { id: "settings", icon: <FiSettings size={15} />, label: "Settings",     action: () => navigate("/profile") },
+    { id: "settings", icon: <FiSettings size={15} />, label: "Settings",     action: () => setActiveNav("settings") },
     { id: "logout",   icon: <FiLogOut size={15} />,   label: "Log out",      action: () => { logout(); navigate("/"); } },
   ];
 
@@ -191,7 +191,63 @@ export default function GuestDashboard() {
           )}
 
           {/* Bookings table */}
-          {activeNav === "saved" ? (
+          {activeNav === "settings" ? (
+            <div style={{ maxWidth: "560px" }}>
+              <p style={{ fontSize: "15px", fontWeight: 700, color: text, marginBottom: "20px" }}>Settings</p>
+
+              {/* Appearance */}
+              <div style={{ background: card, border: `1px solid ${border}`, borderRadius: "14px", marginBottom: "16px", overflow: "hidden" }}>
+                <p style={{ fontSize: "11px", fontWeight: 700, color: sub, padding: "14px 20px 0", margin: 0, textTransform: "uppercase", letterSpacing: ".06em" }}>Appearance</p>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 20px" }}>
+                  <div>
+                    <p style={{ margin: "0 0 2px", fontSize: "14px", fontWeight: 600, color: text }}>Dark mode</p>
+                    <p style={{ margin: 0, fontSize: "12px", color: sub }}>Switch between light and dark theme</p>
+                  </div>
+                  <div onClick={toggleDark} style={{ width: "44px", height: "24px", borderRadius: "999px", background: dark ? accent : "#ccc", cursor: "pointer", position: "relative", transition: "background .2s", flexShrink: 0 }}>
+                    <div style={{ position: "absolute", top: "3px", left: dark ? "23px" : "3px", width: "18px", height: "18px", borderRadius: "50%", background: "#fff", transition: "left .2s" }} />
+                  </div>
+                </div>
+              </div>
+
+              {/* Change Password */}
+              <div style={{ background: card, border: `1px solid ${border}`, borderRadius: "14px", marginBottom: "16px", overflow: "hidden" }}>
+                <p style={{ fontSize: "11px", fontWeight: 700, color: sub, padding: "14px 20px 0", margin: 0, textTransform: "uppercase", letterSpacing: ".06em" }}>Security</p>
+                <div style={{ padding: "14px 20px" }}>
+                  <p style={{ margin: "0 0 2px", fontSize: "14px", fontWeight: 600, color: text }}>Change password</p>
+                  <p style={{ margin: "0 0 14px", fontSize: "12px", color: sub }}>Update your account password</p>
+                  <button onClick={() => navigate("/profile")} style={{ background: accent, color: "#fff", border: "none", borderRadius: "8px", padding: "8px 18px", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Go to Profile</button>
+                </div>
+              </div>
+
+              {/* Notifications */}
+              <div style={{ background: card, border: `1px solid ${border}`, borderRadius: "14px", marginBottom: "16px", overflow: "hidden" }}>
+                <p style={{ fontSize: "11px", fontWeight: 700, color: sub, padding: "14px 20px 0", margin: 0, textTransform: "uppercase", letterSpacing: ".06em" }}>Notifications</p>
+                {[
+                  { label: "Booking confirmations", desc: "Get notified when a booking is approved" },
+                  { label: "Review reminders", desc: "Remind me to review after a stay" },
+                  { label: "Promotions & deals", desc: "Receive special offers and discounts" },
+                ].map(({ label, desc }) => (
+                  <div key={label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 20px", borderTop: `1px solid ${border}` }}>
+                    <div>
+                      <p style={{ margin: "0 0 2px", fontSize: "13px", fontWeight: 600, color: text }}>{label}</p>
+                      <p style={{ margin: 0, fontSize: "12px", color: sub }}>{desc}</p>
+                    </div>
+                    <input type="checkbox" defaultChecked style={{ width: "16px", height: "16px", accentColor: accent, cursor: "pointer", flexShrink: 0 }} />
+                  </div>
+                ))}
+              </div>
+
+              {/* Danger Zone */}
+              <div style={{ background: card, border: "1px solid #fca5a5", borderRadius: "14px", overflow: "hidden" }}>
+                <p style={{ fontSize: "11px", fontWeight: 700, color: "#ef4444", padding: "14px 20px 0", margin: 0, textTransform: "uppercase", letterSpacing: ".06em" }}>Danger Zone</p>
+                <div style={{ padding: "14px 20px" }}>
+                  <p style={{ margin: "0 0 2px", fontSize: "14px", fontWeight: 600, color: text }}>Delete account</p>
+                  <p style={{ margin: "0 0 14px", fontSize: "12px", color: sub }}>Permanently delete your account and all data. This cannot be undone.</p>
+                  <button onClick={() => { if (window.confirm("Are you sure? This cannot be undone.")) { logout(); navigate("/"); } }} style={{ background: "#ef4444", color: "#fff", border: "none", borderRadius: "8px", padding: "8px 18px", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Delete my account</button>
+                </div>
+              </div>
+            </div>
+          ) : activeNav === "saved" ? (
             <div>
               <p style={{ fontSize: "15px", fontWeight: 700, color: text, marginBottom: "12px" }}>Saved Listings</p>
               {savedListings.length === 0 ? (
@@ -302,6 +358,9 @@ export default function GuestDashboard() {
     </div>
   );
 }
+
+
+
 
 
 
