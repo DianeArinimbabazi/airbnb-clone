@@ -45,11 +45,11 @@ export function AdminDashboard() {
 
   const { data: bookings = [], isLoading } = useQuery<Booking[]>({
     queryKey: ["admin", "bookings"],
-    queryFn: () => api.get<Booking[]>("/bookings/all"),
+    queryFn: async () => { const r = await api.get<any>("/bookings?limit=100"); return r.data ?? r ?? []; },
   });
   const { data: stats } = useQuery<Stats>({
     queryKey: ["admin", "stats"],
-    queryFn: () => api.get<Stats>("/admin/stats"),
+    queryFn: async () => { const bookings = await api.get<any>("/bookings?limit=100"); const arr = bookings.data ?? []; return { totalBookings: arr.length, pendingBookings: arr.filter((b:any)=>b.status==="PENDING").length, totalRevenue: arr.filter((b:any)=>b.status!=="CANCELLED").reduce((s:number,b:any)=>s+b.totalPrice,0), totalUsers: 0, totalListings: 0 }; },
   });
 
   const approveMutation = useMutation({
@@ -238,6 +238,7 @@ export function AdminDashboard() {
 }
 
 export default AdminDashboard;
+
 
 
 

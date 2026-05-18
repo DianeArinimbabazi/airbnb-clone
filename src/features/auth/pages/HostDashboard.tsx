@@ -56,10 +56,7 @@ export default function HostDashboard() {
   const { data: listings = [], isLoading: loadingListings } = useQuery<Listing[]>({
     queryKey: ["listings", "host", user?.id],
     enabled: !!user?.id,
-    queryFn: async () => {
-      const res = await api.get<ListingsResponse>(`/listings?hostId=${user?.id}&limit=50`);
-      return (res.data ?? []).map(assignPhoto);
-    },
+    queryFn: async () => { const res = await api.get<ListingsResponse>(`/listings?hostId=${user?.id}&limit=50`); return (res.data ?? []).map(assignPhoto); },
   });
   const { data: bookings = [], isLoading: loadingBookings } = useMyBookings();
 
@@ -272,4 +269,5 @@ export default function HostDashboard() {
     </div>
   );
 }
+
 
