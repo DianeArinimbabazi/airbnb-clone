@@ -73,19 +73,19 @@ export function AdminDashboard() {
   const revenue   = bookings.filter(b => b.status !== "CANCELLED").reduce((s, b) => s + b.totalPrice, 0);
 
   const navItems = [
-    { id: "dashboard", icon: <FiHome size={15} />, label: "Dashboard" },
+    { id: "dashboard", icon: <FiHome size={15} />, label: "Dashboard", action: () => navigate("/admin") },
     { id: "listings",  icon: <FiPlus size={15} />, label: "Add listing", action: () => navigate("/listings/new") },
-    { id: "messages",  icon: <FiMessageSquare size={15} />, label: "Messages" },
+    { id: "messages", icon: <FiMessageSquare size={15} />, label: "Messages", action: () => navigate("/profile") },
   ];
   const listingItems = [
     { id: "mylistings", icon: <FiHome size={15} />, label: "My listings", action: () => navigate("/listings") },
-    { id: "reviews",    icon: <FiStar size={15} />, label: "Reviews" },
-    { id: "bookings",   icon: <FiCalendar size={15} />, label: "Bookings" },
-    { id: "saved",      icon: <FiHeart size={15} />, label: "Saved" },
+    { id: "reviews", icon: <FiStar size={15} />, label: "Reviews", action: () => navigate("/listings") },
+    { id: "bookings", icon: <FiCalendar size={15} />, label: "Bookings", action: () => navigate("/admin") },
+    { id: "saved", icon: <FiHeart size={15} />, label: "Saved", action: () => navigate("/listings") },
   ];
   const accountItems = [
     { id: "profile",  icon: <FiUser size={15} />, label: "Edit profile", action: () => navigate("/profile") },
-    { id: "settings", icon: <FiSettings size={15} />, label: "Settings" },
+    { id: "settings", icon: <FiSettings size={15} />, label: "Settings", action: () => navigate("/profile") },
     { id: "moderation", icon: <FiShield size={15} />, label: "Moderation", action: () => navigate("/admin/moderation") },
     { id: "logout",   icon: <FiLogOut size={15} />, label: "Log out", action: () => { logout(); navigate("/"); } },
   ];
@@ -240,6 +240,7 @@ export function AdminDashboard() {
 }
 
 export default AdminDashboard;
+
 
 
 
