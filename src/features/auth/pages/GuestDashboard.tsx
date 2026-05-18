@@ -13,7 +13,7 @@ interface BookingWithReview extends Booking {
 }
 
 function fmt(iso: string) { return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }); }
-function initials(name: string) { return name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase(); }
+
 
 const STATUS: Record<string, { label: string; color: string; bg: string }> = {
   PENDING:   { label: "Awaiting Approval", color: "#854f0b", bg: "#faeeda" },
@@ -246,3 +246,4 @@ export default function GuestDashboard() {
     </div>
   );
 }
+

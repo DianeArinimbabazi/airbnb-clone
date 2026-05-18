@@ -6,7 +6,7 @@ import { useTheme } from "../../../shared/context/ThemeContext";
 import { useMyBookings } from "../../bookings/hooks/useMyBookings";
 import { api } from "../../../lib/api";
 import toast from "react-hot-toast";
-import { FiHome, FiSearch, FiPlus, FiCalendar, FiStar, FiUser, FiSettings, FiLogOut, FiEdit, FiTrash, FiEye, FiMapPin, FiDollarSign } from "react-icons/fi";
+import { FiHome, FiSearch, FiPlus, FiCalendar, FiStar, FiUser, FiSettings, FiLogOut, FiEdit, FiTrash, FiEye, FiDollarSign } from "react-icons/fi";
 
 interface Listing {
   id: string; title: string; location: string; pricePerNight: number;
@@ -272,3 +272,4 @@ export default function HostDashboard() {
     </div>
   );
 }
+
