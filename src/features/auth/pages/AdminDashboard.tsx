@@ -105,7 +105,7 @@ export function AdminDashboard() {
       {/* Sidebar */}
       <div style={{ width: "220px", flexShrink: 0, background: card, borderRight: `1px solid ${border}`, display: "flex", flexDirection: "column", position: "sticky", top: 0, height: "100vh", overflowY: "auto" }}>
         <div style={{ padding: "18px 20px 14px", fontSize: "20px", fontWeight: 800, borderBottom: `1px solid ${border}`, display: "flex", alignItems: "center", gap: "8px", color: text }}>
-          <FiMapPin size={18} color={accent} />List<span style={{ color: accent }}>On</span>
+          <FiMapPin size={18} color={accent} />DIA<span style={{ color: accent }}>VELA</span>
         </div>
 
         <div style={{ padding: "14px 0 4px" }}>
@@ -128,7 +128,7 @@ export function AdminDashboard() {
         {/* Topbar */}
         <div style={{ background: card, borderBottom: `1px solid ${border}`, padding: "12px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 10 }}>
           <div style={{ display: "flex", alignItems: "center", gap: "8px", background: bg, border: `1px solid ${border}`, borderRadius: "10px", padding: "7px 12px", fontSize: "13px", color: sub, width: "220px" }}>
-            <FiSearch size={13} /><span>Search...</span>
+            <FiSearch size={13} /><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search bookings..." style={{ border:"none", background:"transparent", fontSize:"13px", color:text, outline:"none", width:"160px" }} />
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "16px", fontSize: "13px", color: sub }}>
             {["Home","Dashboard","Listings","Explore"].map(l => <span key={l} style={{ cursor: "pointer" }}>{l}</span>)}
@@ -169,7 +169,7 @@ export function AdminDashboard() {
           {/* Bookings table */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
             <p style={{ fontSize: "15px", fontWeight: 700, color: text, margin: 0 }}>Bookings</p>
-            <span style={{ fontSize: "12px", color: accent, cursor: "pointer" }}>View all</span>
+            <span onClick={() => navigate("/admin")} style={{ fontSize: "12px", color: accent, cursor: "pointer" }}>View all</span>
           </div>
           <div style={{ background: card, border: `1px solid ${border}`, borderRadius: "14px", overflow: "hidden" }}>
             <div style={{ padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: `1px solid ${border}` }}>
@@ -240,4 +240,5 @@ export function AdminDashboard() {
 }
 
 export default AdminDashboard;
+
 
