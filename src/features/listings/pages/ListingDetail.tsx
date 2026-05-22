@@ -1,4 +1,6 @@
-import { AIReviewSummary } from '../../ai/AIReviewSummary';
+﻿import { AIReviewSummary } from '../../ai/AIReviewSummary';
+import { lazy, Suspense } from 'react';
+const ListingMap = lazy(() => import('../components/ListingMap'));
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -284,6 +286,15 @@ export function ListingDetail() {
             )}
           </div>
 
+          {/* Location Map */}
+          <div style={{ padding:"24px 0", borderBottom:"1px solid " + border }}>
+            <h3 style={{ fontSize:"18px", fontWeight:700, color: text, margin:"0 0 8px" }}>Where you will be</h3>
+            <p style={{ fontSize:"14px", color: subText, margin:"0 0 20px" }}>{listing.location}</p>
+            <Suspense fallback={<div style={{height:"400px",display:"flex",alignItems:"center",justifyContent:"center",color:subText}}>Loading map...</div>}>
+              <ListingMap location={listing.location} dark={dark} />
+            </Suspense>
+          </div>
+
           <AIReviewSummary listingId={id} rating={listing.rating} />
         </div>
 
@@ -353,3 +364,5 @@ export function ListingDetail() {
 }
 
 export default ListingDetail;
+
+
