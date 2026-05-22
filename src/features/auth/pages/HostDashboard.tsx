@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+﻿import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../hooks/useAuth";
@@ -97,14 +97,14 @@ export default function HostDashboard() {
     return Object.entries(map).slice(-6);
   })();
 
-  const navItems: { id: Section; icon: JSX.Element; label: string }[] = [
+  const navItems: { id: Section; icon: React.ReactNode; label: string }[] = [
     { id: "listings",  icon: <FiHome size={15} />,        label: "My listings" },
     { id: "bookings",  icon: <FiCalendar size={15} />,    label: "Bookings" },
     { id: "earnings",  icon: <FiDollarSign size={15} />,  label: "Earnings" },
     { id: "reviews",   icon: <FiStar size={15} />,        label: "Reviews" },
     { id: "messages",  icon: <FiMessageSquare size={15} />, label: "Messages" },
   ];
-  const accountItems: { id: Section | "add" | "profile" | "logout" | "explore"; icon: JSX.Element; label: string; action: () => void }[] = [
+  const accountItems: { id: Section | "add" | "profile" | "logout" | "explore"; icon: React.ReactNode; label: string; action: () => void }[] = [
     { id: "add",      icon: <FiPlus size={15} />,      label: "Add listing",  action: () => navigate("/listings/new") },
     { id: "explore",  icon: <FiMap size={15} />,        label: "Explore map",  action: () => navigate("/listings") },
     { id: "profile",  icon: <FiUser size={15} />,       label: "Edit profile", action: () => navigate("/profile") },
@@ -112,7 +112,7 @@ export default function HostDashboard() {
     { id: "logout",   icon: <FiLogOut size={15} />,     label: "Log out",      action: () => { logout(); navigate("/"); } },
   ];
 
-  const NavItem = ({ id, icon, label, action }: { id: string; icon: JSX.Element; label: string; action?: () => void }) => {
+  const NavItem = ({ id, icon, label, action }: { id: string; icon: React.ReactNode; label: string; action?: () => void }) => {
     const active = activeNav === id;
     return (
       <div onClick={() => { if (action) action(); else setActiveNav(id as Section); }}
@@ -502,3 +502,5 @@ export default function HostDashboard() {
     </div>
   );
 }
+
+
