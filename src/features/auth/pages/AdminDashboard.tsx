@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import {
   FiHome, FiMessageSquare, FiStar, FiCalendar, FiUser, FiSettings,
   FiLogOut, FiCheck, FiEye, FiSearch, FiShield, FiClock, FiDollarSign,
-  FiTrash, FiList, FiBarChart2, FiSend
+  FiTrash, FiList, FiSend
 } from "react-icons/fi";
 
 interface Booking {
@@ -438,7 +438,7 @@ export function AdminDashboard() {
                         <div style={{fontSize:"32px",marginBottom:"8px"}}>✅</div>
                         All caught up — no pending approvals
                       </td></tr>
-                    ):bookings.filter(b=>b.status==="PENDING").map((b,i)=>(
+                    ):bookings.filter(b=>b.status==="PENDING").map((b)=>(
                       <tr key={b.id} style={{borderBottom:`1px solid ${border}`}}>
                         <td style={{padding:"11px 14px"}}>
                           <div style={{display:"flex",alignItems:"center",gap:"8px"}}>
@@ -552,3 +552,5 @@ export function AdminDashboard() {
 }
 
 export default AdminDashboard;
+
+
