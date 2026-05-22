@@ -74,8 +74,9 @@ export function useListings() {
   return useQuery<Listing[]>({
     queryKey: ["listings"],
     queryFn: async () => {
-      const res = await api.get<{ data: Listing[] }>("/listings?limit=50");
+      const res = await api.get<{ data: Listing[] }>("/listings?limit=200");
       return (res.data ?? []).map(assignPhoto);
     },
   });
 }
+
