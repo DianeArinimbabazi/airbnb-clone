@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+﻿import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "../../../lib/api";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -57,7 +57,7 @@ export function ModerationQueue() {
         <p style={{ color: "#717171" }}>Loading...</p>
       ) : listings.length === 0 ? (
         <div style={{ textAlign: "center", padding: "64px 24px", background: "#f9f9f9", borderRadius: "16px" }}>
-          <p style={{ fontSize: "40px" }}>ð </p>
+          <p style={{ fontSize: "40px" }}></p>
           <p style={{ fontWeight: 600, color: "#222" }}>No listings yet</p>
         </div>
       ) : (
@@ -67,14 +67,14 @@ export function ModerationQueue() {
               <div style={{ background: "#f5f5f5", overflow: "hidden", minHeight: "140px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 {l.photos?.[0]
                   ? <img src={l.photos[0].url} alt={l.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                  : <span style={{ fontSize: "40px" }}>ð </span>
+                  : <span style={{ fontSize: "40px" }}></span>
                 }
               </div>
               <div style={{ padding: "20px 24px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                 <div>
                   <h3 style={{ fontSize: "17px", fontWeight: 700, color: "#222", margin: "0 0 6px" }}>{l.title}</h3>
-                  <p style={{ fontSize: "13px", color: "#717171", margin: "0 0 4px" }}>ð {l.location} Â· {l.type} Â· ${l.pricePerNight}/night</p>
-                  <p style={{ fontSize: "13px", color: "#717171", margin: "0 0 8px" }}>ð¤ {l.host?.name} Â· {l.host?.email}</p>
+                  <p style={{ fontSize: "13px", color: "#717171", margin: "0 0 4px" }}> {l.location}  {l.type}  ${l.pricePerNight}/night</p>
+                  <p style={{ fontSize: "13px", color: "#717171", margin: "0 0 8px" }}> {l.host?.name}  {l.host?.email}</p>
                   <p style={{ fontSize: "13px", color: "#444", margin: 0, lineHeight: 1.5 }}>{l.description?.slice(0, 120)}...</p>
                 </div>
                 <div style={{ display: "flex", gap: "10px", marginTop: "16px" }}>

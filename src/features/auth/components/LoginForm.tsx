@@ -1,4 +1,4 @@
-  import { useState } from 'react';
+﻿  import { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
@@ -46,7 +46,7 @@ export function LoginForm() {
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="••••••••"
+          placeholder=""
           style={{
             width: '100%',
             padding: '12px 16px',
@@ -78,3 +78,4 @@ export function LoginForm() {
     </form>
   );
 }
+

@@ -1,4 +1,4 @@
- import { Transition } from '@headlessui/react';
+﻿ import { Transition } from '@headlessui/react';
 import { useStore } from '../../../store/StoreContext';
 
 export function SavedListings() {
@@ -24,7 +24,7 @@ export function SavedListings() {
         marginBottom: '32px',
       }}>
         <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#7c6fa8', marginBottom: '16px' }}>
-          💜 Saved Homes ({savedListings.length})
+           Saved Homes ({savedListings.length})
         </h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {savedListings.map((listing) => (
@@ -51,4 +51,5 @@ export function SavedListings() {
     </Transition>
   );
 }
+
 

@@ -5,8 +5,8 @@ import { useListings } from './hooks/useListings';
 import { ListingCard } from './components/ListingCard';
 
 const CATEGORIES = [
-  { icon: '🏙️', label: 'City Stays', count: 124 },
-  { icon: '🌊', label: 'Lakeside', count: 48 },
+  { icon: '', label: 'City Stays', count: 124 },
+  { icon: '', label: 'Lakeside', count: 48 },
   { icon: 'MTN', label: 'Mountain', count: 63 },
   { icon: 'FOR', label: 'Forest', count: 37 },
   { icon: 'CTR', label: 'Countryside', count: 91 },
@@ -26,7 +26,7 @@ const STATS = [
   { value: '10K+', label: 'Happy guests', icon: 'HG' },
   { value: '500+', label: 'Unique listings', icon: 'HL' },
   { value: '50+', label: 'Destinations', icon: 'DS' },
-  { value: '4.9★', label: 'Average rating', icon: 'AR' },
+  { value: '4.9', label: 'Average rating', icon: 'AR' },
 ];
 
 const HOW = [
@@ -67,7 +67,7 @@ export default function HomePage() {
           </p>
           <div style={{ background: '#fff', borderRadius: '16px', padding: '8px', display: 'flex', gap: '8px', maxWidth: '640px', margin: '0 auto', boxShadow: '0 20px 60px rgba(0,0,0,0.35)' }}>
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 16px', background: '#fef2f2', borderRadius: '12px', border: '1.5px solid #fecaca' }}>
-              <span style={{ fontSize: '18px' }}>📍</span>
+              <span style={{ fontSize: '18px' }}></span>
               <input type="text" placeholder="Where are you going?" value={searchLocation} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchLocation(e.target.value)}
                 style={{ border: 'none', outline: 'none', fontSize: '15px', background: 'transparent', flex: 1, color: '#111', fontFamily: 'inherit' }} />
             </div>
@@ -78,8 +78,8 @@ export default function HomePage() {
           </div>
           <p style={{ marginTop: '18px', color: '#f87171', fontSize: '13px', opacity: 0.85 }}>
             Popular: <span style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setSearchLocation('Kigali')}>Kigali</span>
-            {' · '}<span style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setSearchLocation('Gisenyi')}>Gisenyi</span>
-            {' · '}<span style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setSearchLocation('Musanze')}>Musanze</span>
+            {'  '}<span style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setSearchLocation('Gisenyi')}>Gisenyi</span>
+            {'  '}<span style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setSearchLocation('Musanze')}>Musanze</span>
           </p>
         </div>
         <div style={{ position: 'relative', maxWidth: '860px', margin: '52px auto 0', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
@@ -138,7 +138,7 @@ export default function HomePage() {
             <p style={{ margin: '0 0 6px', fontSize: '13px', fontWeight: 700, color: '#dc2626', textTransform: 'uppercase', letterSpacing: '1px' }}>Top picks</p>
             <h2 style={{ margin: 0, fontSize: '28px', fontWeight: 800, color: '#111', letterSpacing: '-0.5px' }}>Featured stays</h2>
           </div>
-          <button onClick={() => navigate('/listings')} style={{ background: 'none', border: '1.5px solid #e5e7eb', borderRadius: '50px', padding: '10px 22px', fontSize: '13px', fontWeight: 700, color: '#555', cursor: 'pointer', fontFamily: 'inherit' }}>View all →</button>
+          <button onClick={() => navigate('/listings')} style={{ background: 'none', border: '1.5px solid #e5e7eb', borderRadius: '50px', padding: '10px 22px', fontSize: '13px', fontWeight: 700, color: '#555', cursor: 'pointer', fontFamily: 'inherit' }}>View all </button>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
           {featured.map(listing => <ListingCard key={listing.id} listing={listing} />)}
@@ -175,10 +175,10 @@ export default function HomePage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
             {[
-              { icon: '✅', title: 'Every listing verified', desc: 'We personally review and approve every property before it goes live.' },
-              { icon: '🛡️', title: 'Every host vetted', desc: 'All hosts complete identity verification and background checks before listing.' },
-              { icon: '💳', title: 'Secure payments', desc: 'Payments are held safely and only released to hosts after you successfully check in.' },
-              { icon: '🎯', title: 'Stay guarantee', desc: "If your stay doesn't match the listing, we'll find you a comparable place immediately." },
+              { icon: '', title: 'Every listing verified', desc: 'We personally review and approve every property before it goes live.' },
+              { icon: '', title: 'Every host vetted', desc: 'All hosts complete identity verification and background checks before listing.' },
+              { icon: '', title: 'Secure payments', desc: 'Payments are held safely and only released to hosts after you successfully check in.' },
+              { icon: '', title: 'Stay guarantee', desc: "If your stay doesn't match the listing, we'll find you a comparable place immediately." },
             ].map(t => (
               <div key={t.title} style={{ background: '#fff', borderRadius: '20px', padding: '32px 28px', border: '1px solid #fecaca', display: 'flex', gap: '18px', alignItems: 'flex-start' }}>
                 <div style={{ fontSize: '24px', flexShrink: 0, width: '52px', height: '52px', background: '#fef2f2', borderRadius: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{t.icon}</div>
@@ -203,7 +203,7 @@ export default function HomePage() {
             {REVIEWS.map(r => (
               <div key={r.name} style={{ background: '#fafafa', borderRadius: '20px', padding: '28px', border: '1px solid #f0f0f0' }}>
                 <div style={{ display: 'flex', gap: '4px', marginBottom: '16px' }}>
-                  {[...Array(r.rating)].map((_, i) => <span key={i} style={{ color: '#dc2626', fontSize: '14px' }}>★</span>)}
+                  {[...Array(r.rating)].map((_, i) => <span key={i} style={{ color: '#dc2626', fontSize: '14px' }}></span>)}
                 </div>
                 <p style={{ margin: '0 0 20px', fontSize: '14px', color: '#444', lineHeight: 1.8, fontStyle: 'italic' }}>"{r.text}"</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -225,14 +225,14 @@ export default function HomePage() {
           <div>
             <p style={{ margin: '0 0 10px', fontSize: '13px', fontWeight: 700, color: '#f87171', textTransform: 'uppercase', letterSpacing: '1px' }}>For hosts</p>
             <h2 style={{ margin: '0 0 16px', fontSize: '36px', fontWeight: 800, color: '#fff', lineHeight: 1.15, letterSpacing: '-1px' }}>Turn your space into income</h2>
-            <p style={{ margin: '0 0 32px', color: '#d1d5db', fontSize: '16px', lineHeight: 1.7 }}>Join thousands of verified hosts earning extra income. We handle the trust layer — you focus on great hospitality.</p>
+            <p style={{ margin: '0 0 32px', color: '#d1d5db', fontSize: '16px', lineHeight: 1.7 }}>Join thousands of verified hosts earning extra income. We handle the trust layer  you focus on great hospitality.</p>
             <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
               <button onClick={() => navigate('/signup')} style={{ background: '#dc2626', color: '#fff', border: 'none', borderRadius: '50px', padding: '16px 32px', fontSize: '15px', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}>Start hosting</button>
               <button style={{ background: 'rgba(255,255,255,0.08)', color: '#fff', border: '1.5px solid rgba(255,255,255,0.2)', borderRadius: '50px', padding: '16px 28px', fontSize: '15px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' }}>Learn more</button>
             </div>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
-            {[{ value: '$850', label: 'Avg. monthly earnings' }, { value: '48h', label: 'Average first booking' }, { value: '4.9★', label: 'Host satisfaction' }, { value: '0%', label: 'Hidden fees' }].map(s => (
+            {[{ value: '$850', label: 'Avg. monthly earnings' }, { value: '48h', label: 'Average first booking' }, { value: '4.9', label: 'Host satisfaction' }, { value: '0%', label: 'Hidden fees' }].map(s => (
               <div key={s.label} style={{ background: 'rgba(255,255,255,0.06)', borderRadius: '16px', padding: '20px 18px', border: '1px solid rgba(255,255,255,0.08)' }}>
                 <p style={{ margin: '0 0 4px', fontSize: '24px', fontWeight: 800, color: '#ef4444' }}>{s.value}</p>
                 <p style={{ margin: 0, fontSize: '12px', color: '#9ca3af' }}>{s.label}</p>
@@ -257,9 +257,9 @@ export default function HomePage() {
             </div>
           </div>
           <div style={{ paddingTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-            <p style={{ margin: 0, color: '#444', fontSize: '12px' }}>2025 DIAVELA · Every listing verified · Every stay guaranteed.</p>
+            <p style={{ margin: 0, color: '#444', fontSize: '12px' }}>2025 DIAVELA  Every listing verified  Every stay guaranteed.</p>
             <div style={{ display: 'flex', gap: '8px' }}>
-              {['✅ Verified', '🛡️ Vetted', '🎯 Guaranteed'].map(b => (
+              {[' Verified', ' Vetted', ' Guaranteed'].map(b => (
                 <span key={b} style={{ fontSize: '11px', fontWeight: 600, color: '#dc2626', background: 'rgba(220,38,38,0.10)', padding: '3px 10px', borderRadius: '20px' }}>{b}</span>
               ))}
             </div>

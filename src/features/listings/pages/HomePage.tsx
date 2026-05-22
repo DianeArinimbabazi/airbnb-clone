@@ -26,7 +26,7 @@ const STATS = [
   { value: '10K+', label: 'Happy guests', icon: FiSmile },
   { value: '500+', label: 'Unique listings', icon: FiHome },
   { value: '50+', label: 'Destinations', icon: FiMapPin },
-  { value: '4.9★', label: 'Average rating', icon: FiStar },
+  { value: '4.9', label: 'Average rating', icon: FiStar },
 ];
 
 const HOW = [
@@ -78,8 +78,8 @@ export default function HomePage() {
           </div>
           <p style={{ marginTop: '18px', color: '#6ee7b7', fontSize: '13px', opacity: 0.8 }}>
             Popular: <span style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setSearchLocation('Kigali')}>Kigali</span>
-            {' · '}<span style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setSearchLocation('Gisenyi')}>Gisenyi</span>
-            {' · '}<span style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setSearchLocation('Musanze')}>Musanze</span>
+            {'  '}<span style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setSearchLocation('Gisenyi')}>Gisenyi</span>
+            {'  '}<span style={{ cursor: 'pointer', textDecoration: 'underline' }} onClick={() => setSearchLocation('Musanze')}>Musanze</span>
           </p>
         </div>
         <div style={{ position: 'relative', maxWidth: '860px', margin: '52px auto 0', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
@@ -138,7 +138,7 @@ export default function HomePage() {
             <p style={{ margin: '0 0 6px', fontSize: '13px', fontWeight: 700, color: '#10B981', textTransform: 'uppercase', letterSpacing: '1px' }}>DIAVELA top picks</p>
             <h2 style={{ margin: 0, fontSize: '28px', fontWeight: 800, color: '#111', letterSpacing: '-0.5px' }}>Featured DIAVELA stays</h2>
           </div>
-          <button onClick={() => navigate('/listings')} style={{ background: 'none', border: '1.5px solid #e5e7eb', borderRadius: '50px', padding: '10px 22px', fontSize: '13px', fontWeight: 700, color: '#555', cursor: 'pointer', fontFamily: 'inherit' }}>View all DIAVELA stays →</button>
+          <button onClick={() => navigate('/listings')} style={{ background: 'none', border: '1.5px solid #e5e7eb', borderRadius: '50px', padding: '10px 22px', fontSize: '13px', fontWeight: 700, color: '#555', cursor: 'pointer', fontFamily: 'inherit' }}>View all DIAVELA stays </button>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
           {featured.map(listing => <ListingCard key={listing.id} listing={listing} />)}
@@ -257,7 +257,7 @@ export default function HomePage() {
             </div>
           </div>
           <div style={{ paddingTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-            <p style={{ margin: 0, color: '#444', fontSize: '12px' }}>2025 DIAVELA · Every listing verified · Every stay guaranteed.</p>
+            <p style={{ margin: 0, color: '#444', fontSize: '12px' }}>2025 DIAVELA  Every listing verified  Every stay guaranteed.</p>
             <div style={{ display: 'flex', gap: '8px' }}>
               {[{ icon: FiCheckCircle, label: 'Verified' }, { icon: FiShield, label: 'Vetted' }, { icon: FiTarget, label: 'Guaranteed' }].map(t => (
                 <span key={t.label} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', fontWeight: 600, color: '#10B981', background: 'rgba(16,185,129,0.1)', padding: '3px 10px', borderRadius: '20px' }}><t.icon />{t.label}</span>
@@ -269,3 +269,4 @@ export default function HomePage() {
     </div>
   );
 }
+

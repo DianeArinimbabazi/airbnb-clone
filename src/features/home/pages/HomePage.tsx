@@ -44,7 +44,7 @@ export default function HomePage() {
 
         {/* Hero text */}
         <p style={{ fontSize:"clamp(11px, 2.5vw, 13px)", fontWeight:700, letterSpacing:"0.15em", color:"rgba(255,255,255,0.75)", textTransform:"uppercase", marginBottom:"clamp(12px, 3vw, 20px)", textAlign:"center" }}>
-          DIAVELA — Trusted travel experiences in Rwanda
+          DIAVELA  Trusted travel experiences in Rwanda
         </p>
         <h1 style={{ fontSize:"clamp(28px, 5vw, 68px)", fontWeight:800, color:"#fff", lineHeight:1.1, marginBottom:"clamp(12px, 3vw, 20px)", maxWidth:"800px", textAlign:"center", padding:"0 8px" }}>
           Discover Rwanda retreats <br />
@@ -93,6 +93,7 @@ export default function HomePage() {
     </div>
   );
 }
+
 
 
 

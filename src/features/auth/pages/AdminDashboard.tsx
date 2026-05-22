@@ -94,7 +94,7 @@ export function AdminDashboard() {
   );
   const ratedListings = listings.filter(l=>typeof l.rating==="number");
   const avgRating = ratedListings.length
-    ? (ratedListings.reduce((s,l)=>s+l.rating!,0)/ratedListings.length).toFixed(1) : "—";
+    ? (ratedListings.reduce((s,l)=>s+l.rating!,0)/ratedListings.length).toFixed(1) : "";
 
   const navSections = [
     { label:"Main menu", items:[
@@ -163,7 +163,7 @@ export function AdminDashboard() {
 
         <div style={{ padding:"24px", flex:1, overflowY:"auto" }}>
 
-          {/* Stats row — always visible */}
+          {/* Stats row  always visible */}
           <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"12px", marginBottom:"24px" }}>
             {[
               { label:"Total Bookings", value:bookings.length,   icon:<FiCalendar size={18}/>, ic:{bg:"#fff1ef",color:accent} },
@@ -181,7 +181,7 @@ export function AdminDashboard() {
             ))}
           </div>
 
-          {/* ── DASHBOARD ── */}
+          {/*  DASHBOARD  */}
           {activeNav==="dashboard" && (
             <div style={{ display:"flex", flexDirection:"column", gap:"20px" }}>
               <div style={{ background:`linear-gradient(135deg,#f97316,${accent})`, borderRadius:"16px", padding:"24px 28px", color:"#fff", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
@@ -194,9 +194,9 @@ export function AdminDashboard() {
               </div>
               <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"16px" }}>
                 {[
-                  { label:"Total Listings", value:listings.length, icon:"🏠", action:()=>setActiveNav("alllistings") },
-                  { label:"Total Users",    value:users.length,    icon:"👥", action:()=>setActiveNav("users") },
-                  { label:"Avg Rating",     value:avgRating,       icon:"⭐", action:()=>setActiveNav("reviews") },
+                  { label:"Total Listings", value:listings.length, icon:"", action:()=>setActiveNav("alllistings") },
+                  { label:"Total Users",    value:users.length,    icon:"", action:()=>setActiveNav("users") },
+                  { label:"Avg Rating",     value:avgRating,       icon:"", action:()=>setActiveNav("reviews") },
                 ].map(({label,value,icon,action})=>(
                   <div key={label} onClick={action} style={{ background:card, border:`1px solid ${border}`, borderRadius:"14px", padding:"20px", cursor:"pointer" }}>
                     <div style={{ fontSize:"28px", marginBottom:"8px" }}>{icon}</div>
@@ -236,7 +236,7 @@ export function AdminDashboard() {
             </div>
           )}
 
-          {/* ── MESSAGES ── */}
+          {/*  MESSAGES  */}
           {activeNav==="messages" && (
             <div style={{ background:card, border:`1px solid ${border}`, borderRadius:"16px", overflow:"hidden", display:"flex", height:"500px" }}>
               <div style={{ width:"260px", borderRight:`1px solid ${border}`, display:"flex", flexDirection:"column" }}>
@@ -258,7 +258,7 @@ export function AdminDashboard() {
               </div>
               <div style={{ flex:1, display:"flex", flexDirection:"column" }}>
                 <div style={{ padding:"14px 20px", borderBottom:`1px solid ${border}`, fontSize:"13px", fontWeight:600, color:text }}>
-                  {bookings.length>0?`Chat with ${bookings[0].guest?.name} — ${bookings[0].listing?.title}`:"Select a conversation"}
+                  {bookings.length>0?`Chat with ${bookings[0].guest?.name}  ${bookings[0].listing?.title}`:"Select a conversation"}
                 </div>
                 <div style={{ flex:1, padding:"20px", overflowY:"auto", display:"flex", flexDirection:"column", gap:"12px" }}>
                   {bookings.length>0?(
@@ -283,7 +283,7 @@ export function AdminDashboard() {
             </div>
           )}
 
-          {/* ── ALL LISTINGS ── */}
+          {/*  ALL LISTINGS  */}
           {activeNav==="alllistings" && (
             <div style={{ background:card, border:`1px solid ${border}`, borderRadius:"14px", overflow:"hidden" }}>
               <div style={{ padding:"14px 20px", borderBottom:`1px solid ${border}`, fontSize:"14px", fontWeight:700, color:text }}>
@@ -307,10 +307,10 @@ export function AdminDashboard() {
                       <td style={{padding:"11px 14px",fontSize:"13px",fontWeight:600,color:text}}>${l.pricePerNight}</td>
                       <td style={{padding:"11px 14px"}}>
                         {typeof l.rating==="number"
-                          ?<span style={{fontSize:"12px",fontWeight:600,color:"#92400e",background:"#faeeda",padding:"2px 8px",borderRadius:"999px"}}>★ {l.rating.toFixed(1)}</span>
-                          :<span style={{fontSize:"12px",color:sub}}>—</span>}
+                          ?<span style={{fontSize:"12px",fontWeight:600,color:"#92400e",background:"#faeeda",padding:"2px 8px",borderRadius:"999px"}}> {l.rating.toFixed(1)}</span>
+                          :<span style={{fontSize:"12px",color:sub}}></span>}
                       </td>
-                      <td style={{padding:"11px 14px",fontSize:"12px",color:sub}}>{l.host?.name??"—"}</td>
+                      <td style={{padding:"11px 14px",fontSize:"12px",color:sub}}>{l.host?.name??""}</td>
                       <td style={{padding:"11px 14px"}}>
                         <div style={{display:"flex",gap:"6px"}}>
                           <button onClick={()=>navigate(`/listings/${l.id}`)} style={{background:bg,color:sub,border:`1px solid ${border}`,borderRadius:"6px",padding:"5px 10px",fontSize:"11px",cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",gap:"3px"}}><FiEye size={11}/></button>
@@ -324,14 +324,14 @@ export function AdminDashboard() {
             </div>
           )}
 
-          {/* ── REVIEWS ── */}
+          {/*  REVIEWS  */}
           {activeNav==="reviews" && (
             <div style={{ display:"flex", flexDirection:"column", gap:"16px" }}>
               <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"16px" }}>
                 {[
-                  { label:"Avg Rating",     value:avgRating,        icon:"★" },
-                  { label:"Rated Listings", value:ratedListings.length, icon:"🏠" },
-                  { label:"Total Listings", value:listings.length,  icon:"📋" },
+                  { label:"Avg Rating",     value:avgRating,        icon:"" },
+                  { label:"Rated Listings", value:ratedListings.length, icon:"" },
+                  { label:"Total Listings", value:listings.length,  icon:"" },
                 ].map(({label,value,icon})=>(
                   <div key={label} style={{ background:card, border:`1px solid ${border}`, borderRadius:"16px", padding:"20px", display:"flex", alignItems:"center", gap:"16px" }}>
                     <div style={{ width:"44px", height:"44px", borderRadius:"12px", background:"#fff1ef", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"20px" }}>{icon}</div>
@@ -360,7 +360,7 @@ export function AdminDashboard() {
                         <td style={{padding:"12px 16px"}}>
                           <div style={{display:"flex",gap:"2px",alignItems:"center"}}>
                             {[1,2,3,4,5].map(s=>(
-                              <span key={s} style={{color:s<=Math.round(l.rating!)?"#f59e0b":"#e5e7eb",fontSize:"14px"}}>★</span>
+                              <span key={s} style={{color:s<=Math.round(l.rating!)?"#f59e0b":"#e5e7eb",fontSize:"14px"}}></span>
                             ))}
                             <span style={{fontSize:"12px",color:sub,marginLeft:"6px"}}>{l.rating!.toFixed(1)}</span>
                           </div>
@@ -373,7 +373,7 @@ export function AdminDashboard() {
             </div>
           )}
 
-          {/* ── BOOKINGS ── */}
+          {/*  BOOKINGS  */}
           {activeNav==="bookings" && (
             <div style={{ background:card, border:`1px solid ${border}`, borderRadius:"14px", overflow:"hidden" }}>
               <div style={{ padding:"14px 20px", borderBottom:`1px solid ${border}`, fontSize:"14px", fontWeight:700, color:text }}>All bookings</div>
@@ -421,7 +421,7 @@ export function AdminDashboard() {
             </div>
           )}
 
-          {/* ── MODERATION ── */}
+          {/*  MODERATION  */}
           {activeNav==="moderation" && (
             <div style={{ display:"flex", flexDirection:"column", gap:"16px" }}>
               <div style={{ background:card, border:`1px solid ${border}`, borderRadius:"14px", overflow:"hidden" }}>
@@ -435,8 +435,8 @@ export function AdminDashboard() {
                   <tbody>
                     {bookings.filter(b=>b.status==="PENDING").length===0?(
                       <tr><td colSpan={6} style={{padding:"32px",textAlign:"center",color:sub,fontSize:"13px"}}>
-                        <div style={{fontSize:"32px",marginBottom:"8px"}}>✅</div>
-                        All caught up — no pending approvals
+                        <div style={{fontSize:"32px",marginBottom:"8px"}}></div>
+                        All caught up  no pending approvals
                       </td></tr>
                     ):bookings.filter(b=>b.status==="PENDING").map((b)=>(
                       <tr key={b.id} style={{borderBottom:`1px solid ${border}`}}>
@@ -467,7 +467,7 @@ export function AdminDashboard() {
             </div>
           )}
 
-          {/* ── USERS ── */}
+          {/*  USERS  */}
           {activeNav==="users" && (
             <div style={{ background:card, border:`1px solid ${border}`, borderRadius:"14px", overflow:"hidden" }}>
               <div style={{ padding:"14px 20px", borderBottom:`1px solid ${border}`, fontSize:"14px", fontWeight:700, color:text }}>All users ({users.length})</div>
@@ -504,7 +504,7 @@ export function AdminDashboard() {
             </div>
           )}
 
-          {/* ── SETTINGS ── */}
+          {/*  SETTINGS  */}
           {activeNav==="settings" && (
             <div style={{ maxWidth:"560px", display:"flex", flexDirection:"column", gap:"20px" }}>
               <div style={{ background:card, border:`1px solid ${border}`, borderRadius:"16px", padding:"24px" }}>
@@ -552,5 +552,6 @@ export function AdminDashboard() {
 }
 
 export default AdminDashboard;
+
 
 

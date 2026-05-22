@@ -54,7 +54,7 @@ export function AIReviewSummary({ listingId, rating }: { listingId: string | und
     <div style={{ padding: '24px 0' }}>
       <h3 style={{ fontSize: '18px', fontWeight: 700, color: text, margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
         <FaStar size={18} color="#FF385C" />
-        {rating ? Number(rating).toFixed(1) + ' · Guest reviews' : 'Guest reviews'}
+        {rating ? Number(rating).toFixed(1) + '  Guest reviews' : 'Guest reviews'}
       </h3>
 
       {!loaded ? (
@@ -94,7 +94,7 @@ export function AIReviewSummary({ listingId, rating }: { listingId: string | und
               <p style={{ margin: '0 0 6px', fontSize: '12px', fontWeight: 700, color: '#008a05' }}>What guests loved</p>
               {data.positives.map((p, i) => (
                 <div key={i} style={{ display: 'flex', gap: '8px', fontSize: '13px', color: bodyText, marginBottom: '4px' }}>
-                  <span style={{ color: '#008a05', flexShrink: 0 }}>•</span>{p}
+                  <span style={{ color: '#008a05', flexShrink: 0 }}></span>{p}
                 </div>
               ))}
             </div>
@@ -105,7 +105,7 @@ export function AIReviewSummary({ listingId, rating }: { listingId: string | und
               <p style={{ margin: '0 0 6px', fontSize: '12px', fontWeight: 700, color: '#c13515' }}>Areas for improvement</p>
               {data.negatives.map((n, i) => (
                 <div key={i} style={{ display: 'flex', gap: '8px', fontSize: '13px', color: bodyText, marginBottom: '4px' }}>
-                  <span style={{ color: '#c13515', flexShrink: 0 }}>–</span>{n}
+                  <span style={{ color: '#c13515', flexShrink: 0 }}></span>{n}
                 </div>
               ))}
             </div>
@@ -115,3 +115,4 @@ export function AIReviewSummary({ listingId, rating }: { listingId: string | und
     </div>
   );
 }
+

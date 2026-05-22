@@ -281,7 +281,7 @@ export default function GuestDashboard() {
               <p style={{ fontSize: "15px", fontWeight: 700, color: text, marginBottom: "12px" }}>My Reviews</p>
               <div style={{ background: card, border: `1px solid ${border}`, borderRadius: "14px", overflow: "hidden" }}>
                 {bookings.filter(b => b.review).length === 0 ? (
-                  <p style={{ padding: "32px", textAlign: "center", color: sub, fontSize: "13px", margin: 0 }}>No reviews yet  complete a stay and share your experience!</p>
+                  <p style={{ padding: "32px", textAlign: "center", color: sub, fontSize: "13px", margin: 0 }}>No reviews yet — complete a stay and share your experience!</p>
                 ) : bookings.filter(b => b.review).map(b => (
                   <div key={b.id} style={{ padding: "16px 20px", borderBottom: `1px solid ${border}`, display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                     <div>
@@ -289,7 +289,7 @@ export default function GuestDashboard() {
                       <p style={{ margin: "0 0 6px", fontSize: "12px", color: sub }}>{b.listing?.location}</p>
                       <p style={{ margin: 0, fontSize: "13px", color: text }}>{b.review?.comment}</p>
                     </div>
-                    <span style={{ fontSize: "13px", fontWeight: 700, color: "#f59e0b", whiteSpace: "nowrap", marginLeft: "16px" }}> {b.review?.rating}/5</span>
+                    <span style={{ fontSize: "13px", fontWeight: 700, color: "#f59e0b", whiteSpace: "nowrap", marginLeft: "16px" }}>★ {b.review?.rating}/5</span>
                   </div>
                 ))}
               </div>
@@ -314,7 +314,7 @@ export default function GuestDashboard() {
                   <tr><td colSpan={6} style={{ padding: "32px", textAlign: "center", color: sub, fontSize: "13px" }}>Loading bookings...</td></tr>
                 ) : filtered.length === 0 ? (
                   <tr><td colSpan={6} style={{ padding: "32px", textAlign: "center", color: sub, fontSize: "13px" }}>
-                    {bookings.length === 0 ? "No bookings yet  find your next stay!" : "No results found"}
+                    {bookings.length === 0 ? "No bookings yet — find your next stay!" : "No results found"}
                   </td></tr>
                 ) : filtered.map((b, i) => {
                   const s = STATUS[b.status] ?? STATUS.COMPLETED;
@@ -326,7 +326,7 @@ export default function GuestDashboard() {
                         <p style={{ margin: "0 0 2px", fontSize: "13px", fontWeight: 600, color: text }}>{b.listing?.title}</p>
                         <p style={{ margin: 0, fontSize: "11px", color: sub }}>{b.listing?.location}</p>
                       </td>
-                      <td style={{ padding: "11px 14px", fontSize: "12px", color: sub }}>{fmt(b.checkIn)}  {fmt(b.checkOut)}</td>
+                      <td style={{ padding: "11px 14px", fontSize: "12px", color: sub }}>{fmt(b.checkIn)} → {fmt(b.checkOut)}</td>
                       <td style={{ padding: "11px 14px", fontSize: "13px", fontWeight: 600, color: text }}>${b.totalPrice}</td>
                       <td style={{ padding: "11px 14px" }}>
                         <span style={{ fontSize: "11px", fontWeight: 600, padding: "3px 10px", borderRadius: "999px", background: s.bg, color: s.color }}>{s.label}</span>
@@ -337,7 +337,7 @@ export default function GuestDashboard() {
                             <button onClick={() => setReviewTarget({ ...b, listingId: b.listingId || (b as any).listing?.id })} style={{ background: "#fffbeb", color: "#92400e", border: `1px solid #fde68a`, borderRadius: "6px", padding: "5px 10px", fontSize: "11px", fontWeight: 600, cursor: "pointer", fontFamily: "inherit", display: "flex", alignItems: "center", gap: "4px" }}><FiStar size={11} /> Review</button>
                           )}
                           {b.review && (
-                            <span style={{ fontSize: "11px", fontWeight: 600, color: "#3b6d11", background: "#eaf3de", borderRadius: "6px", padding: "5px 10px" }}> {b.review.rating}/5</span>
+                            <span style={{ fontSize: "11px", fontWeight: 600, color: "#3b6d11", background: "#eaf3de", borderRadius: "6px", padding: "5px 10px" }}>★ {b.review.rating}/5</span>
                           )}
                           <button onClick={() => navigate(`/listings/${b.listingId}`)} style={{ background: bg, color: sub, border: `1px solid ${border}`, borderRadius: "6px", padding: "5px 10px", fontSize: "11px", cursor: "pointer", fontFamily: "inherit", display: "flex", alignItems: "center", gap: "4px" }}><FiEye size={11} /> View</button>
                         </div>
@@ -358,7 +358,6 @@ export default function GuestDashboard() {
     </div>
   );
 }
-
 
 
 

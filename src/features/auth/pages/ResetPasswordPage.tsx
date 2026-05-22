@@ -106,7 +106,7 @@ export function ResetPasswordPage() {
         <div style={{ position:"absolute", top:"-80px", right:"-80px", width:"300px", height:"300px", borderRadius:"50%", background:"rgba(255,56,92,0.06)" }} />
         <div style={{ position:"absolute", bottom:"-60px", left:"-60px", width:"200px", height:"200px", borderRadius:"50%", background:"rgba(16,185,129,0.08)" }} />
         <div style={{ textAlign:"center", maxWidth:"360px", position:"relative", zIndex:1 }}>
-          <div style={{ fontSize:"80px", marginBottom:"24px" }}>🔒</div>
+          <div style={{ fontSize:"80px", marginBottom:"24px" }}></div>
           <h2 style={{ fontSize:"26px", fontWeight:700, color:text, marginBottom:"12px" }}>Secure your account</h2>
           <p style={{ fontSize:"14px", color:sub, lineHeight:1.7 }}>
             Choose a strong password you have not used before to keep your account safe.
@@ -116,5 +116,6 @@ export function ResetPasswordPage() {
     </div>
   );
 }
+
 
 

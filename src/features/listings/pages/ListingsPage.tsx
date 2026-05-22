@@ -95,7 +95,7 @@ export default function ListingsPage() {
       )}
       <p style={{ fontSize:"14px", color:"#717171", marginBottom:"20px" }}>
         {filtered.length} listing{filtered.length !== 1 ? "s" : ""} found
-        {viewMode === "map" && " — click a pin to explore"}
+        {viewMode === "map" && "  click a pin to explore"}
       </p>
       {viewMode === "map" ? (
         <Suspense fallback={<Spinner />}>
@@ -120,4 +120,5 @@ export default function ListingsPage() {
     </div>
   );
 }
+
 

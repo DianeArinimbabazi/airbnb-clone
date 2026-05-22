@@ -49,7 +49,7 @@ export function BookingPage() {
       qc.invalidateQueries({ queryKey: ["listing", id] });
       if (qRescheduleId) {
         api.delete(`/bookings/${qRescheduleId}`).then(() => {
-          toast.success("Previous booking cancelled — rescheduled.");
+          toast.success("Previous booking cancelled  rescheduled.");
           qc.invalidateQueries({ queryKey: ["bookings", "mine"] });
           navigate("/guest");
         }).catch(() => {
@@ -123,3 +123,4 @@ export function BookingPage() {
   );
 }
 export default BookingPage;
+

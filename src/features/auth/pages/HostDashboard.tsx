@@ -76,7 +76,7 @@ export default function HostDashboard() {
   const totalRevenue = bookings.filter(b => b.status !== "CANCELLED").reduce((s, b) => s + b.totalPrice, 0);
   const upcoming     = bookings.filter(b => b.status === "CONFIRMED" && new Date(b.checkIn) >= new Date());
   const ratings      = listings.map(l => l.rating).filter((r): r is number => typeof r === "number");
-  const avgRating    = ratings.length ? (ratings.reduce((s, r) => s + r, 0) / ratings.length).toFixed(1) : "—";
+  const avgRating    = ratings.length ? (ratings.reduce((s, r) => s + r, 0) / ratings.length).toFixed(1) : "";
 
   const filteredListings = listings.filter(l =>
     l.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -178,7 +178,7 @@ export default function HostDashboard() {
             ))}
           </div>
 
-          {/* ── LISTINGS ── */}
+          {/*  LISTINGS  */}
           {activeNav === "listings" && (
             <div style={{ background: card, border: `1px solid ${border}`, borderRadius: "14px", overflow: "hidden" }}>
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -194,7 +194,7 @@ export default function HostDashboard() {
                     <tr><td colSpan={8} style={{ padding: "32px", textAlign: "center", color: sub }}>Loading...</td></tr>
                   ) : filteredListings.length === 0 ? (
                     <tr><td colSpan={8} style={{ padding: "32px", textAlign: "center", color: sub }}>
-                      No listings yet. <span onClick={() => navigate("/listings/new")} style={{ color: accent, cursor: "pointer", fontWeight: 600 }}>Create your first →</span>
+                      No listings yet. <span onClick={() => navigate("/listings/new")} style={{ color: accent, cursor: "pointer", fontWeight: 600 }}>Create your first </span>
                     </td></tr>
                   ) : filteredListings.map((l, i) => (
                     <tr key={l.id} style={{ borderBottom: `1px solid ${border}` }}>
@@ -210,8 +210,8 @@ export default function HostDashboard() {
                       <td style={{ padding: "10px 12px", fontSize: "13px", fontWeight: 600, color: text }}>${l.pricePerNight}</td>
                       <td style={{ padding: "10px 12px" }}>
                         {typeof l.rating === "number"
-                          ? <span style={{ fontSize: "12px", fontWeight: 600, color: "#92400e", background: "#faeeda", padding: "2px 8px", borderRadius: "999px" }}>★ {l.rating.toFixed(1)}</span>
-                          : <span style={{ fontSize: "12px", color: sub }}>—</span>}
+                          ? <span style={{ fontSize: "12px", fontWeight: 600, color: "#92400e", background: "#faeeda", padding: "2px 8px", borderRadius: "999px" }}> {l.rating.toFixed(1)}</span>
+                          : <span style={{ fontSize: "12px", color: sub }}></span>}
                       </td>
                       <td style={{ padding: "10px 12px" }}>
                         <div style={{ display: "flex", gap: "6px" }}>
@@ -230,7 +230,7 @@ export default function HostDashboard() {
             </div>
           )}
 
-          {/* ── BOOKINGS ── */}
+          {/*  BOOKINGS  */}
           {activeNav === "bookings" && (
             <div style={{ background: card, border: `1px solid ${border}`, borderRadius: "14px", overflow: "hidden" }}>
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -272,7 +272,7 @@ export default function HostDashboard() {
             </div>
           )}
 
-          {/* ── EARNINGS ── */}
+          {/*  EARNINGS  */}
           {activeNav === "earnings" && (
             <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "16px" }}>
@@ -291,7 +291,7 @@ export default function HostDashboard() {
               <div style={{ background: card, border: `1px solid ${border}`, borderRadius: "16px", padding: "20px" }}>
                 <p style={{ fontSize: "14px", fontWeight: 700, color: text, margin: "0 0 16px" }}>Monthly earnings</p>
                 {monthlyEarnings.length === 0 ? (
-                  <p style={{ color: sub, fontSize: "13px", textAlign: "center", padding: "32px 0" }}>No earnings data yet — complete some bookings to see your chart.</p>
+                  <p style={{ color: sub, fontSize: "13px", textAlign: "center", padding: "32px 0" }}>No earnings data yet  complete some bookings to see your chart.</p>
                 ) : (
                   <div style={{ display: "flex", alignItems: "flex-end", gap: "8px", height: "160px" }}>
                     {monthlyEarnings.map(([month, amount]) => {
@@ -338,14 +338,14 @@ export default function HostDashboard() {
             </div>
           )}
 
-          {/* ── REVIEWS ── */}
+          {/*  REVIEWS  */}
           {activeNav === "reviews" && (
             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "16px", marginBottom: "4px" }}>
                 {[
-                  { label: "Avg Rating", value: avgRating, icon: "★" },
-                  { label: "Total Reviews", value: ratings.length, icon: "✍" },
-                  { label: "Listings Rated", value: listings.filter(l => typeof l.rating === "number").length, icon: "🏠" },
+                  { label: "Avg Rating", value: avgRating, icon: "" },
+                  { label: "Total Reviews", value: ratings.length, icon: "" },
+                  { label: "Listings Rated", value: listings.filter(l => typeof l.rating === "number").length, icon: "" },
                 ].map(({ label, value, icon }) => (
                   <div key={label} style={{ background: card, border: `1px solid ${border}`, borderRadius: "16px", padding: "20px", display: "flex", alignItems: "center", gap: "16px" }}>
                     <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: "#fff1ef", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px" }}>{icon}</div>
@@ -358,7 +358,7 @@ export default function HostDashboard() {
               </div>
               {listings.filter(l => typeof l.rating === "number").length === 0 ? (
                 <div style={{ background: card, border: `1px solid ${border}`, borderRadius: "16px", padding: "60px 40px", textAlign: "center" }}>
-                  <div style={{ fontSize: "40px", marginBottom: "16px" }}>⭐</div>
+                  <div style={{ fontSize: "40px", marginBottom: "16px" }}></div>
                   <p style={{ fontSize: "16px", fontWeight: 700, color: text, margin: "0 0 8px" }}>No reviews yet</p>
                   <p style={{ fontSize: "13px", color: sub, margin: 0 }}>Reviews from guests will appear here once your listings receive ratings.</p>
                 </div>
@@ -380,7 +380,7 @@ export default function HostDashboard() {
                           <td style={{ padding: "12px 16px" }}>
                             <div style={{ display: "flex", gap: "2px" }}>
                               {[1,2,3,4,5].map(s => (
-                                <span key={s} style={{ color: s <= Math.round(l.rating!) ? "#f59e0b" : "#e5e7eb", fontSize: "14px" }}>★</span>
+                                <span key={s} style={{ color: s <= Math.round(l.rating!) ? "#f59e0b" : "#e5e7eb", fontSize: "14px" }}></span>
                               ))}
                               <span style={{ fontSize: "12px", color: sub, marginLeft: "6px" }}>{l.rating!.toFixed(1)}</span>
                             </div>
@@ -395,7 +395,7 @@ export default function HostDashboard() {
             </div>
           )}
 
-          {/* ── MESSAGES ── */}
+          {/*  MESSAGES  */}
           {activeNav === "messages" && (
             <div style={{ background: card, border: `1px solid ${border}`, borderRadius: "16px", overflow: "hidden", display: "flex", height: "500px" }}>
               {/* Sidebar */}
@@ -422,7 +422,7 @@ export default function HostDashboard() {
               {/* Chat area */}
               <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
                 <div style={{ padding: "14px 20px", borderBottom: `1px solid ${border}`, fontSize: "13px", fontWeight: 600, color: text }}>
-                  {bookings.length > 0 ? `Chat with ${(bookings[0] as any).guest?.name ?? "guest"} — ${bookings[0].listing?.title}` : "Select a conversation"}
+                  {bookings.length > 0 ? `Chat with ${(bookings[0] as any).guest?.name ?? "guest"}  ${bookings[0].listing?.title}` : "Select a conversation"}
                 </div>
                 <div style={{ flex: 1, padding: "20px", overflowY: "auto", display: "flex", flexDirection: "column", gap: "12px" }}>
                   {bookings.length > 0 ? (
@@ -453,7 +453,7 @@ export default function HostDashboard() {
             </div>
           )}
 
-          {/* ── SETTINGS ── */}
+          {/*  SETTINGS  */}
           {activeNav === "settings" && (
             <div style={{ maxWidth: "560px", display: "flex", flexDirection: "column", gap: "20px" }}>
               <div style={{ background: card, border: `1px solid ${border}`, borderRadius: "16px", padding: "24px" }}>
@@ -502,5 +502,6 @@ export default function HostDashboard() {
     </div>
   );
 }
+
 
 
