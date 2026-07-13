@@ -55,7 +55,7 @@ export function LoginPage() {
         </div>
 
         {error && (
-          <div style={{ background:"#fee2e2", color:"#dc2626", padding:"12px 16px", borderRadius:"8px", marginBottom:"16px", fontSize:"14px" }}>
+          <div style={{ background: dark ? "#3b1111" : "#fee2e2", color: dark ? "#fca5a5" : "#dc2626", padding:"12px 16px", borderRadius:"8px", marginBottom:"16px", fontSize:"14px" }}>
             {error}
           </div>
         )}
@@ -73,7 +73,7 @@ export function LoginPage() {
           </div>
           </div>
           <button type="submit" disabled={loading}
-            style={{ padding:"14px", background:loading ? "#ccc" : "#FF385C", color:"#fff", border:"none", borderRadius:"8px", fontWeight:700, fontSize:"15px", cursor:loading ? "not-allowed" : "pointer", fontFamily:"inherit", marginTop:"4px" }}>
+            style={{ padding:"14px", background:loading ? (dark ? "#555" : "#ccc") : "#FF385C", color:"#fff", border:"none", borderRadius:"8px", fontWeight:700, fontSize:"15px", cursor:loading ? "not-allowed" : "pointer", fontFamily:"inherit", marginTop:"4px" }}>
             {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
@@ -98,10 +98,10 @@ export function LoginPage() {
             </div>
             <div style={{ display:"flex", gap:"6px", alignItems:"flex-end", height:"80px" }}>
               {[40,65,45,80,55,70,50].map((h,i) => (
-                <div key={i} style={{ flex:1, height:`${h}%`, borderRadius:"4px 4px 0 0", background: i===3 ? "#FF385C" : "#e8e8e8" }} />
+                <div key={i} style={{ flex:1, height:`${h}%`, borderRadius:"4px 4px 0 0", background: i===3 ? "#FF385C" : (dark ? "#444" : "#e8e8e8") }} />
               ))}
             </div>
-            <div style={{ height:"2px", background:"#f0f0f0", marginTop:"8px" }} />
+            <div style={{ height:"2px", background: border, marginTop:"8px" }} />
           </div>
         </div>
       </div>

@@ -14,10 +14,13 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   });
 
   if (res.status === 401) {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    window.location.href = "/login";
-    throw new Error("Session expired");
+    const token = localStorage.getItem("token");
+    if (token) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      window.location.href = "/login";
+    }
+    throw new Error("Unauthorized");
   }
 
   if (!res.ok) {

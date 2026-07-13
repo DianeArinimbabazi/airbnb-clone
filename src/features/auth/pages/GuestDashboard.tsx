@@ -71,7 +71,7 @@ export default function GuestDashboard() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const { dark, toggleDark } = useTheme();
-  const { data: rawBookings = [], isLoading } = useMyBookings();
+  const { data: rawBookings = [], isLoading, isError } = useMyBookings();
   const { isSaved, toggle } = useFavorites();
   const { data: allListings = [] } = useListings();
   const savedListings = allListings.filter(l => isSaved(l.id));
@@ -79,6 +79,14 @@ export default function GuestDashboard() {
   const [reviewTarget, setReviewTarget] = useState<BookingWithReview | null>(null);
   const [search, setSearch] = useState("");
   const [activeNav, setActiveNav] = useState("bookings");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [notifPrefs, setNotifPrefs] = useState({ bookings: true, reviews: true, promos: false });
+
+  const deleteAccountMutation = useMutation({
+    mutationFn: () => api.delete(`/users/${user?.id}`),
+    onSuccess: () => { toast.success("Account deleted"); logout(); navigate("/"); },
+    onError: (e: any) => toast.error(e?.message || "Could not delete account"),
+  });
 
   const card   = dark ? "#1a1a1a" : "#ffffff";
   const bg     = dark ? "#111111" : "#f7f7f5";
@@ -116,8 +124,11 @@ export default function GuestDashboard() {
     <div style={{ fontFamily: "Outfit, Segoe UI, sans-serif", display: "flex", minHeight: "100vh", background: bg }}>
       {reviewTarget && <ReviewModal booking={reviewTarget} onClose={() => setReviewTarget(null)} card={card} text={text} sub={sub} border={border} accent={accent} />}
 
+      {/* Sidebar overlay for mobile */}
+      {sidebarOpen && <div className="dashboard-sidebar-overlay" onClick={() => setSidebarOpen(false)} style={{ display: "none", position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 199 }} />}
+
       {/* Sidebar */}
-      <div style={{ width: "220px", flexShrink: 0, background: card, borderRight: `1px solid ${border}`, display: "flex", flexDirection: "column", position: "sticky", top: 0, height: "100vh", overflowY: "auto" }}>
+      <div className={`dashboard-sidebar ${sidebarOpen ? "open" : ""}`} style={{ width: "220px", flexShrink: 0, background: card, borderRight: `1px solid ${border}`, display: "flex", flexDirection: "column", position: "sticky", top: 0, height: "100vh", overflowY: "auto" }}>
         <div onClick={() => navigate("/")} style={{ padding: "18px 20px 14px", fontSize: "20px", fontWeight: 800, borderBottom: `1px solid ${border}`, cursor: "pointer", color: text }}>
           DIA<span style={{ color: accent }}>VELA</span>
         </div>
@@ -134,10 +145,15 @@ export default function GuestDashboard() {
       {/* Main */}
       <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
         {/* Topbar */}
-        <div style={{ background: card, borderBottom: `1px solid ${border}`, padding: "12px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 10 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", background: bg, border: `1px solid ${border}`, borderRadius: "10px", padding: "7px 12px", width: "240px" }}>
-            <FiSearch size={13} color={sub} />
-            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search bookings..." style={{ border: "none", background: "transparent", fontSize: "13px", color: text, outline: "none", width: "100%" }} />
+        <div className="dashboard-topbar" style={{ background: card, borderBottom: `1px solid ${border}`, padding: "12px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 10 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <button onClick={() => setSidebarOpen(true)} className="nav-hamburger" style={{ display: "none", background: "none", border: `1px solid ${border}`, borderRadius: "8px", padding: "8px", cursor: "pointer", color: text }}>
+              <FiSearch size={16} />
+            </button>
+            <div className="dashboard-topbar-search" style={{ display: "flex", alignItems: "center", gap: "8px", background: bg, border: `1px solid ${border}`, borderRadius: "10px", padding: "7px 12px", width: "240px" }}>
+              <FiSearch size={13} color={sub} />
+              <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search bookings..." style={{ border: "none", background: "transparent", fontSize: "13px", color: text, outline: "none", width: "100%" }} />
+            </div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "16px", fontSize: "13px", color: sub }}>
             {[{label:"Home",to:"/"},{label:"Listings",to:"/listings"},{label:"Profile",to:"/profile"}].map(({label,to}) => (
@@ -150,7 +166,7 @@ export default function GuestDashboard() {
           </div>
         </div>
 
-        <div style={{ padding: "24px", flex: 1 }}>
+        <div className="dashboard-content" style={{ padding: "24px", flex: 1 }}>
           {/* Banner */}
           <div style={{ background: `linear-gradient(135deg, #f97316, ${accent})`, borderRadius: "16px", padding: "24px 28px", color: "#fff", marginBottom: "20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <div>
@@ -162,7 +178,7 @@ export default function GuestDashboard() {
           </div>
 
           {/* Stats */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "12px", marginBottom: "24px" }}>
+          <div className="dashboard-stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "12px", marginBottom: "24px" }}>
             {[
               { label: "Total Bookings",  value: bookings.length,              color: text },
               { label: "Upcoming",        value: upcoming.length,              color: text },
@@ -223,16 +239,18 @@ export default function GuestDashboard() {
               <div style={{ background: card, border: `1px solid ${border}`, borderRadius: "14px", marginBottom: "16px", overflow: "hidden" }}>
                 <p style={{ fontSize: "11px", fontWeight: 700, color: sub, padding: "14px 20px 0", margin: 0, textTransform: "uppercase", letterSpacing: ".06em" }}>Notifications</p>
                 {[
-                  { label: "Booking confirmations", desc: "Get notified when a booking is approved" },
-                  { label: "Review reminders", desc: "Remind me to review after a stay" },
-                  { label: "Promotions & deals", desc: "Receive special offers and discounts" },
-                ].map(({ label, desc }) => (
+                  { key: "bookings" as const, label: "Booking confirmations", desc: "Get notified when a booking is approved" },
+                  { key: "reviews" as const, label: "Review reminders", desc: "Remind me to review after a stay" },
+                  { key: "promos" as const, label: "Promotions & deals", desc: "Receive special offers and discounts" },
+                ].map(({ key, label, desc }) => (
                   <div key={label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 20px", borderTop: `1px solid ${border}` }}>
                     <div>
                       <p style={{ margin: "0 0 2px", fontSize: "13px", fontWeight: 600, color: text }}>{label}</p>
                       <p style={{ margin: 0, fontSize: "12px", color: sub }}>{desc}</p>
                     </div>
-                    <input type="checkbox" defaultChecked style={{ width: "16px", height: "16px", accentColor: accent, cursor: "pointer", flexShrink: 0 }} />
+                    <div onClick={() => setNotifPrefs(p => ({ ...p, [key]: !p[key] }))} style={{ width: "44px", height: "24px", borderRadius: "999px", background: notifPrefs[key] ? accent : (dark ? "#333" : "#ccc"), cursor: "pointer", position: "relative", transition: "background .2s", flexShrink: 0 }}>
+                      <div style={{ position: "absolute", top: "3px", left: notifPrefs[key] ? "23px" : "3px", width: "18px", height: "18px", borderRadius: "50%", background: "#fff", transition: "left .2s" }} />
+                    </div>
                   </div>
                 ))}
               </div>
@@ -243,7 +261,9 @@ export default function GuestDashboard() {
                 <div style={{ padding: "14px 20px" }}>
                   <p style={{ margin: "0 0 2px", fontSize: "14px", fontWeight: 600, color: text }}>Delete account</p>
                   <p style={{ margin: "0 0 14px", fontSize: "12px", color: sub }}>Permanently delete your account and all data. This cannot be undone.</p>
-                  <button onClick={() => { if (window.confirm("Are you sure? This cannot be undone.")) { logout(); navigate("/"); } }} style={{ background: "#ef4444", color: "#fff", border: "none", borderRadius: "8px", padding: "8px 18px", fontSize: "13px", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Delete my account</button>
+                  <button onClick={() => { if (window.confirm("Are you sure? This will permanently delete your account and all associated data. This cannot be undone.")) { deleteAccountMutation.mutate(); } }} disabled={deleteAccountMutation.isPending} style={{ background: deleteAccountMutation.isPending ? "#ccc" : "#ef4444", color: "#fff", border: "none", borderRadius: "8px", padding: "8px 18px", fontSize: "13px", fontWeight: 700, cursor: deleteAccountMutation.isPending ? "not-allowed" : "pointer", fontFamily: "inherit" }}>
+                    {deleteAccountMutation.isPending ? "Deleting..." : "Delete my account"}
+                  </button>
                 </div>
               </div>
             </div>
@@ -261,7 +281,7 @@ export default function GuestDashboard() {
                   {savedListings.map(l => (
                     <div key={l.id} style={{ background: card, border: `1px solid ${border}`, borderRadius: "14px", overflow: "hidden", cursor: "pointer" }}>
                       <div style={{ position: "relative" }}>
-                        <img src={l.photos?.[0]?.url} alt={l.title} style={{ width: "100%", height: "150px", objectFit: "cover" }} onClick={() => navigate(`/listings/${l.id}`)} />
+                        <img src={l.photos?.[0]?.url} alt={l.title} style={{ width: "100%", height: "150px", objectFit: "cover" }} onClick={() => navigate(`/listings/${l.id}`)} onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
                         <button onClick={() => toggle(l.id)} style={{ position: "absolute", top: "8px", right: "8px", background: "#fff", border: "none", borderRadius: "50%", width: "30px", height: "30px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
                           <FiHeart size={14} color={accent} fill={accent} />
                         </button>
@@ -300,7 +320,7 @@ export default function GuestDashboard() {
             <p style={{ fontSize: "15px", fontWeight: 700, color: text, margin: 0 }}>My Bookings</p>
             <span onClick={() => navigate("/listings")} style={{ fontSize: "12px", color: accent, cursor: "pointer" }}>Browse more</span>
           </div>
-          <div style={{ background: card, border: `1px solid ${border}`, borderRadius: "14px", overflow: "hidden" }}>
+          <div className="dashboard-table-wrap" style={{ background: card, border: `1px solid ${border}`, borderRadius: "14px", overflow: "hidden" }}>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ background: bg }}>
@@ -311,7 +331,15 @@ export default function GuestDashboard() {
               </thead>
               <tbody>
                 {isLoading ? (
-                  <tr><td colSpan={6} style={{ padding: "32px", textAlign: "center", color: sub, fontSize: "13px" }}>Loading bookings...</td></tr>
+                  <tr><td colSpan={6} style={{ padding: "40px", textAlign: "center", color: sub, fontSize: "13px" }}>
+                    <div style={{ display: "inline-block", width: "24px", height: "24px", border: `3px solid ${border}`, borderTopColor: accent, borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+                    <p style={{ marginTop: "8px" }}>Loading bookings...</p>
+                  </td></tr>
+                ) : isError ? (
+                  <tr><td colSpan={6} style={{ padding: "40px", textAlign: "center", color: "#ef4444", fontSize: "13px" }}>
+                    <p style={{ fontWeight: 600, marginBottom: "4px" }}>Failed to load bookings</p>
+                    <p style={{ color: sub }}>Please try again later or check your connection.</p>
+                  </td></tr>
                 ) : filtered.length === 0 ? (
                   <tr><td colSpan={6} style={{ padding: "32px", textAlign: "center", color: sub, fontSize: "13px" }}>
                     {bookings.length === 0 ? "No bookings yet  find your next stay!" : "No results found"}

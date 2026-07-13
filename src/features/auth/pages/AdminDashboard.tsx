@@ -46,6 +46,14 @@ export function AdminDashboard() {
   const [activeNav, setActiveNav] = useState<Section>("dashboard");
   const [msgDraft, setMsgDraft] = useState("");
   const [settingsForm, setSettingsForm] = useState({ name: user?.name??"", email: user?.email??"" });
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [platformSettings, setPlatformSettings] = useState({ emailNotifs: true, autoApproval: false, maintenance: false, newUserAlerts: true });
+
+  const updateProfileMutation = useMutation({
+    mutationFn: () => api.put(`/users/${user?.id}`, { name: settingsForm.name }),
+    onSuccess: () => { toast.success("Profile updated"); qc.invalidateQueries({ queryKey: ["admin"] }); },
+    onError: (e: any) => toast.error(e?.message || "Could not update profile"),
+  });
 
   const card=dark?"#1a1a1a":"#ffffff", bg=dark?"#111111":"#f7f7f5";
   const text=dark?"#f0f0f0":"#111111", sub=dark?"#888888":"#666666";
@@ -126,8 +134,11 @@ export function AdminDashboard() {
 
   return (
     <div style={{ fontFamily:"Outfit, Segoe UI, sans-serif", display:"flex", minHeight:"100vh", background:bg }}>
+      {/* Sidebar overlay for mobile */}
+      {sidebarOpen && <div className="dashboard-sidebar-overlay" onClick={() => setSidebarOpen(false)} style={{ display: "none", position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 199 }} />}
+
       {/* Sidebar */}
-      <div style={{ width:"220px", flexShrink:0, background:card, borderRight:`1px solid ${border}`, display:"flex", flexDirection:"column", position:"sticky", top:0, height:"100vh", overflowY:"auto" }}>
+      <div className={`dashboard-sidebar ${sidebarOpen ? "open" : ""}`} style={{ width:"220px", flexShrink:0, background:card, borderRight:`1px solid ${border}`, display:"flex", flexDirection:"column", position:"sticky", top:0, height:"100vh", overflowY:"auto" }}>
         <div onClick={()=>navigate("/")} style={{ padding:"18px 20px 14px", fontSize:"20px", fontWeight:800, borderBottom:`1px solid ${border}`, cursor:"pointer", color:text }}>
           DIA<span style={{color:accent}}>VELA</span>
         </div>
@@ -149,10 +160,15 @@ export function AdminDashboard() {
       {/* Main */}
       <div style={{ flex:1, display:"flex", flexDirection:"column", minWidth:0 }}>
         {/* Topbar */}
-        <div style={{ background:card, borderBottom:`1px solid ${border}`, padding:"12px 24px", display:"flex", alignItems:"center", justifyContent:"space-between", position:"sticky", top:0, zIndex:10 }}>
-          <div style={{ display:"flex", alignItems:"center", gap:"8px", background:bg, border:`1px solid ${border}`, borderRadius:"10px", padding:"7px 12px", width:"240px" }}>
-            <FiSearch size={13} color={sub}/>
-            <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search..." style={{ border:"none", background:"transparent", fontSize:"13px", color:text, outline:"none", width:"100%" }}/>
+        <div className="dashboard-topbar" style={{ background:card, borderBottom:`1px solid ${border}`, padding:"12px 24px", display:"flex", alignItems:"center", justifyContent:"space-between", position:"sticky", top:0, zIndex:10 }}>
+          <div style={{ display:"flex", alignItems:"center", gap: "12px" }}>
+            <button onClick={() => setSidebarOpen(true)} className="nav-hamburger" style={{ display: "none", background: "none", border: `1px solid ${border}`, borderRadius: "8px", padding: "8px", cursor: "pointer", color: text }}>
+              <FiSearch size={16} />
+            </button>
+            <div className="dashboard-topbar-search" style={{ display:"flex", alignItems:"center", gap:"8px", background:bg, border:`1px solid ${border}`, borderRadius:"10px", padding:"7px 12px", width:"240px" }}>
+              <FiSearch size={13} color={sub}/>
+              <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search..." style={{ border:"none", background:"transparent", fontSize:"13px", color:text, outline:"none", width:"100%" }}/>
+            </div>
           </div>
           <div style={{ display:"flex", alignItems:"center", gap:"10px" }}>
             {[{label:"Home",to:"/"},{label:"Listings",to:"/listings"},{label:"Profile",to:"/profile"}].map(({label,to})=>(
@@ -161,10 +177,10 @@ export function AdminDashboard() {
           </div>
         </div>
 
-        <div style={{ padding:"24px", flex:1, overflowY:"auto" }}>
+        <div className="dashboard-content" style={{ padding:"24px", flex:1, overflowY:"auto" }}>
 
           {/* Stats row  always visible */}
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"12px", marginBottom:"24px" }}>
+          <div className="dashboard-stats-grid" style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"12px", marginBottom:"24px" }}>
             {[
               { label:"Total Bookings", value:bookings.length,   icon:<FiCalendar size={18}/>, ic:{bg:"#fff1ef",color:accent} },
               { label:"Pending",        value:pending,           icon:<FiClock size={18}/>,    ic:{bg:"#faeeda",color:"#854f0b"}, red:true },
@@ -519,18 +535,23 @@ export function AdminDashboard() {
                       style={{width:"100%",background:inputBg,border:`1px solid ${border}`,borderRadius:"10px",padding:"10px 14px",fontSize:"13px",color:text,outline:"none",fontFamily:"inherit",boxSizing:"border-box"}}/>
                   </div>
                 ))}
-                <button onClick={()=>{ navigate("/profile"); toast.success("Opening profile editor..."); }}
-                  style={{background:accent,color:"#fff",border:"none",borderRadius:"10px",padding:"11px 24px",fontSize:"13px",fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>
-                  Save changes
+                <button onClick={() => updateProfileMutation.mutate()} disabled={updateProfileMutation.isPending}
+                  style={{background:accent,color:"#fff",border:"none",borderRadius:"10px",padding:"11px 24px",fontSize:"13px",fontWeight:700,cursor:updateProfileMutation.isPending?"not-allowed":"pointer",fontFamily:"inherit"}}>
+                  {updateProfileMutation.isPending ? "Saving..." : "Save changes"}
                 </button>
               </div>
               <div style={{ background:card, border:`1px solid ${border}`, borderRadius:"16px", padding:"24px" }}>
                 <p style={{ fontSize:"15px", fontWeight:700, color:text, margin:"0 0 16px" }}>Platform settings</p>
-                {["Email notifications","Booking auto-approval","Maintenance mode","New user alerts"].map(label=>(
+                {[
+                  { key: "emailNotifs" as const, label:"Email notifications" },
+                  { key: "autoApproval" as const, label:"Booking auto-approval" },
+                  { key: "maintenance" as const, label:"Maintenance mode" },
+                  { key: "newUserAlerts" as const, label:"New user alerts" },
+                ].map(({ key, label })=>(
                   <div key={label} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 0",borderBottom:`1px solid ${border}`}}>
                     <span style={{fontSize:"13px",color:text}}>{label}</span>
-                    <div style={{width:"36px",height:"20px",borderRadius:"10px",background:label==="Maintenance mode"?(dark?"#333":"#ddd"):accent,cursor:"pointer",position:"relative"}}>
-                      <div style={{position:"absolute",right:label==="Maintenance mode"?"auto":"2px",left:label==="Maintenance mode"?"2px":"auto",top:"2px",width:"16px",height:"16px",borderRadius:"50%",background:"#fff"}}/>
+                    <div onClick={() => setPlatformSettings(p => ({ ...p, [key]: !p[key] }))} style={{width:"44px",height:"24px",borderRadius:"12px",background:platformSettings[key]?accent:(dark?"#333":"#ddd"),cursor:"pointer",position:"relative",transition:"background .2s"}}>
+                      <div style={{position:"absolute",top:"3px",left:platformSettings[key]?"23px":"3px",width:"18px",height:"18px",borderRadius:"50%",background:"#fff",transition:"left .2s"}}/>
                     </div>
                   </div>
                 ))}

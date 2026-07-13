@@ -57,7 +57,7 @@ export default function ListingsMapView({ listings }: { listings: Listing[] }) {
             <Popup maxWidth={220}>
               <div style={{ fontFamily: "Outfit, sans-serif", cursor: "pointer" }} onClick={() => navigate(`/listings/${listing.id}`)}>
                 {(listing as any).photos?.[0]?.url && (
-                  <img src={(listing as any).photos[0].url} alt={listing.title} style={{ width: "100%", height: "120px", objectFit: "cover", borderRadius: "8px", marginBottom: "8px" }} />
+                  <img src={(listing as any).photos[0].url} alt={listing.title} style={{ width: "100%", height: "120px", objectFit: "cover", borderRadius: "8px", marginBottom: "8px" }} onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
                 )}
                 <p style={{ margin: "0 0 2px", fontWeight: 700, fontSize: "13px", color: "#111" }}>{listing.title}</p>
                 <p style={{ margin: "0 0 4px", fontSize: "12px", color: "#666" }}>{listing.location}</p>

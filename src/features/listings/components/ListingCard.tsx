@@ -3,12 +3,11 @@ import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { FaHeart, FaRegHeart, FaStar, FaMapMarkerAlt } from "react-icons/fa";
 import { FiHome } from "react-icons/fi";
-import numeral from "numeral";
-import { motion } from "framer-motion";
 import { useFavorites } from "../hooks/useFavorites";
 import styles from "./ListingCard.module.css";
 
-const BASE_URL = "https://airbnb-api-3mnx.onrender.com";
+import { config } from "../../../config/env";
+const BASE_URL = config.apiUrl.replace(/\/api\/?$/, "");
 
 function getImg(listing: any): string {
   if (listing.photos?.length > 0) {
@@ -39,10 +38,9 @@ export function ListingCard({ listing }: { listing: any }) {
   const imgUrl = getImg(listing);
 
   return (
-    <motion.div
+    <div
       className={clsx(styles.card, { [styles.saved]: saved, [styles.luxury]: price > 300, [styles.booked]: !available, [styles.superhost]: superhost })}
       onClick={() => navigate(`/listings/${listing.id}`)}
-      initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
     >
       <div className={styles.imgWrapper}>
         {imgUrl && !err
@@ -57,7 +55,7 @@ export function ListingCard({ listing }: { listing: any }) {
       <div className={styles.body}>
         <div className={styles.topRow}>
           <h3 className={styles.title}>{title}</h3>
-          <div className={styles.rating}><FaStar />{numeral(rating).format("0.0")}</div>
+          <div className={styles.rating}><FaStar />{Number(rating).toFixed(1)}</div>
         </div>
         <div className={styles.location}><FaMapMarkerAlt />{location}</div>
         <div className={styles.meta}>
@@ -66,11 +64,11 @@ export function ListingCard({ listing }: { listing: any }) {
           {available ? <span className={styles.badgeAvailable}>Available</span> : <span className={styles.badgeBooked}>Booked</span>}
         </div>
         <div className={styles.footer}>
-          <div className={styles.price}>{numeral(price).format("$0,0")} <span>/ night</span></div>
+          <div className={styles.price}>${price.toLocaleString()} <span>/ night</span></div>
           <div className={styles.date}>{listing.guests ? `Up to ${listing.guests} guests` : ""}</div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 

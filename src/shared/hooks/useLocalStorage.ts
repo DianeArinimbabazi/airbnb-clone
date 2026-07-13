@@ -14,7 +14,7 @@ export function useLocalStorage<T>(key: string, initial: T): [T, (value: T) => v
       setStored(value);
       localStorage.setItem(key, JSON.stringify(value));
     } catch {
-      console.error("useLocalStorage write failed");
+      // localStorage write failed silently
     }
   };
   return [stored, setValue];

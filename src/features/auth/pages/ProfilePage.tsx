@@ -94,11 +94,11 @@ export function ProfilePage() {
           <div style={{ position: "relative", flexShrink: 0 }}>
             <div style={{ width: "72px", height: "72px", borderRadius: "50%", background: "#064e3b", display: "flex", alignItems: "center", justifyContent: "center", color: "#6ee7b7", fontWeight: 800, fontSize: "28px", overflow: "hidden" }}>
               {avatarUrl
-                ? <img src={avatarUrl} alt="avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                ? <img src={avatarUrl} alt="avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
                 : (user?.name?.[0]?.toUpperCase() ?? user?.email?.[0]?.toUpperCase() ?? "U")
               }
             </div>
-            <label style={{ position: "absolute", bottom: 0, right: 0, width: "24px", height: "24px", borderRadius: "50%", background: "#10B981", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", border: "2px solid white" }}>
+            <label style={{ position: "absolute", bottom: 0, right: 0, width: "24px", height: "24px", borderRadius: "50%", background: "#10B981", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", border: `2px solid ${card}` }}>
               <span style={{ color: "#fff", fontSize: "12px", fontWeight: 700 }}>+</span>
               <input type="file" accept="image/*" onChange={handleAvatarChange} style={{ display: "none" }} />
             </label>
@@ -150,7 +150,7 @@ export function ProfilePage() {
               <input type="password" value={confirmPassword} onChange={e => setConfirm(e.target.value)} style={inp} placeholder="Confirm new password" />
             </div>
             <button onClick={handlePasswordSubmit} disabled={changePassword.isPending}
-              style={{ padding: "12px", background: "#111", color: "#fff", border: "none", borderRadius: "10px", fontWeight: 700, fontSize: "14px", cursor: "pointer", fontFamily: "inherit" }}>
+              style={{ padding: "12px", background: dark ? "#333" : "#111", color: "#fff", border: "none", borderRadius: "10px", fontWeight: 700, fontSize: "14px", cursor: "pointer", fontFamily: "inherit" }}>
               {changePassword.isPending ? "Changing..." : "Change password"}
             </button>
           </div>
@@ -158,7 +158,7 @@ export function ProfilePage() {
 
         {/* Sign out */}
         <button onClick={() => { logout(); navigate("/"); }}
-          style={{ width: "100%", padding: "14px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: "12px", fontWeight: 700, fontSize: "14px", cursor: "pointer", fontFamily: "inherit" }}>
+          style={{ width: "100%", padding: "14px", background: dark ? "#3b1111" : "#fee2e2", color: dark ? "#fca5a5" : "#dc2626", border: "none", borderRadius: "12px", fontWeight: 700, fontSize: "14px", cursor: "pointer", fontFamily: "inherit" }}>
           Sign out
         </button>
       </div>

@@ -70,7 +70,8 @@ export function useListing(id: string) {
     queryKey: ["listing", id],
     enabled: !!id,
     queryFn: async () => {
-      const listing = await api.get<Listing>(`/listings/${id}`);
+      const res = await api.get<any>(`/listings/${id}`);
+      const listing: Listing = res.data ?? res;
       if (listing.photos && listing.photos.length > 0) return listing;
       const pool = PHOTOS[listing.type] ?? FALLBACK;
       const base = hashId(listing.id);

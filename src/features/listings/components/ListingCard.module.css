@@ -223,3 +223,50 @@
   font-size: 12px;
   color: #999;
 }
+
+/* Dark mode overrides */
+:global([data-theme="dark"]) .card {
+  background: #1a1a1a;
+  border-color: #333;
+}
+:global([data-theme="dark"]) .card:hover {
+  border-color: #555;
+}
+:global([data-theme="dark"]) .imgWrapper {
+  background: #222;
+}
+:global([data-theme="dark"]) .imgFallback {
+  background: #2a1a1a;
+}
+:global([data-theme="dark"]) .heartBtn {
+  background: rgba(40, 40, 40, 0.92);
+}
+:global([data-theme="dark"]) .heartBtn:hover {
+  background: #333;
+}
+:global([data-theme="dark"]) .title {
+  color: #f0f0f0;
+}
+:global([data-theme="dark"]) .location {
+  color: #888;
+}
+:global([data-theme="dark"]) .badgeSuperhost {
+  background: #333;
+}
+:global([data-theme="dark"]) .badgeAvailable {
+  background: #333;
+  color: #aaa;
+}
+:global([data-theme="dark"]) .badgeBooked {
+  background: #3b1111;
+  color: #fca5a5;
+}
+:global([data-theme="dark"]) .footer {
+  border-top-color: #333;
+}
+:global([data-theme="dark"]) .price {
+  color: #f0f0f0;
+}
+:global([data-theme="dark"]) .price span {
+  color: #888;
+}

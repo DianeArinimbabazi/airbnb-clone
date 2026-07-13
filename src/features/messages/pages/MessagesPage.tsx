@@ -4,7 +4,7 @@ import { useTheme } from "../../../shared/context/ThemeContext";
 import { useAuth } from "../../auth/hooks/useAuth";
 import { api } from "../../../lib/api";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { FiArrowLeft, FiSend, FiMessageSquare, FiSearch } from "react-icons/fi";
+import { FiArrowLeft, FiSend, FiMessageSquare, FiSearch, FiMenu } from "react-icons/fi";
 
 interface ApiMessage {
   id: string; content: string; senderId: string; receiverId: string;
@@ -43,6 +43,7 @@ export default function MessagesPage() {
   const [activeBookingId, setActiveBookingId] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
   const [search, setSearch] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const bg    = dark ? "#111111" : "#f7f7f5";
@@ -120,13 +121,19 @@ export default function MessagesPage() {
           <button onClick={() => navigate(-1)} style={{ background: card, border: `1px solid ${border}`, borderRadius: "50%", width: "36px", height: "36px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: text }}>
             <FiArrowLeft size={16}/>
           </button>
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="nav-hamburger" style={{ display: "none", background: card, border: `1px solid ${border}`, borderRadius: "50%", width: "36px", height: "36px", alignItems: "center", justifyContent: "center", cursor: "pointer", color: text }}>
+            <FiMenu size={16}/>
+          </button>
           <h1 style={{ margin: 0, fontSize: "22px", fontWeight: 800, color: text }}>Messages</h1>
         </div>
 
         <div style={{ display: "flex", height: "calc(100vh - 120px)", background: card, borderRadius: "20px", border: `1px solid ${border}`, overflow: "hidden" }}>
 
+          {/* Sidebar overlay for mobile */}
+          {sidebarOpen && <div className="messages-overlay" onClick={() => setSidebarOpen(false)} style={{ display: "none", position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 199 }} />}
+
           {/* Sidebar */}
-          <div style={{ width: "300px", flexShrink: 0, borderRight: `1px solid ${border}`, display: "flex", flexDirection: "column" }}>
+          <div className={`messages-sidebar ${sidebarOpen ? "open" : ""}`} style={{ width: "300px", flexShrink: 0, borderRight: `1px solid ${border}`, display: "flex", flexDirection: "column" }}>
             <div style={{ padding: "14px", borderBottom: `1px solid ${border}` }}>
               <div style={{ display: "flex", alignItems: "center", gap: "8px", background: inputBg, borderRadius: "10px", padding: "8px 12px" }}>
                 <FiSearch size={13} color={sub}/>
@@ -150,7 +157,7 @@ export default function MessagesPage() {
                 const isActive = conv.bookingId === activeBookingId;
                 const name = other?.name ?? "Unknown";
                 return (
-                  <div key={conv.bookingId} onClick={() => setActiveBookingId(conv.bookingId)}
+                  <div key={conv.bookingId} onClick={() => { setActiveBookingId(conv.bookingId); setSidebarOpen(false); }}
                     style={{ padding: "14px", cursor: "pointer", background: isActive ? (dark ? "#2a1008" : "#fff1ef") : "transparent", borderLeft: isActive ? `3px solid ${accent}` : "3px solid transparent", display: "flex", gap: "10px", alignItems: "flex-start" }}>
                     <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: colorFor(name), display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "14px", fontWeight: 700, flexShrink: 0 }}>
                       {initials(name)}

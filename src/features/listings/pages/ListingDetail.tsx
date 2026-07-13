@@ -9,8 +9,9 @@ import toast from "react-hot-toast";
 import { useFavorites } from "../hooks/useFavorites";
 import { useListing } from "../hooks/useListing";
 import { useTheme } from "../../../shared/context/ThemeContext";
+import { useAuth } from "../../auth/hooks/useAuth";
 import { Spinner } from "../../../shared/components/Spinner";
-import numeral from "numeral";
+
 import type { ReactNode } from "react";
 import {
   FaHeart, FaRegHeart, FaStar, FaUsers, FaBed, FaBath,
@@ -44,6 +45,7 @@ export function ListingDetail() {
   const { data: listing, isLoading, isError } = useListing(id!);
   const { isSaved, toggle } = useFavorites();
   const { dark } = useTheme();
+  const { isAuthenticated } = useAuth();
   const [showAllAmenities, setShowAllAmenities] = useState(false);
   const [checkIn, setCheckIn]   = useState("");
   const [checkOut, setCheckOut] = useState("");
@@ -67,6 +69,7 @@ export function ListingDetail() {
   });
 
   function handleBook() {
+    if (!isAuthenticated) return navigate(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
     if (!checkIn || !checkOut) return toast.error("Select check-in and check-out dates");
     if (new Date(checkOut) <= new Date(checkIn)) return toast.error("Check-out must be after check-in");
     bookMutation.mutate();
@@ -144,7 +147,7 @@ export function ListingDetail() {
       <div style={{ display:"flex", alignItems:"center", gap:"12px", marginBottom:"16px", flexWrap:"wrap" }}>
         {listing.rating && (
           <span style={{ display:"flex", alignItems:"center", gap:"4px", fontWeight:600, fontSize:"14px", color: text }}>
-            <FaStar size={14} color="#FF385C" /> {numeral(listing.rating).format("0.0")}
+            <FaStar size={14} color="#FF385C" /> {Number(listing.rating).toFixed(1)}
           </span>
         )}
         {listing.superhost && <span style={{ fontSize:"13px", fontWeight:600, color: text }}> Superhost</span>}
@@ -157,12 +160,12 @@ export function ListingDetail() {
       <div style={{ position:"relative", marginBottom:"32px" }}>
         {photos.length === 1 ? (
           <div style={{ height:"480px", borderRadius:"16px", overflow:"hidden", cursor:"pointer" }} onClick={() => setShowCarousel(true)}>
-            <img src={photos[0]} alt={listing.title} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
+            <img src={photos[0]} alt={listing.title} style={{ width:"100%", height:"100%", objectFit:"cover" }} onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
           </div>
         ) : (
           <div className="listing-photo-grid">
             <div style={{ gridRow:"1 / 3", position:"relative", overflow:"hidden", cursor:"pointer" }} onClick={() => { setPhotoIndex(0); setShowCarousel(true); }}>
-              <img src={photos[0]} alt={listing.title} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
+              <img src={photos[0]} alt={listing.title} style={{ width:"100%", height:"100%", objectFit:"cover" }} onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
             </div>
             {[1,2,3,4].filter(i => photos[i]).map(i => (
               <div key={i} style={{ overflow:"hidden", cursor:"pointer" }} onClick={() => { setPhotoIndex(i); setShowCarousel(true); }}>
@@ -182,12 +185,12 @@ export function ListingDetail() {
       {/* Carousel Modal */}
       {showCarousel && (
         <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.95)", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center" }}>
-          <button onClick={() => setShowCarousel(false)} style={{ position:"absolute", top:"20px", right:"20px", background:"none", border:"none", color:"#fff", fontSize:"32px", cursor:"pointer" }}>x</button>
+          <button onClick={() => setShowCarousel(false)} aria-label="Close carousel" style={{ position:"absolute", top:"20px", right:"20px", background:"rgba(255,255,255,0.2)", border:"none", borderRadius:"50%", width:"48px", height:"48px", color:"#fff", fontSize:"20px", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>{'\u2715'}</button>
           <button onClick={prevPhoto} style={{ position:"absolute", left:"20px", background:"rgba(255,255,255,0.2)", border:"none", borderRadius:"50%", width:"48px", height:"48px", color:"#fff", fontSize:"20px", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>
             <FaChevronLeft />
           </button>
           <div style={{ textAlign:"center" }}>
-            <img src={photos[photoIndex]} alt={"Photo " + (photoIndex+1)} style={{ maxHeight:"80vh", maxWidth:"90vw", objectFit:"contain", borderRadius:"8px" }} />
+            <img src={photos[photoIndex]} alt={"Photo " + (photoIndex+1)} style={{ maxHeight:"80vh", maxWidth:"90vw", objectFit:"contain", borderRadius:"8px" }} onError={e => { (e.target as HTMLImageElement).style.display = "none"; }} />
             <p style={{ color:"#fff", marginTop:"12px", fontSize:"14px" }}>{photoIndex+1} / {photos.length}</p>
           </div>
           <button onClick={nextPhoto} style={{ position:"absolute", right:"20px", background:"rgba(255,255,255,0.2)", border:"none", borderRadius:"50%", width:"48px", height:"48px", color:"#fff", fontSize:"20px", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>
@@ -303,12 +306,12 @@ export function ListingDetail() {
           <div style={{ background: cardBg, padding:"24px", borderRadius:"16px", boxShadow:"0 4px 24px rgba(0,0,0,0.12)", position:"sticky", top:"24px", border:"1px solid " + border }}>
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"20px" }}>
               <div>
-                <span style={{ fontSize:"22px", fontWeight:800, color: text }}>{numeral(listing.pricePerNight).format("$0,0")}</span>
+                <span style={{ fontSize:"22px", fontWeight:800, color: text }}>{"$" + listing.pricePerNight.toLocaleString()}</span>
                 <span style={{ fontSize:"15px", color: subText }}> / night</span>
               </div>
               {listing.rating && Number(listing.rating) > 0 && (
                 <span style={{ display:"flex", alignItems:"center", gap:"4px", fontSize:"14px", fontWeight:600, color: text }}>
-                  <FaStar size={12} color="#FF385C" /> {numeral(listing.rating).format("0.0")}
+                  <FaStar size={12} color="#FF385C" /> {Number(listing.rating).toFixed(1)}
                 </span>
               )}
             </div>
@@ -334,25 +337,25 @@ export function ListingDetail() {
               </div>
             </div>
 
-            <button onClick={handleBook} disabled={bookMutation.isPending || !checkIn || !checkOut}
-              style={{ width:"100%", padding:"14px", background: (!checkIn || !checkOut) ? "#ccc" : "#FF385C", color:"#fff", border:"none", borderRadius:"10px", fontSize:"16px", fontWeight:700, cursor: (!checkIn || !checkOut) ? "default" : "pointer", fontFamily:"inherit", marginBottom:"12px" }}>
-              {bookMutation.isPending ? "Booking..." : "Book"}
+            <button onClick={handleBook} disabled={bookMutation.isPending}
+              style={{ width:"100%", padding:"14px", background: "#FF385C", color:"#fff", border:"none", borderRadius:"10px", fontSize:"16px", fontWeight:700, cursor: "pointer", fontFamily:"inherit", marginBottom:"12px" }}>
+              {bookMutation.isPending ? "Booking..." : isAuthenticated ? "Book" : "Sign in to book"}
             </button>
             <p style={{ textAlign:"center", fontSize:"13px", color: subText, margin:"0 0 16px" }}>You won't be charged yet</p>
 
             {nights > 0 && (
               <div style={{ display:"flex", flexDirection:"column", gap:"12px", borderTop:"1px solid " + border, paddingTop:"16px" }}>
                 <div style={{ display:"flex", justifyContent:"space-between", fontSize:"14px", color: text }}>
-                  <span>{numeral(listing.pricePerNight).format("$0,0")} x {nights} night{nights > 1 ? "s" : ""}</span>
-                  <span>{numeral(subtotal).format("$0,0")}</span>
+                  <span>{"$" + listing.pricePerNight.toLocaleString()} x {nights} night{nights > 1 ? "s" : ""}</span>
+                  <span>{"$" + subtotal.toLocaleString()}</span>
                 </div>
                 <div style={{ display:"flex", justifyContent:"space-between", fontSize:"14px", color: text }}>
                   <span>Service fee</span>
-                  <span>{numeral(serviceFee).format("$0,0")}</span>
+                  <span>{"$" + serviceFee.toLocaleString()}</span>
                 </div>
                 <div style={{ display:"flex", justifyContent:"space-between", fontSize:"15px", fontWeight:700, color: text, borderTop:"1px solid " + border, paddingTop:"12px" }}>
                   <span>Total</span>
-                  <span>{numeral(total).format("$0,0")}</span>
+                  <span>{"$" + total.toLocaleString()}</span>
                 </div>
               </div>
             )}

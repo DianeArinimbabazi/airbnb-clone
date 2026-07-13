@@ -54,13 +54,13 @@ export function ForgotPasswordPage() {
         </div>
 
         {error && (
-          <div style={{ background:"#fee2e2", color:"#dc2626", padding:"12px 16px", borderRadius:"8px", marginBottom:"16px", fontSize:"14px" }}>
+          <div style={{ background: dark ? "#3b1111" : "#fee2e2", color: dark ? "#fca5a5" : "#dc2626", padding:"12px 16px", borderRadius:"8px", marginBottom:"16px", fontSize:"14px" }}>
             {error}
           </div>
         )}
 
         {success ? (
-          <div style={{ background:"#dcfce7", color:"#16a34a", padding:"20px", borderRadius:"12px", fontSize:"14px", lineHeight:1.7 }}>
+          <div style={{ background: dark ? "#064e3b" : "#dcfce7", color: dark ? "#6ee7b7" : "#16a34a", padding:"20px", borderRadius:"12px", fontSize:"14px", lineHeight:1.7 }}>
             <p style={{ margin:"0 0 8px", fontWeight:700, fontSize:"16px" }}>Check your inbox!</p>
             <p style={{ margin:0 }}>
               If <strong>{email}</strong> is registered, a password reset link has been sent. Check your email and follow the instructions.
@@ -79,7 +79,7 @@ export function ForgotPasswordPage() {
               />
             </div>
             <button type="submit" disabled={loading}
-              style={{ padding:"14px", background:loading ? "#ccc" : "#FF385C", color:"#fff", border:"none", borderRadius:"8px", fontWeight:700, fontSize:"15px", cursor:loading ? "not-allowed" : "pointer", fontFamily:"inherit" }}>
+              style={{ padding:"14px", background:loading ? (dark ? "#555" : "#ccc") : "#FF385C", color:"#fff", border:"none", borderRadius:"8px", fontWeight:700, fontSize:"15px", cursor:loading ? "not-allowed" : "pointer", fontFamily:"inherit" }}>
               {loading ? "Sending..." : "Send Reset Link"}
             </button>
             <p style={{ textAlign:"center", fontSize:"14px", color:sub, margin:0 }}>

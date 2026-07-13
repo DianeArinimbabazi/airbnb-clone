@@ -49,13 +49,13 @@ export function SignupPage() {
           <p style={{ fontSize:"13px", color:sub, margin:0, lineHeight:1.6 }}>Join our community of travelers and hosts across Rwanda.</p>
         </div>
 
-        {error && <div style={{ background:"#fee2e2", color:"#dc2626", padding:"12px 16px", borderRadius:"8px", marginBottom:"16px", fontSize:"14px" }}>{error}</div>}
+        {error && <div style={{ background: dark ? "#3b1111" : "#fee2e2", color: dark ? "#fca5a5" : "#dc2626", padding:"12px 16px", borderRadius:"8px", marginBottom:"16px", fontSize:"14px" }}>{error}</div>}
 
         {/* Role toggle */}
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"10px", marginBottom:"20px" }}>
           {(["GUEST","HOST"] as const).map(r => (
             <button key={r} type="button" onClick={() => setForm(p => ({ ...p, role:r }))}
-              style={{ padding:"12px", borderRadius:"8px", border:`2px solid ${form.role===r ? "#FF385C" : "#e0e0e0"}`, background:form.role===r ? "#fff0f3" : "#fff", color:form.role===r ? "#FF385C" : "#555", fontWeight:700, fontSize:"14px", cursor:"pointer", fontFamily:"inherit" }}>
+              style={{ padding:"12px", borderRadius:"8px", border:`2px solid ${form.role===r ? "#FF385C" : border}`, background:form.role===r ? (dark ? "#3b1111" : "#fff0f3") : card, color:form.role===r ? "#FF385C" : sub, fontWeight:700, fontSize:"14px", cursor:"pointer", fontFamily:"inherit" }}>
               {r === "GUEST" ? "Join as Guest" : "Join as Host"}
             </button>
           ))}
@@ -70,11 +70,11 @@ export function SignupPage() {
           <div><label style={lbl}>Phone <span style={{ color:"#FF385C" }}>*</span></label><input value={form.phone} onChange={set("phone")} placeholder="+250 700 000 000" required style={inp} /></div>
           <div><label style={lbl}>Password <span style={{ color:"#FF385C" }}>*</span></label><input type="password" value={form.password} onChange={set("password")} placeholder="Min 8 characters" required minLength={8} style={inp} /></div>
           <div><label style={lbl}>Confirm Password <span style={{ color:"#FF385C" }}>*</span></label><input type="password" value={form.confirmPassword} onChange={set("confirmPassword")} placeholder="Repeat password" required style={inp} /></div>
-          <label style={{ display:"flex", alignItems:"center", gap:"8px", fontSize:"13px", color:"#666", cursor:"pointer" }}>
+          <label style={{ display:"flex", alignItems:"center", gap:"8px", fontSize:"13px", color:sub, cursor:"pointer" }}>
             <input type="checkbox" required /> By signing up, you agree to the <span style={{ color:"#FF385C", textDecoration:"underline" }}>terms of service</span>
           </label>
           <button type="submit" disabled={loading}
-            style={{ padding:"14px", background:loading ? "#ccc" : "#FF385C", color:"#fff", border:"none", borderRadius:"8px", fontWeight:700, fontSize:"15px", cursor:loading ? "not-allowed" : "pointer", fontFamily:"inherit", marginTop:"4px" }}>
+            style={{ padding:"14px", background:loading ? (dark ? "#555" : "#ccc") : "#FF385C", color:"#fff", border:"none", borderRadius:"8px", fontWeight:700, fontSize:"15px", cursor:loading ? "not-allowed" : "pointer", fontFamily:"inherit", marginTop:"4px" }}>
             {loading ? "Creating account..." : "Sign Up"}
           </button>
         </form>
@@ -100,10 +100,10 @@ export function SignupPage() {
             </div>
             <div style={{ display:"flex", gap:"6px", alignItems:"flex-end", height:"80px" }}>
               {[40,65,45,80,55,70,50].map((h,i) => (
-                <div key={i} style={{ flex:1, height:`${h}%`, borderRadius:"4px 4px 0 0", background:i===3 ? "#FF385C" : "#e8e8e8" }} />
+                <div key={i} style={{ flex:1, height:`${h}%`, borderRadius:"4px 4px 0 0", background:i===3 ? "#FF385C" : (dark ? "#444" : "#e8e8e8") }} />
               ))}
             </div>
-            <div style={{ height:"2px", background:"#f0f0f0", marginTop:"8px" }} />
+            <div style={{ height:"2px", background: border, marginTop:"8px" }} />
           </div>
         </div>
       </div>

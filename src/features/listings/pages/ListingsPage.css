@@ -120,3 +120,14 @@
   color: #888;
   margin: 0;
 }
+
+/* Dark mode overrides */
+[data-theme="dark"] .listings-title { color: #f0f0f0; }
+[data-theme="dark"] .listings-subtitle { color: #888; }
+[data-theme="dark"] .search-bar { background: #1a1a1a; color: #f0f0f0; border-color: #444; }
+[data-theme="dark"] .search-bar:focus { border-color: #9b8ec4; }
+[data-theme="dark"] .saved-toggle { background: #1a1a1a; border-color: #444; color: #aaa; }
+[data-theme="dark"] .saved-toggle:hover { border-color: #9b8ec4; color: #9b8ec4; }
+[data-theme="dark"] .results-count { color: #888; }
+[data-theme="dark"] .empty-state__title { color: #f0f0f0; }
+[data-theme="dark"] .empty-state__sub { color: #888; }

@@ -1,10 +1,8 @@
 ﻿import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../auth/hooks/useAuth";
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = () => {
@@ -20,27 +18,6 @@ export default function HomePage() {
         background:"linear-gradient(rgba(0,0,0,0.52),rgba(0,0,0,0.52)), url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=1600') center/cover no-repeat",
         padding:"clamp(40px, 10vw, 80px) 16px"
       }}>
-
-        {/* Auth buttons top-right */}
-        <div style={{ display:"flex", flexWrap:"wrap", justifyContent:"flex-end", width:"100%", gap:"8px", marginBottom:"clamp(20px, 5vw, 32px)" }}>
-          {!isAuthenticated ? (
-            <>
-              <button onClick={() => navigate("/login")}
-                style={{ padding:"10px 20px", borderRadius:"8px", border:"2px solid #fff", background:"transparent", color:"#fff", fontWeight:700, fontSize:"clamp(13px, 2vw, 15px)", cursor:"pointer", fontFamily:"inherit" }}>
-                Sign In
-              </button>
-              <button onClick={() => navigate("/signup")}
-                style={{ padding:"10px 20px", borderRadius:"8px", border:"none", background:"#FF385C", color:"#fff", fontWeight:700, fontSize:"clamp(13px, 2vw, 15px)", cursor:"pointer", fontFamily:"inherit" }}>
-                Sign Up
-              </button>
-            </>
-          ) : (
-            <button onClick={() => navigate("/listings")}
-              style={{ padding:"10px 20px", borderRadius:"8px", border:"none", background:"#FF385C", color:"#fff", fontWeight:700, fontSize:"clamp(13px, 2vw, 15px)", cursor:"pointer", fontFamily:"inherit" }}>
-              Browse Listings
-            </button>
-          )}
-        </div>
 
         {/* Hero text */}
         <p style={{ fontSize:"clamp(11px, 2.5vw, 13px)", fontWeight:700, letterSpacing:"0.15em", color:"rgba(255,255,255,0.75)", textTransform:"uppercase", marginBottom:"clamp(12px, 3vw, 20px)", textAlign:"center" }}>

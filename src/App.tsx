@@ -1,21 +1,19 @@
-﻿import { AIChatWidget } from './features/ai/AIChatWidget';
-import { config } from './config/env';
-import { lazy, Suspense, useEffect } from "react";
+﻿import { lazy, Suspense, useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import Navbar from "./shared/components/Navbar";
 import { Spinner } from "./shared/components/Spinner";
 import { NotFound } from "./shared/components/NotFound";
-import { LoginPage } from "./features/auth/pages/LoginPage";
-import { ForgotPasswordPage } from "./features/auth/pages/ForgotPasswordPage";
-import { ResetPasswordPage } from "./features/auth/pages/ResetPasswordPage";
-import { SignupPage } from "./features/auth/pages/SignupPage";
-import ListingsPage from "./features/listings/pages/ListingsPage";
-import HomePage from "./features/home/pages/HomePage";
 import { useAuth } from "./features/auth/hooks/useAuth";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
-const ListingDetail     = lazy(() => import("./features/listings/pages/ListingDetail").then(m => ({ default: m.ListingDetail })));
+const HomePage           = lazy(() => import("./features/home/pages/HomePage"));
+const LoginPage          = lazy(() => import("./features/auth/pages/LoginPage").then(m => ({ default: m.LoginPage })));
+const ForgotPasswordPage = lazy(() => import("./features/auth/pages/ForgotPasswordPage").then(m => ({ default: m.ForgotPasswordPage })));
+const ResetPasswordPage  = lazy(() => import("./features/auth/pages/ResetPasswordPage").then(m => ({ default: m.ResetPasswordPage })));
+const SignupPage         = lazy(() => import("./features/auth/pages/SignupPage").then(m => ({ default: m.SignupPage })));
+const ListingsPage       = lazy(() => import("./features/listings/pages/ListingsPage"));
+const ListingDetail      = lazy(() => import("./features/listings/pages/ListingDetail").then(m => ({ default: m.ListingDetail })));
 const GuestDashboard    = lazy(() => import("./features/auth/pages/GuestDashboard").then(m => ({ default: m.default })));
 const HostDashboard     = lazy(() => import("./features/auth/pages/HostDashboard").then(m => ({ default: m.default })));
 const AdminDashboard    = lazy(() => import("./features/auth/pages/AdminDashboard").then(m => ({ default: m.AdminDashboard ?? m.default })));
@@ -25,10 +23,9 @@ const EditListingPage   = lazy(() => import("./features/host/pages/EditListingPa
 const ModerationQueue   = lazy(() => import("./features/admin/pages/ModerationQueue").then(m => ({ default: m.ModerationQueue ?? m.default })));
 const ProfilePage       = lazy(() => import("./features/auth/pages/ProfilePage").then(m => ({ default: m.ProfilePage ?? m.default })));
 const MessagesPage      = lazy(() => import("./features/messages/pages/MessagesPage").then(m => ({ default: m.default })));
+const AIChatWidget      = lazy(() => import("./features/ai/AIChatWidget").then(m => ({ default: m.AIChatWidget })));
 
 NProgress.configure({ showSpinner: false, trickleSpeed: 200 });
-
-fetch(config.apiUrl + '/listings?limit=1').catch(() => {});
 
 function RequireAuth({ children, role }: { children: React.ReactNode; role?: "GUEST" | "HOST" | "ADMIN" }) {
   const { isAuthenticated, user } = useAuth();
@@ -55,8 +52,8 @@ export default function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-          <Route path="/listings"          element={<RequireAuth><ListingsPage /></RequireAuth>} />
-          <Route path="/listings/:id"      element={<RequireAuth><ListingDetail /></RequireAuth>} />
+          <Route path="/listings"          element={<ListingsPage />} />
+          <Route path="/listings/:id"      element={<ListingDetail />} />
           <Route path="/listings/new"      element={<RequireAuth role="HOST"><CreateListingPage /></RequireAuth>} />
           <Route path="/listings/:id/edit" element={<RequireAuth role="HOST"><EditListingPage /></RequireAuth>} />
           <Route path="/listings/:id/book" element={<RequireAuth><BookingPage /></RequireAuth>} />
@@ -70,7 +67,9 @@ export default function App() {
           <Route path="*"                 element={<NotFound />} />
         </Routes>
       </Suspense>
-      <AIChatWidget />
+      <Suspense fallback={null}>
+        <AIChatWidget />
+      </Suspense>
     </>
   );
 }

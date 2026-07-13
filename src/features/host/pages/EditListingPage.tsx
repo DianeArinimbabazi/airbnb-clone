@@ -5,6 +5,7 @@ import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "../../../lib/api";
 import { config } from "../../../config/env";
+import { useTheme } from "../../../shared/context/ThemeContext";
 import { useListing } from "../../listings/hooks/useListing";
 import { Spinner } from "../../../shared/components/Spinner";
 import toast from "react-hot-toast";
@@ -23,21 +24,26 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const inp: React.CSSProperties = { width:"100%", padding:"12px 16px", border:"1.5px solid #ddd", borderRadius:"10px", fontSize:"15px", outline:"none", fontFamily:"inherit", boxSizing:"border-box" };
-const lbl: React.CSSProperties = { display:"block", fontWeight:600, fontSize:"13px", marginBottom:"6px", color:"#333" };
-const errStyle: React.CSSProperties = { color:"#e53e3e", fontSize:"13px", marginTop:"4px" };
-
 const TYPES = ["APARTMENT","HOUSE","VILLA","CABIN","STUDIO","LOFT","COTTAGE","BUNGALOW"];
 
 export function EditListingPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const qc = useQueryClient();
+  const { dark } = useTheme();
   const { data: listing, isLoading } = useListing(id!);
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [deletingPhoto, setDeletingPhoto] = useState<string | null>(null);
   const BASE = config.apiUrl;
+
+  const text   = dark ? "#f0f0f0" : "#222";
+  const sub    = dark ? "#aaaaaa" : "#717171";
+  const border = dark ? "#444444" : "#ddd";
+  const card   = dark ? "#1a1a1a" : "#fafafa";
+  const inp: React.CSSProperties = { width:"100%", padding:"12px 16px", border:`1.5px solid ${border}`, borderRadius:"10px", fontSize:"15px", outline:"none", fontFamily:"inherit", boxSizing:"border-box", background: dark ? "#2a2a2a" : "#fff", color: text };
+  const lbl: React.CSSProperties = { display:"block", fontWeight:600, fontSize:"13px", marginBottom:"6px", color: text };
+  const errStyle: React.CSSProperties = { color:"#e53e3e", fontSize:"13px", marginTop:"4px" };
 
   type PhotoData = { url: string; publicId?: string; public_id?: string; id?: string };
   const getPhotoId = (photo: PhotoData) => photo.publicId ?? photo.public_id ?? photo.id ?? photo.url;
@@ -70,7 +76,6 @@ export function EditListingPage() {
       navigate("/host");
     },
     onError: (e: Error) => {
-      console.error("Save error:", e);
       toast.error(e.message || "Failed to update listing");
     },
   });
@@ -131,7 +136,7 @@ export function EditListingPage() {
   if (!listing) return (
     <div style={{ padding:"80px 24px", textAlign:"center" }}>
       <p style={{ fontSize:"48px" }}>??</p>
-      <p>Listing not found</p>
+      <p style={{ color:text }}>Listing not found</p>
       <button onClick={() => navigate("/host")} style={{ marginTop:"16px", background:"#10B981", color:"#fff", border:"none", borderRadius:"10px", padding:"12px 24px", fontWeight:700, cursor:"pointer", fontFamily:"inherit" }}>Back to Dashboard</button>
     </div>
   );
@@ -140,11 +145,11 @@ export function EditListingPage() {
 
   return (
     <div style={{ maxWidth:"640px", margin:"0 auto", padding:"40px 24px 80px" }}>
-      <button onClick={() => navigate("/host")} style={{ background:"none", border:"1.5px solid #ddd", borderRadius:"10px", padding:"10px 20px", fontWeight:600, fontSize:"14px", color:"#555", cursor:"pointer", fontFamily:"inherit", marginBottom:"32px" }}>
+      <button onClick={() => navigate("/host")} style={{ background:"none", border:`1.5px solid ${border}`, borderRadius:"10px", padding:"10px 20px", fontWeight:600, fontSize:"14px", color:sub, cursor:"pointer", fontFamily:"inherit", marginBottom:"32px" }}>
         Back to Dashboard
       </button>
-      <h1 style={{ fontSize:"26px", fontWeight:800, color:"#222", margin:"0 0 8px" }}>Edit listing</h1>
-      <p style={{ color:"#717171", fontSize:"14px", marginBottom:"32px" }}>Update your property details</p>
+      <h1 style={{ fontSize:"26px", fontWeight:800, color:text, margin:"0 0 8px" }}>Edit listing</h1>
+      <p style={{ color:sub, fontSize:"14px", marginBottom:"32px" }}>Update your property details</p>
 
       {/* Photos section */}
       <div style={{ marginBottom:"32px" }}>
@@ -153,7 +158,7 @@ export function EditListingPage() {
           {realPhotos.map(photo => {
             const photoId = getPhotoId(photo);
             return (
-              <div key={photoId} style={{ position:"relative", borderRadius:"10px", overflow:"hidden", aspectRatio:"4/3", background:"#f5f5f5" }}>
+              <div key={photoId} style={{ position:"relative", borderRadius:"10px", overflow:"hidden", aspectRatio:"4/3", background:card }}>
                 <img src={photo.url} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} />
                 <button
                   type="button"
@@ -170,7 +175,7 @@ export function EditListingPage() {
             <button
               onClick={() => fileRef.current?.click()}
               disabled={uploadingPhoto}
-              style={{ aspectRatio:"4/3", borderRadius:"10px", border:"2px dashed #ddd", background:"#fafafa", cursor:"pointer", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:"6px", color:"#888", fontSize:"13px", fontWeight:600, fontFamily:"inherit" }}
+              style={{ aspectRatio:"4/3", borderRadius:"10px", border:`2px dashed ${border}`, background:card, cursor:"pointer", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:"6px", color:sub, fontSize:"13px", fontWeight:600, fontFamily:"inherit" }}
             >
               <span style={{ fontSize:"24px" }}>+</span>
               {uploadingPhoto ? "Uploading..." : "Add photo"}
@@ -178,7 +183,7 @@ export function EditListingPage() {
           )}
         </div>
         <input ref={fileRef} type="file" accept="image/*" onChange={handlePhotoUpload} style={{ display:"none" }} />
-        <p style={{ fontSize:"12px", color:"#aaa", margin:0 }}>Max 5 photos. Click x to remove, + to add.</p>
+        <p style={{ fontSize:"12px", color:sub, margin:0 }}>Max 5 photos. Click x to remove, + to add.</p>
       </div>
 
       {/* Form */}
@@ -218,7 +223,7 @@ export function EditListingPage() {
           {errors.type && <p style={errStyle}>{errors.type.message}</p>}
         </div>
         <div>
-          <label style={lbl}>Amenities * <span style={{ fontWeight:400, color:"#888" }}>(comma-separated)</span></label>
+          <label style={lbl}>Amenities * <span style={{ fontWeight:400, color:sub }}>(comma-separated)</span></label>
           <input {...register("amenities")} placeholder="WiFi, Pool, Kitchen, Parking, AC" style={inp} />
           {errors.amenities && <p style={errStyle}>{errors.amenities.message}</p>}
         </div>

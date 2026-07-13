@@ -14,17 +14,12 @@ export interface Booking {
   listing: { id: string; title: string; location: string; pricePerNight: number; photos?: { url: string }[]; rating?: number };
 }
 
-interface BookingsResponse {
-  data: Booking[];
-  meta: { total: number };
-}
-
 export function useMyBookings() {
   return useQuery<Booking[]>({
     queryKey: ["bookings", "mine"],
     queryFn: async () => {
-      const res = await api.get<BookingsResponse>("/bookings?limit=50");
-      return res.data ?? [];
+      const res = await api.get<any>("/bookings?limit=50");
+      return Array.isArray(res) ? res : (res.data ?? []);
     },
   });
 }
@@ -33,8 +28,8 @@ export function useHostBookings() {
   return useQuery<Booking[]>({
     queryKey: ["bookings", "host"],
     queryFn: async () => {
-      const res = await api.get<BookingsResponse>("/bookings?limit=50");
-      return res.data ?? [];
+      const res = await api.get<any>("/bookings?limit=50");
+      return Array.isArray(res) ? res : (res.data ?? []);
     },
   });
 }
